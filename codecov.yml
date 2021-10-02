@@ -1,5 +1,5 @@
 codecov:
-  token: '0f70a160-eb7a-4eea-a243-5b3c5cb458c5'
+  token: "0f70a160-eb7a-4eea-a243-5b3c5cb458c5"
   bot: "codecov-io"
   ci:
     - "travis.com"
