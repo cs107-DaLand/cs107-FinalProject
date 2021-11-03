@@ -2,7 +2,10 @@ class Variable(object):
 	counter = 0
 	def __init__(self, val, label=None, der=None, ad_mode='forward'):
 
-		self.label = 'v' + Variable.get_counter()
+		if label is not None:
+			self.label = label
+		else:
+			self.label = 'v' + Variable.get_counter()
 
 		if der is not None:
 			self.der = der
