@@ -1,13 +1,19 @@
+import numpy as np
+from utils import add_dict
+
 class Variable(object):
 	counter = 0
-	def __init__(self, val, label=None, der=None, ad_mode='forward'):
+	def __init__(self, val, der=None, label=None, ad_mode='forward'):
 
-		self.label = 'v' + Variable.get_counter()
+		if label is not None:
+			self.label = label
+		else:
+			self.label = 'v' + Variable.get_counter()
 
 		if der is not None:
 			self.der = der
 		else:
-			self.der = {label: [[1]]}
+			self.der = {label: np.asarray([[1]])}
 
 		self.ad_mode = ad_mode
 		self.val = val
@@ -27,10 +33,31 @@ class Variable(object):
 		return str(Variable.counter)
 
 
-x = Variable(val=2)
-y = Variable(val=3)
-z = Variable(val=4)
+	def __add__(self, other):
+		try:
+			return Variable(self.val + other.val, add_dict(self.der, other.der))
+		except AttributeError:
+			return Variable(self.val + other, self.der)
 
-print(x)
-print(y)
-print(z)
+
+	def __radd__(self, other):
+		pass
+		return self.__add__(other)
+
+	def __sub__(self, other):
+		pass
+
+	def __rsub__(self, other):
+		pass
+
+	def __mul__(self, other):
+		pass
+
+	def __rmul__(self, other):
+		pass
+
+	def __truediv__(self, other):
+		pass
+
+	def __rtruediv__(self, other):
+		pass
