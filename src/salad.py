@@ -13,7 +13,7 @@ class Variable(object):
 		if der is not None:
 			self.der = der
 		else:
-			self.der = {label: np.asarray([[1]])}
+			self.der = {self.label: np.asarray([[1]])}
 
 		self.ad_mode = ad_mode
 		self.val = val
@@ -34,6 +34,8 @@ class Variable(object):
 
 
 	def __add__(self, other):
+		# print(self)
+		# print(other)
 		try:
 			return Variable(self.val + other.val, add_dict(self.der, other.der))
 		except AttributeError:
@@ -41,14 +43,15 @@ class Variable(object):
 
 
 	def __radd__(self, other):
-		pass
 		return self.__add__(other)
 
 	def __sub__(self, other):
 		pass
+		return self.__add__(-other)
 
 	def __rsub__(self, other):
 		pass
+		return (-self).__add__(other)
 
 	def __mul__(self, other):
 		pass
