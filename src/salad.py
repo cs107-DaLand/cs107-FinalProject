@@ -316,3 +316,72 @@ def logistic(x):
         return [logistic_by_element(i) for i in x]
     else:
         return logistic_by_element(x)
+
+def sin(x): #x is an instance of class Variable
+    """
+    If x is a Variable, returns a new variable with val and der
+    If x is a number, returns numeric sin(x)
+    """
+    def sin_by_element(x):
+        if isinstance(x, Variable):
+            val = np.sin(x.val)
+            der = copy.deepcopy(x.der)
+            for key in der:
+                der[key] = np.cos(x.val) * x.der[key]
+            return Variable(val, der, increment_counter=True)
+
+        elif isinstance(x, (int, float)):
+            return np.sin(x)
+        else:
+            raise TypeError("x must be a Variable or a number")
+
+    if isinstance(x, (list, tuple, np.ndarray)):
+        return [sin_by_element(i) for i in x]
+    else:
+        return sin_by_element(x)
+
+def cos(x): #x is an instance of class Variable
+    """
+    If x is a Variable, returns a new variable with val and der
+    If x is a number, returns numeric cos(x)
+    """
+    def cos_by_element(x):
+        if isinstance(x, Variable):
+            val = np.cos(x.val)
+            der = copy.deepcopy(x.der)
+            for key in der:
+                der[key] = -np.sin(x.val) * x.der[key]
+            return Variable(val, der, increment_counter=True)
+
+        elif isinstance(x, (int, float)):
+            return np.cos(x)
+        else:
+            raise TypeError("x must be a Variable or a number")
+    
+    if isinstance(x, (list, tuple, np.ndarray)):
+        return [cos_by_element(i) for i in x]
+    else:
+        return cos_by_element(x)
+
+def tan(x): #x is an instance of class Variable
+    """
+    If x is a Variable, returns a new variable with val and der
+    If x is a number, returns numeric tan(x)
+    """
+    def tan_by_element(x):
+        if isinstance(x, Variable):
+            val = np.tan(x.val)
+            der = copy.deepcopy(x.der)
+            for key in der:
+                der[key] = 1/(np.cos(x.val)**2) * x.der[key]
+            return Variable(val, der, increment_counter=True)
+
+        elif isinstance(x, (int, float)):
+            return np.tan(x)
+        else:
+            raise TypeError("x must be a Variable or a number")
+
+    if isinstance(x, (list, tuple, np.ndarray)):
+        return [tan_by_element(i) for i in x]
+    else:
+        return tan_by_element(x)
