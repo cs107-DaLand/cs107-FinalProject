@@ -516,6 +516,270 @@ def test_log10():
         f"val match? {check_list(ans_val, sol_val)}; der match? {check_list(sol_der_x, ans_der_x) & check_list(sol_der_y, ans_der_y)}"
     )
 
+def test_sin():
+    print("-" * 50, "Test sin")
+
+    def sin(x):
+        return adnp.sin(x)
+
+    x = 3
+    ans = ad.sin(x)
+    sol = sin(x)
+    print("ad.sin(3)")
+    print(f"val match? {sol == ans}")
+
+    x = ad.Variable(3, label="x")
+    y = ad.sin(x)
+    ans_val, ans_der = y.val, y.der["x"]
+    sol_val, sol_der = sin(3), grad(sin)(3.0)
+    print("ad.sin(var(3))")
+    print(
+        f"val match? {ans_val == sol_val}; der match? {math.isclose(ans_der, sol_der)}"
+    )
+
+    x = ad.Variable(3, label="x") + 3
+    y = ad.sin(x)
+    ans_val, ans_der = y.val, y.der["x"]
+    sol_val, sol_der = sin(6), grad(lambda x: sin(x + 3.0))(3.0)
+    print("ad.sin(var(3)+3)")
+    print(
+        f"val match? {ans_val == sol_val}; der match? {math.isclose(ans_der, sol_der)}"
+    )
+
+    x = ad.Variable(3, label="x") + ad.Variable(4, label="y")
+    y = ad.sin(x)
+    ans_val, ans_der = y.val, [y.der["x"], y.der["y"]]
+    sol_val, sol_der = sin(7), [
+        grad(lambda x, y: sin(x + y), 0)(3.0, 4.0),
+        grad(lambda x, y: sin(x + y), 1)(3.0, 4.0),
+    ]
+    print("ad.sin(var(3) + var(4))")
+    print(f"val match? {ans_val == sol_val}; der match? {check_list(ans_der, sol_der)}")
+
+    x = ad.Variable([3, 4, 5], label="x")
+    y = ad.sin(x)
+    ans_val, ans_der = y.val, y.der["x"]
+    sol_val, sol_der = [sin(3), sin(4), sin(5)], [
+        grad(lambda x: sin(x))(3.0),
+        grad(lambda x: sin(x))(4.0),
+        grad(lambda x: sin(x))(5.0),
+    ]
+    print("ad.sin(var([3, 4, 5]))")
+    print(
+        f"val match? {check_list(ans_val, sol_val)}; der match? {check_list(ans_der, sol_der)}"
+    )
+
+    x = ad.Variable([3, 4, 5], label="x")
+    y = ad.sin(x + x)
+    ans_val, ans_der = y.val, y.der["x"]
+    sol_val, sol_der = [sin(3 * 2), sin(4 * 2), sin(5 * 2)], [
+        grad(lambda x: sin(x + x))(3.0),
+        grad(lambda x: sin(x + x))(4.0),
+        grad(lambda x: sin(x + x))(5.0),
+    ]
+    print("ad.sin(var([3, 4, 5]) + var([3, 4, 5]))")
+    print(
+        f"val match? {check_list(ans_val, sol_val)}; der match? {check_list(ans_der, sol_der)}"
+    )
+
+    x = ad.Variable([3, 4, 5], label="x")
+    y = ad.Variable([6, 6, 6], label="y")
+    y = ad.sin(x + y)
+    ans_val, ans_der_x, ans_der_y = y.val, y.der["x"], y.der["y"]
+    sol_val, sol_der_x, sol_der_y = (
+        [sin(9), sin(10), sin(11)],
+        [
+            grad(lambda x, y: sin(x + y), 0)(3.0, 6.0),
+            grad(lambda x, y: sin(x + y), 0)(4.0, 6.0),
+            grad(lambda x, y: sin(x + y), 0)(5.0, 6.0),
+        ],
+        [
+            grad(lambda x, y: sin(x + y), 1)(3.0, 6.0),
+            grad(lambda x, y: sin(x + y), 1)(4.0, 6.0),
+            grad(lambda x, y: sin(x + y), 1)(5.0, 6.0),
+        ],
+    )
+    print("ad.sin(var([3, 4, 5]) + var([6, 6, 6]))")
+    print(
+        f"val match? {check_list(ans_val, sol_val)}; der match? {check_list(sol_der_x, ans_der_x) & check_list(sol_der_y, ans_der_y)}"
+    )
+
+def test_cos():
+    print("-" * 50, "Test cos")
+
+    def cos(x):
+        return adnp.cos(x)
+
+    x = 3
+    ans = ad.cos(x)
+    sol = cos(x)
+    print("ad.cos(3)")
+    print(f"val match? {sol == ans}")
+
+    x = ad.Variable(3, label="x")
+    y = ad.cos(x)
+    ans_val, ans_der = y.val, y.der["x"]
+    sol_val, sol_der = cos(3), grad(cos)(3.0)
+    print("ad.cos(var(3))")
+    print(
+        f"val match? {ans_val == sol_val}; der match? {math.isclose(ans_der, sol_der)}"
+    )
+
+    x = ad.Variable(3, label="x") + 3
+    y = ad.cos(x)
+    ans_val, ans_der = y.val, y.der["x"]
+    sol_val, sol_der = cos(6), grad(lambda x: cos(x + 3.0))(3.0)
+    print("ad.cos(var(3)+3)")
+    print(
+        f"val match? {ans_val == sol_val}; der match? {math.isclose(ans_der, sol_der)}"
+    )
+
+    x = ad.Variable(3, label="x") + ad.Variable(4, label="y")
+    y = ad.cos(x)
+    ans_val, ans_der = y.val, [y.der["x"], y.der["y"]]
+    sol_val, sol_der = cos(7), [
+        grad(lambda x, y: cos(x + y), 0)(3.0, 4.0),
+        grad(lambda x, y: cos(x + y), 1)(3.0, 4.0),
+    ]
+    print("ad.cos(var(3) + var(4))")
+    print(f"val match? {ans_val == sol_val}; der match? {check_list(ans_der, sol_der)}")
+
+    x = ad.Variable([3, 4, 5], label="x")
+    y = ad.cos(x)
+    ans_val, ans_der = y.val, y.der["x"]
+    sol_val, sol_der = [cos(3), cos(4), cos(5)], [
+        grad(lambda x: cos(x))(3.0),
+        grad(lambda x: cos(x))(4.0),
+        grad(lambda x: cos(x))(5.0),
+    ]
+    print("ad.cos(var([3, 4, 5]))")
+    print(
+        f"val match? {check_list(ans_val, sol_val)}; der match? {check_list(ans_der, sol_der)}"
+    )
+
+    x = ad.Variable([3, 4, 5], label="x")
+    y = ad.cos(x + x)
+    ans_val, ans_der = y.val, y.der["x"]
+    sol_val, sol_der = [cos(3 * 2), cos(4 * 2), cos(5 * 2)], [
+        grad(lambda x: cos(x + x))(3.0),
+        grad(lambda x: cos(x + x))(4.0),
+        grad(lambda x: cos(x + x))(5.0),
+    ]
+    print("ad.cos(var([3, 4, 5]) + var([3, 4, 5]))")
+    print(
+        f"val match? {check_list(ans_val, sol_val)}; der match? {check_list(ans_der, sol_der)}"
+    )
+
+    x = ad.Variable([3, 4, 5], label="x")
+    y = ad.Variable([6, 6, 6], label="y")
+    y = ad.cos(x + y)
+    ans_val, ans_der_x, ans_der_y = y.val, y.der["x"], y.der["y"]
+    sol_val, sol_der_x, sol_der_y = (
+        [cos(9), cos(10), cos(11)],
+        [
+            grad(lambda x, y: cos(x + y), 0)(3.0, 6.0),
+            grad(lambda x, y: cos(x + y), 0)(4.0, 6.0),
+            grad(lambda x, y: cos(x + y), 0)(5.0, 6.0),
+        ],
+        [
+            grad(lambda x, y: cos(x + y), 1)(3.0, 6.0),
+            grad(lambda x, y: cos(x + y), 1)(4.0, 6.0),
+            grad(lambda x, y: cos(x + y), 1)(5.0, 6.0),
+        ],
+    )
+    print("ad.cos(var([3, 4, 5]) + var([6, 6, 6]))")
+    print(
+        f"val match? {check_list(ans_val, sol_val)}; der match? {check_list(sol_der_x, ans_der_x) & check_list(sol_der_y, ans_der_y)}"
+    )
+
+def test_tan():
+    print("-" * 50, "Test tan")
+
+    def tan(x):
+        return adnp.tan(x)
+
+    x = 3
+    ans = ad.tan(x)
+    sol = tan(x)
+    print("ad.tan(3)")
+    print(f"val match? {sol == ans}")
+
+    x = ad.Variable(3, label="x")
+    y = ad.tan(x)
+    ans_val, ans_der = y.val, y.der["x"]
+    sol_val, sol_der = tan(3), grad(tan)(3.0)
+    print("ad.tan(var(3))")
+    print(
+        f"val match? {ans_val == sol_val}; der match? {math.isclose(ans_der, sol_der)}"
+    )
+
+    x = ad.Variable(3, label="x") + 3
+    y = ad.tan(x)
+    ans_val, ans_der = y.val, y.der["x"]
+    sol_val, sol_der = tan(6), grad(lambda x: tan(x + 3.0))(3.0)
+    print("ad.tan(var(3)+3)")
+    print(
+        f"val match? {ans_val == sol_val}; der match? {math.isclose(ans_der, sol_der)}"
+    )
+
+    x = ad.Variable(3, label="x") + ad.Variable(4, label="y")
+    y = ad.tan(x)
+    ans_val, ans_der = y.val, [y.der["x"], y.der["y"]]
+    sol_val, sol_der = tan(7), [
+        grad(lambda x, y: tan(x + y), 0)(3.0, 4.0),
+        grad(lambda x, y: tan(x + y), 1)(3.0, 4.0),
+    ]
+    print("ad.tan(var(3) + var(4))")
+    print(f"val match? {ans_val == sol_val}; der match? {check_list(ans_der, sol_der)}")
+
+    x = ad.Variable([3, 4, 5], label="x")
+    y = ad.tan(x)
+    ans_val, ans_der = y.val, y.der["x"]
+    sol_val, sol_der = [tan(3), tan(4), tan(5)], [
+        grad(lambda x: tan(x))(3.0),
+        grad(lambda x: tan(x))(4.0),
+        grad(lambda x: tan(x))(5.0),
+    ]
+    print("ad.tan(var([3, 4, 5]))")
+    print(
+        f"val match? {check_list(ans_val, sol_val)}; der match? {check_list(ans_der, sol_der)}"
+    )
+
+    x = ad.Variable([3, 4, 5], label="x")
+    y = ad.tan(x + x)
+    ans_val, ans_der = y.val, y.der["x"]
+    sol_val, sol_der = [tan(3 * 2), tan(4 * 2), tan(5 * 2)], [
+        grad(lambda x: tan(x + x))(3.0),
+        grad(lambda x: tan(x + x))(4.0),
+        grad(lambda x: tan(x + x))(5.0),
+    ]
+    print("ad.tan(var([3, 4, 5]) + var([3, 4, 5]))")
+    print(
+        f"val match? {check_list(ans_val, sol_val)}; der match? {check_list(ans_der, sol_der)}"
+    )
+
+    x = ad.Variable([3, 4, 5], label="x")
+    y = ad.Variable([6, 6, 6], label="y")
+    y = ad.tan(x + y)
+    ans_val, ans_der_x, ans_der_y = y.val, y.der["x"], y.der["y"]
+    sol_val, sol_der_x, sol_der_y = (
+        [tan(9), tan(10), tan(11)],
+        [
+            grad(lambda x, y: tan(x + y), 0)(3.0, 6.0),
+            grad(lambda x, y: tan(x + y), 0)(4.0, 6.0),
+            grad(lambda x, y: tan(x + y), 0)(5.0, 6.0),
+        ],
+        [
+            grad(lambda x, y: tan(x + y), 1)(3.0, 6.0),
+            grad(lambda x, y: tan(x + y), 1)(4.0, 6.0),
+            grad(lambda x, y: tan(x + y), 1)(5.0, 6.0),
+        ],
+    )
+    print("ad.tan(var([3, 4, 5]) + var([6, 6, 6]))")
+    print(
+        f"val match? {check_list(ans_val, sol_val)}; der match? {check_list(sol_der_x, ans_der_x) & check_list(sol_der_y, ans_der_y)}"
+    )
+
 def test_neg():
     print("----------Testing neg-----------")
     print("***x=3, y=-x***")
@@ -686,6 +950,9 @@ if __name__ == "__main__":
     test_ln()
     test_logistic()
     test_log10()
+    test_sin()
+    test_cos()
+    test_tan()
     test_neg()
     test_pow()
     test_rpow()
