@@ -111,17 +111,24 @@ def exp(x):
     If x is a number, returns numeric exp(x)
     """
 
-    if isinstance(x, Variable):
-        val = np.exp(x.val)
-        der = copy.deepcopy(x.der)
-        for key in der:
-            der[key] *= val * x.der[key]
-        return Variable(val, der, increment_counter=True)
+    def exp_by_element(x):
+        if isinstance(x, Variable):
+            val = np.exp(x.val)
+            der = copy.deepcopy(x.der)
+            for key in der:
+                der[key] = val * x.der[key]
 
-    elif isinstance(x, (int, float)):
-        return np.exp(x)
+            return Variable(val, der, increment_counter=True)
+
+        elif isinstance(x, (int, float)):
+            return np.exp(x)
+        else:
+            raise TypeError("x must be a Variable or a number")
+
+    if isinstance(x, (list, tuple, np.ndarray)):
+        return [exp_by_element(i) for i in x]
     else:
-        raise TypeError("x must be a Variable or a number")
+        return exp_by_element(x)
 
 
 def log10(x):
@@ -129,17 +136,24 @@ def log10(x):
     If x is a Variable, returns a new variable with val and der
     If x is a number, returns numeric log(x)
     """
-    if isinstance(x, Variable):
-        val = np.log(x.val) / np.log(10)
-        der = copy.deepcopy(x.der)
-        for key in der:
-            der[key] *= 1 / x.val * 1 / np.log(10) * x.der[key]
-        return Variable(val, der, increment_counter=True)
 
-    elif isinstance(x, (int, float)):
-        return np.log(x) / np.log(10)
+    def log10_by_element(x):
+        if isinstance(x, Variable):
+            val = np.log(x.val) / np.log(10)
+            der = copy.deepcopy(x.der)
+            for key in der:
+                der[key] = 1 / x.val * 1 / np.log(10) * x.der[key]
+            return Variable(val, der, increment_counter=True)
+
+        elif isinstance(x, (int, float)):
+            return np.log(x) / np.log(10)
+        else:
+            raise TypeError("x must be a Variable or a number")
+
+    if isinstance(x, (list, tuple, np.ndarray)):
+        return [log10_by_element(i) for i in x]
     else:
-        raise TypeError("x must be a Variable or a number")
+        return log10_by_element(x)
 
     # 1/x * 1/log(10)
 
@@ -149,17 +163,24 @@ def ln(x):
     If x is a Variable, returns a new variable with val and der
     If x is a number, returns numeric ln(x)
     """
-    if isinstance(x, Variable):
-        val = np.log(x.val)
-        der = copy.deepcopy(x.der)
-        for key in der:
-            der[key] *= 1 / x.val * x.der[key]
-        return Variable(val, der, increment_counter=True)
 
-    elif isinstance(x, (int, float)):
-        return np.log(x)
+    def ln_by_element(x):
+        if isinstance(x, Variable):
+            val = np.log(x.val)
+            der = copy.deepcopy(x.der)
+            for key in der:
+                der[key] = 1 / x.val * x.der[key]
+            return Variable(val, der, increment_counter=True)
+
+        elif isinstance(x, (int, float)):
+            return np.log(x)
+        else:
+            raise TypeError("x must be a Variable or a number")
+
+    if isinstance(x, (list, tuple, np.ndarray)):
+        return [ln_by_element(i) for i in x]
     else:
-        raise TypeError("x must be a Variable or a number")
+        return ln_by_element(x)
 
 
 def logistic(x):
@@ -167,15 +188,22 @@ def logistic(x):
     If x is a Variable, returns a new variable with val and der
     If x is a number, returns numeric 1 / (1 + np.exp(x))
     """
-    if isinstance(x, Variable):
-        val = 1 / (1 + np.exp(-x.val))
-        der = copy.deepcopy(x.der)
-        for key in der:
-            # derivative of logistic function is logistic(x) * (1 - logistic(x))
-            der[key] *= val * (1 - val) * x.der[key]
-        return Variable(val, der, increment_counter=True)
 
-    elif isinstance(x, (int, float)):
-        return 1 / (1 + np.exp(-x))
+    def logistic_by_element(x):
+        if isinstance(x, Variable):
+            val = 1 / (1 + np.exp(-x.val))
+            der = copy.deepcopy(x.der)
+            for key in der:
+                # derivative of logistic function is logistic(x) * (1 - logistic(x))
+                der[key] = val * (1 - val) * x.der[key]
+            return Variable(val, der, increment_counter=True)
+
+        elif isinstance(x, (int, float)):
+            return 1 / (1 + np.exp(-x))
+        else:
+            raise TypeError("x must be a Variable or a number")
+
+    if isinstance(x, (list, tuple, np.ndarray)):
+        return [logistic_by_element(i) for i in x]
     else:
-        raise TypeError("x must be a Variable or a number")
+        return logistic_by_element(x)
