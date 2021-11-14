@@ -1,5 +1,6 @@
 
 import math
+import numpy as np
 
 
 def add_dict(dict1, dict2):
@@ -20,3 +21,10 @@ def check_list(list1, list2):
         if not math.isclose(list1[i], list2[i], rel_tol=1e-9, abs_tol=0.0):
             ans = False
     return ans
+
+## For comparing derivative dictionaries with rounding
+def compare_dicts(dict1, dict2, round_place=4):
+    for k in dict2:
+        if np.round(dict1[k], round_place) != np.round(dict2[k], round_place):
+            return False
+    return True

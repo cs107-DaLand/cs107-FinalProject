@@ -4,14 +4,7 @@ import numpy as np
 import autograd.numpy as adnp
 from autograd import grad
 import salad as ad
-from utils import check_list
-
-## For comparing derivative dictionaries with rounding
-def compare_dicts(dict1, dict2, round_place=4):
-    for k in dict2:
-        if np.round(dict1[k], round_place) != np.round(dict2[k], round_place):
-            return False
-    return True
+from utils import check_list, compare_dicts
 
 
 def test_add_radd():
