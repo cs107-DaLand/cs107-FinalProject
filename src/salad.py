@@ -58,19 +58,19 @@ class Variable(object):
             dict1, dict2 = self.der, other.der
             new_dict = {}
             for v in set(dict1).intersection(set(dict2)):  # intersection
-                new_dict[v] = a1 * dict2[v] + a2 * dict1[v]
+                new_dict[v] = a1 * np.asarray(dict2[v]) + a2 * np.asarray(dict1[v])
             for v in set(dict1) - set(
                 dict2
             ):  # Only those variables in self DOES THIS WORK
-                new_dict[v] = a2 * dict1[v]
+                new_dict[v] = a2 * np.asarray(dict1[v])
             for v in set(dict2) - set(dict1):  # Only those variables in other
-                new_dict[v] = a1 * dict2[v]
+                new_dict[v] = a1 * np.asarray(dict2[v])
             return Variable(a1 * a2, new_dict)
 
         except AttributeError:
             new_dict = {}
             for key in self.der:
-                new_dict[key] = other * self.der[key]
+                new_dict[key] = other * np.asarray(self.der[key])
             return Variable(self.val * other, new_dict)
 
     def __rmul__(self, other):
@@ -82,7 +82,7 @@ class Variable(object):
             a2 = 1 / other.val
             dict2 = dict(other.der)
             for k in dict2:
-                dict2[k] = (-1 * dict2[k]) / (other.val * other.val)
+                dict2[k] = (-1 * np.asarray(dict2[k])) / (other.val * other.val)
             reciprocal_other = Variable(a2, dict2, increment_counter=False)
             return self.__mul__(reciprocal_other)
 
@@ -91,7 +91,7 @@ class Variable(object):
             a1 = self.val / other
             dict1 = dict(self.der)
             for k in dict1:
-                dict1[k] = (other * dict1[k]) / (other * other)
+                dict1[k] = (other * np.asarray(dict1[k])) / (other * other)
             return Variable(a1, dict1)
 
     def __rtruediv__(self, other):
@@ -100,7 +100,7 @@ class Variable(object):
         a2 = 1 / new_var.val
         dict2 = dict(new_var.der)
         for k in dict2:
-            dict2[k] = (-1 * dict2[k]) / (new_var.val * new_var.val)
+            dict2[k] = (-1 * np.asarray(dict2[k])) / (new_var.val * new_var.val)
         reciprocal_new_var = Variable(a2, dict2, increment_counter=False)
         return reciprocal_new_var
 
