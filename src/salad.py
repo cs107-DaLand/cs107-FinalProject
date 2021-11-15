@@ -141,7 +141,8 @@ class Variable(object):
             return Variable(val=-self.val, der=new_dir, ad_mode=self.ad_mode, increment_counter=True)
         except:
             for key in self.der:
-                new_dir[key] = [-self.der[key]]
+                #new_dir[key] = [-self.der[key]]
+                new_dir[key] = -self.der[key]
             return Variable(val=[-self.val], der=new_dir, ad_mode=self.ad_mode, increment_counter=True)
 
 
@@ -171,7 +172,8 @@ class Variable(object):
                     my_der = self.der[v] if v in self.der else 0
                     other_der = other.der[v] if v in other.der else 0
                     v_der = new_val * (other_der * np.log(self.val) + my_der / self.val * other.val)
-                    new_der[v] = np.array([v_der])
+                    #new_der[v] = np.array([v_der])
+                    new_der[v] = v_der
                 return Variable(val=new_val, der=new_der, ad_mode=self.ad_mode, increment_counter=True)
         else:
             try:
@@ -181,10 +183,12 @@ class Variable(object):
                     new_der[v] = [new_val[i] * self.der[v][i] * other / self.val[i] for i in range(len(new_val))]
                 return Variable(val=new_val, der=new_der, ad_mode=self.ad_mode, increment_counter=True)
             except:
-                new_val = [self.val ** other]
+                #new_val = [self.val ** other]
+                new_val = self.val ** other
                 new_der = {}
                 for v in self.der:
-                    new_der[v] = [new_val[0] * self.der[v] * other / self.val]
+                    #new_der[v] = [new_val[0] * self.der[v] * other / self.val]
+                    new_der[v] = new_val * self.der[v] * other / self.val
                 return Variable(val=new_val, der=new_der, ad_mode=self.ad_mode, increment_counter=True)
 
 
@@ -199,10 +203,12 @@ class Variable(object):
                     new_der[v] = [new_val[i] * self.der[v][i] * np.log(other) for i in range(len(new_val))]
                 return Variable(val=new_val, der=new_der, ad_mode=self.ad_mode, increment_counter=True)
             except:
-                new_val = [other ** self.val]
+                #new_val = [other ** self.val]
+                new_val = other ** self.val
                 new_der = {}
                 for v in self.der:
-                    new_der[v] = [new_val[0] * self.der[v] * np.log(other)]
+                    #new_der[v] = [new_val[0] * self.der[v] * np.log(other)]
+                    new_der[v] = new_val * self.der[v] * np.log(other)
                 return Variable(val=new_val, der=new_der, ad_mode=self.ad_mode, increment_counter=True)
 
     def __ne__(self, other):
