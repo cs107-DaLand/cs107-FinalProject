@@ -28,3 +28,11 @@ def compare_dicts(dict1, dict2, round_place=4):
         if np.round(dict1[k], round_place) != np.round(dict2[k], round_place):
             return False
     return True
+
+def compare_dicts_multi(d1, d2):
+    if not d1.keys() == d2.keys():
+        return False
+    for k in d1:
+        if not np.all(d1[k] == d2[k]):
+            return False
+    return True
