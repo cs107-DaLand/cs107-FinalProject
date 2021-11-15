@@ -4,7 +4,7 @@ import numpy as np
 import autograd.numpy as adnp
 from autograd import grad
 import salad as ad
-from utils import check_list, compare_dicts
+from utils import check_list, compare_dicts, compare_dicts_multi
 
 
 def test_add_radd():
@@ -774,165 +774,204 @@ def test_tan():
     )
 
 def test_neg():
-    print("----------Testing neg-----------")
-    print("***x=3, y=-x***")
+    #print("----------Testing neg-----------")
+    #print("***x=3, y=-x***")
     x = ad.Variable(3, label='x')
     y = -x
-    print(y)
+    #print(y)
+    assert y.val == -3
+    assert y.der == {'x': -1}
 
-    print("***x=3, x.der={'x':2}, y=-x***")
+    #print("***x=3, x.der={'x':2}, y=-x***")
     x = ad.Variable(3, label='x', der={'x':2})
     y = -x
-    print(y)
+    ##print(y)
+    assert y.val == -3
+    assert y.der == {'x': -2}
 
-    print("***x=[0,1,2], y=-x***")
+    #print("***x=[0,1,2], y=-x***")
     x = ad.Variable(np.arange(3), label='x')
     y = -x
-    print(y)
+    ##print(y)
+    assert np.all(y.val == [0, -1, -2])
+    assert y.der == {'x': [-1,-1,-1]}
 
-    print("***x=0, y=3, z=x+2y, z2=-z***")
+    #print("***x=0, y=3, z=x+2y, z2=-z***")
     x = ad.Variable(0, label='x')
     y = ad.Variable(3, label='y')
     z = x + 2 * y
     z2 = -z
-    print(z2)
+    ##print(z2)
+    assert z2.val == -6
+    assert z2.der == {'x': -1, 'y': -2}
 
-    print("***x=[0,1,2], y=[3,4,5], z=x+2y, z2=-z***")
+    #print("***x=[0,1,2], y=[3,4,5], z=x+2y, z2=-z***")
     x = ad.Variable(np.arange(3), label='x')
     y = ad.Variable(3 + np.arange(3), label='y')
     z = x + 2 * y
     z2 = -z
-    print(z2)
+    ##print(z2)
+    assert np.all(z2.val == [-6, -9, -12])
+    assert z2.der == {'x': [-1, -1, -1], 'y': [-2, -2, -2]}
 
 def test_pow():
-    print("----------Testing pow-----------")
-    print("***x=3, z=x^2***")
-    print("should be: z=9, dz/dx=6")
+    #print("----------Testing pow-----------")
+    #print("***x=3, z=x^2***")
+    #print("should be: z=9, dz/dx=6")
     x = ad.Variable(3, label='x')
     z = x ** 2
-    print(z)
+    ##print(z)
+    assert z.val == 9
+    assert z.der == {'x': 6}
 
-    print("***x=[3,2], z=x^2***")
-    print("should be: z=[9,4], dz/dx=[6,4]")
+    #print("***x=[3,2], z=x^2***")
+    #print("should be: z=[9,4], dz/dx=[6,4]")
     x = ad.Variable([3,2], label='x')
     z = x ** 2
-    print(z)
+    ##print(z)
+    assert np.all(z.val == [9,4])
+    assert np.all(z.der == {'x': [6,4]})
 
-    print("***x=3, y=2, z=x^y***")
-    print("should be: z=9, dz/dx=6, dz/dy=9.8875")
+    #print("***x=3, y=2, z=x^y***")
+    #print("should be: z=9, dz/dx=6, dz/dy=9.8875")
     x = ad.Variable(3, label='x')
     y = ad.Variable(2, label='y')
     z = x ** y
-    print(z)
+    ##print(z)
+    assert z.val == 9
+    assert z.der == {'x': 6, 'y': 9 * np.log(3)}
 
-    print("***x=[3,2], y=[2,3], z=x^y***")
-    print("should be: z=[9,8], dz/dx=[6,12], dz/dy=[9.8875,5.5452]")
+    #print("***x=[3,2], y=[2,3], z=x^y***")
+    #print("should be: z=[9,8], dz/dx=[6,12], dz/dy=[9.8875,5.5452]")
     x = ad.Variable([3,2], label='x')
     y = ad.Variable([2,3], label='y')
     z = x ** y
-    print(z)
+    ##print(z)
+    assert np.all(z.val == [9,8])
+    ##print(z.der)
+    assert compare_dicts_multi(z.der, {'x': [6,12], 'y': [9 * np.log(3), 8 * np.log(2)]}) == True
 
-    print("***x=[e-1, e-1], y=[1,1], z=x+y, z2=z^y***")
-    print("should be: z2=[e,e], dz/dx=[1,1], dz/dy=[e+1, e+1]")
+    #print("***x=[e-1, e-1], y=[1,1], z=x+y, z2=z^y***")
+    #print("should be: z2=[e,e], dz/dx=[1,1], dz/dy=[e+1, e+1]")
     x = ad.Variable([np.e-1, np.e-1], label='x')
     y = ad.Variable([1,1], label='y')
     z = x + y
     z2 = z ** y
-    print(z2)
+    ##print(z2)
+    assert np.all(z2.val == [np.e, np.e])
+    assert compare_dicts_multi(z2.der, {'x': [1,1], 'y': [np.e+1, np.e+1]}) == True
 
 def test_rpow():
-    print("----------Testing rpow-----------")
-    print("***x=1, z=e^x***")
-    print("should be: z=e, dz/dx=e")
+    #print("----------Testing rpow-----------")
+    #print("***x=1, z=e^x***")
+    #print("should be: z=e, dz/dx=e")
     x = ad.Variable(1, label='x')
     z = np.e ** x
-    print(z)
+    ##print(z)
+    assert z.val == np.e
+    assert z.der == {'x': np.e}
 
-    print("***x=[1,2], z=e^x***")
-    print("should be: z=[e, 7.389], dz/dx=[e, 7.389]")
+    #print("***x=[1,2], z=e^x***")
+    #print("should be: z=[e, 7.389], dz/dx=[e, 7.389]")
     x = ad.Variable([1,2], label='x')
     z = np.e ** x
-    print(z)
+    ##print(z)
+    assert np.all(z.val == [np.e, np.e ** 2])
+    assert np.all(z.der == {'x': [np.e, np.e ** 2]})
 
-    print("***x=2, y=-1, z=e^(x+2*y)***")
-    print("should be: z=e, dz/dx=1, dz/dy=2")
+    #print("***x=2, y=-1, z=e^(x+2*y)***")
+    #print("should be: z=1, dz/dx=1, dz/dy=2")
     x = ad.Variable(2, label='x')
     y = ad.Variable(-1, label='y')
     z = np.e ** (x + 2 * y)
-    print(z)
+    ##print(z)
+    assert z.val == 1
+    assert z.der == {'x': 1, 'y': 2}
 
-    print("***x=[2,-2], y=[-1,1], z=e^(x+2*y)***")
-    print("should be: z=[e,e], dz/dx=[1,1], dz/dy=[2,2]")
+    #print("***x=[2,-2], y=[-1,1], z=e^(x+2*y)***")
+    #print("should be: z=[1,1], dz/dx=[1,1], dz/dy=[2,2]")
     x = ad.Variable([2,-2], label='x')
     y = ad.Variable([-1,1], label='y')
     z = np.e ** (x + 2 * y)
-    print(z)
+    ##print(z)
+    assert np.all(z.val == [1,1])
+    assert np.all(z.der == {'x': [1,1], 'y': [2,2]})
 
 def test_ne():
-    print("----------Testing ne-----------")
-    print("!!!!!!!!NOTICE: ONLY COMPARING LABEL!!!!!!!!")
-    print("***x=1, y=1***")
-    print("should be: x==x, x!=y")
+    #print("----------Testing ne-----------")
+    #print("!!!!!!!!NOTICE: ONLY COMPARING LABEL!!!!!!!!")
+    #print("***x=1, y=1***")
+    #print("should be: x==x, x!=y")
     x = ad.Variable(1, label='x')
     y = ad.Variable(1, label='y')
-    print("x!=x: ", x!=x)
-    print("x!=y: ", x!=y)
+    #print("x!=x: ", x!=x)
+    #print("x!=y: ", x!=y)
+    assert (x != x) == False
+    assert (x != y) == True
 
 def test_lt():
-    print("----------Testing lt-----------")
-    print("***x=1, y=2***")
-    print("should be: x<y")
+    #print("----------Testing lt-----------")
+    #print("***x=1, y=2***")
+    #print("should be: x<y")
     x = ad.Variable(1, label='x')
     y = ad.Variable(2, label='y')
-    print("x<y: ", x<y)
+    ##print("x<y: ", x<y)
+    assert (x < y) == True
 
-    print("***x=[1,2], y=[2,2]***")
-    print("should be: [T, F]")
+    #print("***x=[1,2], y=[2,2]***")
+    #print("should be: [T, F]")
     x = ad.Variable([1,2], label='x')
     y = ad.Variable([2,2], label='y')
-    print("x<y: ", x<y)
+    #print("x<y: ", x<y)
+    assert np.all((x < y) == [True, False])
 
 def test_le():
-    print("----------Testing le-----------")
-    print("***x=1, y=2***")
-    print("should be: x<=y")
+    #print("----------Testing le-----------")
+    #print("***x=1, y=2***")
+    #print("should be: x<=y")
     x = ad.Variable(1, label='x')
     y = ad.Variable(2, label='y')
-    print("x<=y: ", x<=y)
+    #print("x<=y: ", x<=y)
+    assert (x <= y) == True
 
-    print("***x=[1,2], y=[2,2]***")
-    print("should be: [T, T]")
+    #print("***x=[1,2], y=[2,2]***")
+    #print("should be: [T, T]")
     x = ad.Variable([1,2], label='x')
     y = ad.Variable([2,2], label='y')
-    print("x<=y: ", x<=y)
+    #print("x<=y: ", x<=y)
+    assert np.all((x <= y) == [True, True])
 
 def test_gt():
-    print("----------Testing gt-----------")
-    print("***x=3, y=2***")
-    print("should be: x>y")
+    #print("----------Testing gt-----------")
+    #print("***x=3, y=2***")
+    #print("should be: x>y")
     x = ad.Variable(3, label='x')
     y = ad.Variable(2, label='y')
-    print("x>y: ", x>y)
+    #print("x>y: ", x>y)
+    assert (x > y) == True
 
-    print("***x=[3,2], y=[2,2]***")
-    print("should be: [T, F]")
+    #print("***x=[3,2], y=[2,2]***")
+    #print("should be: [T, F]")
     x = ad.Variable([3,2], label='x')
     y = ad.Variable([2,2], label='y')
-    print("x>y: ", x>y)
+    #print("x>y: ", x>y)
+    assert np.all((x > y) == [True, False])
 
 def test_ge():
-    print("----------Testing ge-----------")
-    print("***x=3, y=2***")
-    print("should be: x>=y")
+    #print("----------Testing ge-----------")
+    #print("***x=3, y=2***")
+    #print("should be: x>=y")
     x = ad.Variable(3, label='x')
     y = ad.Variable(2, label='y')
-    print("x>=y: ", x>=y)
+    #print("x>=y: ", x>=y)
+    assert (x >= y) == True
 
-    print("***x=[3,2], y=[2,2]***")
-    print("should be: [T, T]")
+    #print("***x=[3,2], y=[2,2]***")
+    #print("should be: [T, T]")
     x = ad.Variable([3,2], label='x')
     y = ad.Variable([2,2], label='y')
-    print("x>=y: ", x>=y)
+    #print("x>=y: ", x>=y)
+    assert np.all((x >= y) == [True, True])
 
 if __name__ == "__main__":
     test_add_radd()
