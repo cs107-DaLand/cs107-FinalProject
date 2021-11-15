@@ -3,6 +3,35 @@ from utils import add_dict
 import copy
 
 
+class Forward(object):
+    """
+        For handling multiple function input
+        Example:
+        >> variables = {'x': 3, 'y': 5}
+        >> functions = ['2*x + y', '3*x + 2*y]
+        >> f = Forward(variables, functions)
+        >> print(f) 
+        Label: v3, Value: 11, Derivative: {'x': 2.0, 'y': 1.0}
+        Label: v6, Value: 19, Derivative: {'x': 3.0, 'y': 2.0}
+    """
+    def __init__(self, variables: dict, functions: list):
+        var_dict = {}
+        for key in variables:
+            var_dict[key] = Variable(val=variables[key], label=key)
+        
+        self.results = []
+        for func in functions:
+            self.results.append(eval(func, var_dict))
+
+    def __str__(self):
+        pretty = []
+        for res in self.results:
+            pretty.append(f"Label: {res.label}, Value: {res.val}, Derivative: {res.der}")
+            pretty.append('\n')
+        return ''.join(pretty).rstrip()
+
+
+
 class Variable(object):
     counter = 0
 
