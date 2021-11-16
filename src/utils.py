@@ -30,7 +30,7 @@ def compare_dicts(dict1, dict2, round_place=4):
     return True
 
 def compare_dicts_multi(d1, d2):
-    if not d1.keys() == d2.keys():
+    if not set(d1) == set(d2):
         return False
     for k in d1:
         if not np.all(d1[k] == d2[k]):
