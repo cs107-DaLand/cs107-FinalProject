@@ -1,5 +1,5 @@
 import numpy as np
-from utils import add_dict
+from utils import add_dict, compare_dicts_multi
 import copy
 
 
@@ -211,9 +211,33 @@ class Variable(object):
                     new_der[v] = new_val * self.der[v] * np.log(other)
                 return Variable(val=new_val, der=new_der, ad_mode=self.ad_mode, increment_counter=True)
 
+    '''
     def __ne__(self, other):
         return self.label != other.label
-    
+    '''
+    def __eq__(self, other):
+        if not isinstance(other, Variable):
+            return False
+        if isinstance(self.val, (list, tuple, np.ndarray)) and isinstance(other.val, (list, tuple, np.ndarray)):
+            if not np.all(self.val == other.val):
+                return False
+            if not compare_dicts_multi(self.der, other.der):
+                return False
+            return True
+        elif isinstance(self.val, (list, tuple, np.ndarray)) or isinstance(other.val, (list, tuple, np.ndarray)):
+            return False
+        if self.val != other.val:
+            return False
+        if not set(self.der) == set(other.der):
+            return False
+        for i in self.der:
+            if self.der[i] != other.der[i]:
+                return False
+        return True
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
     def __lt__(self, other):
         try:
             return self.val < other.val
