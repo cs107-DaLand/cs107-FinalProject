@@ -904,10 +904,27 @@ def test_ne():
     #print("should be: x==x, x!=y")
     x = ad.Variable(1, label='x')
     y = ad.Variable(1, label='y')
-    #print("x!=x: ", x!=x)
-    #print("x!=y: ", x!=y)
     assert (x != x) == False
     assert (x != y) == True
+
+    z1 = ad.Variable([1,2], der={'x':[1,2], 'y':[1,2]}, label='z1')
+    z2 = ad.Variable([1,2], der={'x':[1,2], 'y':[1,2]}, label='z2')
+    assert (z1 != z2) == False
+
+    z1 = ad.Variable(1, der={'x':2, 'y':3}, label='z1')
+    z2 = ad.Variable(1, der={'x':2, 'y':3}, label='z2')
+    assert (z1 != z2) == False
+
+    z1 = ad.Variable([1,2], der={'x':[1,2], 'y':[1,2]}, label='z1')
+    z2 = ad.Variable([1,2], der={'x':[1,2], 'y':[1,3]}, label='z2')
+    assert (z1 != z2) == True
+
+    x = ad.Variable(1, label='x')
+    y = ad.Variable(1, label='y')
+    z1 = ad.exp(x) + np.e * y
+    z2 = ad.exp(y) + np.e * x
+    assert (z1 != z2) == False
+
 
 def test_lt():
     #print("----------Testing lt-----------")
