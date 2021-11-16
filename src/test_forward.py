@@ -147,45 +147,37 @@ def test_truediv_rtruediv():
 
 
 def test_exp():
-    print("-" * 50, "Test exp")
     x = 3
     ans = ad.exp(x)
     sol = np.exp(x)
-    print("ad.exp(3)")
-    print(f"val match? {sol == ans}")
+    assert sol == ans
 
     x = ad.Variable(3, label="x")
     y = ad.exp(x)
     ans_val, ans_der = y.val, y.der["x"]
     sol_val, sol_der = np.exp(3), np.exp(3)
-    print("ad.exp(var(3))")
-    print(
-        f"val match? {ans_val == sol_val}; der match? {math.isclose(ans_der, sol_der)}"
-    )
+    assert ans_val == sol_val
+    assert math.isclose(ans_der, sol_der)
 
     x = ad.Variable(3, label="x")
     ans_val, ans_der = ad.exp(x).val, ad.exp(x).der["x"]
     sol_val, sol_der = np.exp(3), np.exp(3)
-    print("ad.exp(var(3))")
-    print(
-        f"val match? {ans_val == sol_val}; der match? {math.isclose(ans_der, sol_der)}"
-    )
+    assert ans_val == sol_val
+    assert math.isclose(ans_der, sol_der)
 
     x = ad.Variable(3, label="x") + 3
     y = ad.exp(x)
     ans_val, ans_der = y.val, y.der["x"]
     sol_val, sol_der = np.exp(6), np.exp(6)
-    print("ad.exp(var(3)+3)")
-    print(
-        f"val match? {ans_val == sol_val}; der match? {math.isclose(ans_der, sol_der)}"
-    )
+    assert ans_val == sol_val
+    assert math.isclose(ans_der, sol_der)
 
     x = ad.Variable(3, label="x") + ad.Variable(4, label="y")
     y = ad.exp(x)
     ans_val, ans_der = y.val, [y.der["x"], y.der["y"]]
     sol_val, sol_der = np.exp(7), [np.exp(7), np.exp(7)]
-    print("ad.exp(var(3) + var(4))")
-    print(f"val match? {ans_val == sol_val}; der match? {check_list(ans_der, sol_der)}")
+    assert ans_val == sol_val
+    assert check_list(ans_der, sol_der)
 
     x = ad.Variable([3, 4, 5], label="x")
     y = ad.exp(x)
@@ -195,9 +187,8 @@ def test_exp():
         np.exp(4),
         np.exp(5),
     ]
-    print("ad.exp(var([3, 4, 5]))")
-    print(f"val match? {check_list(ans_val, sol_val)}")
-    print(f"der match? {check_list(ans_der, sol_der)}")
+    assert check_list(ans_val, sol_val)
+    assert check_list(ans_der, sol_der)
 
     x = ad.Variable([3, 4, 5], label="x")
     y = ad.exp(x) + ad.exp(x)
@@ -207,9 +198,8 @@ def test_exp():
         2 * np.exp(4),
         2 * np.exp(5),
     ]
-    print("ad.exp(var([3, 4, 5]))")
-    print(f"val match? {check_list(ans_val, sol_val)}")
-    print(f"der match? {check_list(ans_der, sol_der)}")
+    assert check_list(ans_val, sol_val)
+    assert check_list(ans_der, sol_der)
 
     x = ad.Variable([3, 4, 5], label="x")
     z = x + x
@@ -220,9 +210,8 @@ def test_exp():
         2 * np.exp(2 * 4),
         2 * np.exp(2 * 5),
     ]
-    print("ad.exp(var([3, 4, 5]) + var([3, 4, 5]))")
-    print(f"val match? {check_list(ans_val, sol_val)}")
-    print(f"der match? {check_list(ans_der, sol_der)}")
+    assert check_list(ans_val, sol_val)
+    assert check_list(ans_der, sol_der)
 
     x = ad.Variable([3, 4, 5], label="x")
     y = ad.Variable([6, 6, 6], label="y")
@@ -241,37 +230,29 @@ def test_exp():
             grad(lambda x, y: adnp.exp(x + y), 1)(5.0, 6.0),
         ],
     )
-    print("ad.exp(var([3, 4, 5]) + var([6, 6, 6]))")
-    print(
-        f"val match? {check_list(ans_val, sol_val)}; der match? {check_list(sol_der_x, ans_der_x) & check_list(sol_der_y, ans_der_y)}"
-    )
+    assert check_list(ans_val, sol_val)
+    assert check_list(sol_der_x, ans_der_x) & check_list(sol_der_y, ans_der_y)
 
 
 def test_ln():
-    print("-" * 50, "Test ln")
     x = 3
     ans = ad.ln(x)
     sol = adnp.log(x)
-    print("ad.ln(3)")
-    print(f"val match? {sol == ans}")
+    assert sol == ans
 
     x = ad.Variable(3, label="x")
     y = ad.ln(x)
     ans_val, ans_der = y.val, y.der["x"]
     sol_val, sol_der = adnp.log(3), grad(adnp.log)(3.0)
-    print("ad.ln(var(3))")
-    print(
-        f"val match? {ans_val == sol_val}; der match? {math.isclose(ans_der, sol_der)}"
-    )
+    assert ans_val == sol_val
+    assert math.isclose(ans_der, sol_der)
 
     x = ad.Variable(3, label="x") + 3
     y = ad.ln(x)
     ans_val, ans_der = y.val, y.der["x"]
     sol_val, sol_der = adnp.log(6), grad(lambda x: adnp.log(x + 3.0))(3.0)
-    print("ad.ln(var(3)+3)")
-    print(
-        f"val match? {ans_val == sol_val}; der match? {math.isclose(ans_der, sol_der)}"
-    )
+    assert ans_val == sol_val
+    assert math.isclose(ans_der, sol_der)
 
     x = ad.Variable(3, label="x") + ad.Variable(4, label="y")
     y = ad.ln(x)
@@ -280,8 +261,8 @@ def test_ln():
         grad(lambda x, y: adnp.log(x + y), 0)(3.0, 4.0),
         grad(lambda x, y: adnp.log(x + y), 1)(3.0, 4.0),
     ]
-    print("ad.ln(var(3) + var(4))")
-    print(f"val match? {ans_val == sol_val}; der match? {check_list(ans_der, sol_der)}")
+    assert ans_val == sol_val
+    assert check_list(ans_der, sol_der)
 
     x = ad.Variable([3, 4, 5], label="x")
     y = ad.ln(x)
@@ -291,10 +272,8 @@ def test_ln():
         grad(lambda x: adnp.log(x))(4.0),
         grad(lambda x: adnp.log(x))(5.0),
     ]
-    print("ad.ln(var([3, 4, 5]))")
-    print(
-        f"val match? {check_list(ans_val, sol_val)}; der match? {check_list(ans_der, sol_der)}"
-    )
+    assert check_list(ans_val, sol_val)
+    assert check_list(ans_der, sol_der)
 
     x = ad.Variable([3, 4, 5], label="x")
     y = ad.ln(x + x)
@@ -304,10 +283,8 @@ def test_ln():
         grad(lambda x: adnp.log(x + x))(4.0),
         grad(lambda x: adnp.log(x + x))(5.0),
     ]
-    print("ad.ln(var([3, 4, 5]) + var([3, 4, 5]))")
-    print(
-        f"val match? {check_list(ans_val, sol_val)}; der match? {check_list(ans_der, sol_der)}"
-    )
+    assert check_list(ans_val, sol_val)
+    assert check_list(ans_der, sol_der)
 
     x = ad.Variable([3, 4, 5], label="x")
     y = ad.Variable([6, 6, 6], label="y")
@@ -326,41 +303,32 @@ def test_ln():
             grad(lambda x, y: adnp.log(x + y), 1)(5.0, 6.0),
         ],
     )
-    print("ad.ln(var([3, 4, 5]) + var([6, 6, 6]))")
-    print(
-        f"val match? {check_list(ans_val, sol_val)}; der match? {check_list(sol_der_x, ans_der_x) & check_list(sol_der_y, ans_der_y)}"
-    )
+    assert check_list(ans_val, sol_val)
+    assert check_list(sol_der_x, ans_der_x) & check_list(sol_der_y, ans_der_y)
 
 
 def test_logistic():
-    print("-" * 50, "Test logistic")
-
     def logistic(x):
         return 1 / (1 + adnp.exp(-x))
 
     x = 3
     ans = ad.logistic(x)
     sol = logistic(x)
-    print("ad.logistic(3)")
-    print(f"val match? {sol == ans}")
+    assert sol == ans
 
     x = ad.Variable(3, label="x")
     y = ad.logistic(x)
     ans_val, ans_der = y.val, y.der["x"]
     sol_val, sol_der = logistic(3), grad(logistic)(3.0)
-    print("ad.logistic(var(3))")
-    print(
-        f"val match? {ans_val == sol_val}; der match? {math.isclose(ans_der, sol_der)}"
-    )
+    assert ans_val == sol_val
+    assert math.isclose(ans_der, sol_der)
 
     x = ad.Variable(3, label="x") + 3
     y = ad.logistic(x)
     ans_val, ans_der = y.val, y.der["x"]
     sol_val, sol_der = logistic(6), grad(lambda x: logistic(x + 3.0))(3.0)
-    print("ad.logistic(var(3)+3)")
-    print(
-        f"val match? {ans_val == sol_val}; der match? {math.isclose(ans_der, sol_der)}"
-    )
+    assert ans_val == sol_val
+    assert math.isclose(ans_der, sol_der)
 
     x = ad.Variable(3, label="x") + ad.Variable(4, label="y")
     y = ad.logistic(x)
@@ -369,8 +337,8 @@ def test_logistic():
         grad(lambda x, y: logistic(x + y), 0)(3.0, 4.0),
         grad(lambda x, y: logistic(x + y), 1)(3.0, 4.0),
     ]
-    print("ad.logistic(var(3) + var(4))")
-    print(f"val match? {ans_val == sol_val}; der match? {check_list(ans_der, sol_der)}")
+    assert ans_val == sol_val
+    assert check_list(ans_der, sol_der)
 
     x = ad.Variable([3, 4, 5], label="x")
     y = ad.logistic(x)
@@ -380,10 +348,8 @@ def test_logistic():
         grad(lambda x: logistic(x))(4.0),
         grad(lambda x: logistic(x))(5.0),
     ]
-    print("ad.logistic(var([3, 4, 5]))")
-    print(
-        f"val match? {check_list(ans_val, sol_val)}; der match? {check_list(ans_der, sol_der)}"
-    )
+    assert check_list(ans_val, sol_val)
+    assert check_list(ans_der, sol_der)
 
     x = ad.Variable([3, 4, 5], label="x")
     y = ad.logistic(x + x)
@@ -393,10 +359,8 @@ def test_logistic():
         grad(lambda x: logistic(x + x))(4.0),
         grad(lambda x: logistic(x + x))(5.0),
     ]
-    print("ad.logistic(var([3, 4, 5]) + var([3, 4, 5]))")
-    print(
-        f"val match? {check_list(ans_val, sol_val)}; der match? {check_list(ans_der, sol_der)}"
-    )
+    assert check_list(ans_val, sol_val)
+    assert check_list(ans_der, sol_der)
 
     x = ad.Variable([3, 4, 5], label="x")
     y = ad.Variable([6, 6, 6], label="y")
@@ -415,41 +379,32 @@ def test_logistic():
             grad(lambda x, y: logistic(x + y), 1)(5.0, 6.0),
         ],
     )
-    print("ad.logistic(var([3, 4, 5]) + var([6, 6, 6]))")
-    print(
-        f"val match? {check_list(ans_val, sol_val)}; der match? {check_list(sol_der_x, ans_der_x) & check_list(sol_der_y, ans_der_y)}"
-    )
+    assert check_list(ans_val, sol_val)
+    assert check_list(sol_der_x, ans_der_x) & check_list(sol_der_y, ans_der_y)
 
 
 def test_log10():
-    print("-" * 50, "Test log10")
-
     def log10(x):
         return adnp.log(x) / adnp.log(10)
 
     x = 3
     ans = ad.log10(x)
     sol = log10(x)
-    print("ad.log10(3)")
-    print(f"val match? {sol == ans}")
+    assert sol == ans
 
     x = ad.Variable(3, label="x")
     y = ad.log10(x)
     ans_val, ans_der = y.val, y.der["x"]
     sol_val, sol_der = log10(3), grad(log10)(3.0)
-    print("ad.log10(var(3))")
-    print(
-        f"val match? {ans_val == sol_val}; der match? {math.isclose(ans_der, sol_der)}"
-    )
+    assert ans_val == sol_val
+    assert math.isclose(ans_der, sol_der)
 
     x = ad.Variable(3, label="x") + 3
     y = ad.log10(x)
     ans_val, ans_der = y.val, y.der["x"]
     sol_val, sol_der = log10(6), grad(lambda x: log10(x + 3.0))(3.0)
-    print("ad.log10(var(3)+3)")
-    print(
-        f"val match? {ans_val == sol_val}; der match? {math.isclose(ans_der, sol_der)}"
-    )
+    assert ans_val == sol_val
+    assert math.isclose(ans_der, sol_der)
 
     x = ad.Variable(3, label="x") + ad.Variable(4, label="y")
     y = ad.log10(x)
@@ -458,8 +413,8 @@ def test_log10():
         grad(lambda x, y: log10(x + y), 0)(3.0, 4.0),
         grad(lambda x, y: log10(x + y), 1)(3.0, 4.0),
     ]
-    print("ad.log10(var(3) + var(4))")
-    print(f"val match? {ans_val == sol_val}; der match? {check_list(ans_der, sol_der)}")
+    assert ans_val == sol_val
+    assert check_list(ans_der, sol_der)
 
     x = ad.Variable([3, 4, 5], label="x")
     y = ad.log10(x)
@@ -469,10 +424,8 @@ def test_log10():
         grad(lambda x: log10(x))(4.0),
         grad(lambda x: log10(x))(5.0),
     ]
-    print("ad.log10(var([3, 4, 5]))")
-    print(
-        f"val match? {check_list(ans_val, sol_val)}; der match? {check_list(ans_der, sol_der)}"
-    )
+    assert check_list(ans_val, sol_val)
+    assert check_list(ans_der, sol_der)
 
     x = ad.Variable([3, 4, 5], label="x")
     y = ad.log10(x + x)
@@ -482,10 +435,8 @@ def test_log10():
         grad(lambda x: log10(x + x))(4.0),
         grad(lambda x: log10(x + x))(5.0),
     ]
-    print("ad.log10(var([3, 4, 5]) + var([3, 4, 5]))")
-    print(
-        f"val match? {check_list(ans_val, sol_val)}; der match? {check_list(ans_der, sol_der)}"
-    )
+    assert check_list(ans_val, sol_val)
+    assert check_list(ans_der, sol_der)
 
     x = ad.Variable([3, 4, 5], label="x")
     y = ad.Variable([6, 6, 6], label="y")
@@ -504,40 +455,32 @@ def test_log10():
             grad(lambda x, y: log10(x + y), 1)(5.0, 6.0),
         ],
     )
-    print("ad.log10(var([3, 4, 5]) + var([6, 6, 6]))")
-    print(
-        f"val match? {check_list(ans_val, sol_val)}; der match? {check_list(sol_der_x, ans_der_x) & check_list(sol_der_y, ans_der_y)}"
-    )
+    assert check_list(ans_val, sol_val)
+    assert check_list(sol_der_x, ans_der_x) & check_list(sol_der_y, ans_der_y)
+
 
 def test_sin():
-    print("-" * 50, "Test sin")
-
     def sin(x):
         return adnp.sin(x)
 
     x = 3
     ans = ad.sin(x)
     sol = sin(x)
-    print("ad.sin(3)")
-    print(f"val match? {sol == ans}")
+    assert sol == ans
 
     x = ad.Variable(3, label="x")
     y = ad.sin(x)
     ans_val, ans_der = y.val, y.der["x"]
     sol_val, sol_der = sin(3), grad(sin)(3.0)
-    print("ad.sin(var(3))")
-    print(
-        f"val match? {ans_val == sol_val}; der match? {math.isclose(ans_der, sol_der)}"
-    )
+    assert ans_val == sol_val
+    assert math.isclose(ans_der, sol_der)
 
     x = ad.Variable(3, label="x") + 3
     y = ad.sin(x)
     ans_val, ans_der = y.val, y.der["x"]
     sol_val, sol_der = sin(6), grad(lambda x: sin(x + 3.0))(3.0)
-    print("ad.sin(var(3)+3)")
-    print(
-        f"val match? {ans_val == sol_val}; der match? {math.isclose(ans_der, sol_der)}"
-    )
+    assert ans_val == sol_val
+    assert math.isclose(ans_der, sol_der)
 
     x = ad.Variable(3, label="x") + ad.Variable(4, label="y")
     y = ad.sin(x)
@@ -546,8 +489,8 @@ def test_sin():
         grad(lambda x, y: sin(x + y), 0)(3.0, 4.0),
         grad(lambda x, y: sin(x + y), 1)(3.0, 4.0),
     ]
-    print("ad.sin(var(3) + var(4))")
-    print(f"val match? {ans_val == sol_val}; der match? {check_list(ans_der, sol_der)}")
+    assert ans_val == sol_val
+    assert check_list(ans_der, sol_der)
 
     x = ad.Variable([3, 4, 5], label="x")
     y = ad.sin(x)
@@ -557,10 +500,8 @@ def test_sin():
         grad(lambda x: sin(x))(4.0),
         grad(lambda x: sin(x))(5.0),
     ]
-    print("ad.sin(var([3, 4, 5]))")
-    print(
-        f"val match? {check_list(ans_val, sol_val)}; der match? {check_list(ans_der, sol_der)}"
-    )
+    assert check_list(ans_val, sol_val)
+    assert check_list(ans_der, sol_der)
 
     x = ad.Variable([3, 4, 5], label="x")
     y = ad.sin(x + x)
@@ -570,10 +511,8 @@ def test_sin():
         grad(lambda x: sin(x + x))(4.0),
         grad(lambda x: sin(x + x))(5.0),
     ]
-    print("ad.sin(var([3, 4, 5]) + var([3, 4, 5]))")
-    print(
-        f"val match? {check_list(ans_val, sol_val)}; der match? {check_list(ans_der, sol_der)}"
-    )
+    assert check_list(ans_val, sol_val)
+    assert check_list(ans_der, sol_der)
 
     x = ad.Variable([3, 4, 5], label="x")
     y = ad.Variable([6, 6, 6], label="y")
@@ -592,40 +531,32 @@ def test_sin():
             grad(lambda x, y: sin(x + y), 1)(5.0, 6.0),
         ],
     )
-    print("ad.sin(var([3, 4, 5]) + var([6, 6, 6]))")
-    print(
-        f"val match? {check_list(ans_val, sol_val)}; der match? {check_list(sol_der_x, ans_der_x) & check_list(sol_der_y, ans_der_y)}"
-    )
+    assert check_list(ans_val, sol_val)
+    assert check_list(sol_der_x, ans_der_x) & check_list(sol_der_y, ans_der_y)
+
 
 def test_cos():
-    print("-" * 50, "Test cos")
-
     def cos(x):
         return adnp.cos(x)
 
     x = 3
     ans = ad.cos(x)
     sol = cos(x)
-    print("ad.cos(3)")
-    print(f"val match? {sol == ans}")
+    assert sol == ans
 
     x = ad.Variable(3, label="x")
     y = ad.cos(x)
     ans_val, ans_der = y.val, y.der["x"]
     sol_val, sol_der = cos(3), grad(cos)(3.0)
-    print("ad.cos(var(3))")
-    print(
-        f"val match? {ans_val == sol_val}; der match? {math.isclose(ans_der, sol_der)}"
-    )
+    assert ans_val == sol_val
+    assert math.isclose(ans_der, sol_der)
 
     x = ad.Variable(3, label="x") + 3
     y = ad.cos(x)
     ans_val, ans_der = y.val, y.der["x"]
     sol_val, sol_der = cos(6), grad(lambda x: cos(x + 3.0))(3.0)
-    print("ad.cos(var(3)+3)")
-    print(
-        f"val match? {ans_val == sol_val}; der match? {math.isclose(ans_der, sol_der)}"
-    )
+    assert ans_val == sol_val
+    assert math.isclose(ans_der, sol_der)
 
     x = ad.Variable(3, label="x") + ad.Variable(4, label="y")
     y = ad.cos(x)
@@ -634,8 +565,8 @@ def test_cos():
         grad(lambda x, y: cos(x + y), 0)(3.0, 4.0),
         grad(lambda x, y: cos(x + y), 1)(3.0, 4.0),
     ]
-    print("ad.cos(var(3) + var(4))")
-    print(f"val match? {ans_val == sol_val}; der match? {check_list(ans_der, sol_der)}")
+    assert ans_val == sol_val
+    assert check_list(ans_der, sol_der)
 
     x = ad.Variable([3, 4, 5], label="x")
     y = ad.cos(x)
@@ -645,10 +576,8 @@ def test_cos():
         grad(lambda x: cos(x))(4.0),
         grad(lambda x: cos(x))(5.0),
     ]
-    print("ad.cos(var([3, 4, 5]))")
-    print(
-        f"val match? {check_list(ans_val, sol_val)}; der match? {check_list(ans_der, sol_der)}"
-    )
+    assert check_list(ans_val, sol_val)
+    assert check_list(ans_der, sol_der)
 
     x = ad.Variable([3, 4, 5], label="x")
     y = ad.cos(x + x)
@@ -658,10 +587,8 @@ def test_cos():
         grad(lambda x: cos(x + x))(4.0),
         grad(lambda x: cos(x + x))(5.0),
     ]
-    print("ad.cos(var([3, 4, 5]) + var([3, 4, 5]))")
-    print(
-        f"val match? {check_list(ans_val, sol_val)}; der match? {check_list(ans_der, sol_der)}"
-    )
+    assert check_list(ans_val, sol_val)
+    assert check_list(ans_der, sol_der)
 
     x = ad.Variable([3, 4, 5], label="x")
     y = ad.Variable([6, 6, 6], label="y")
@@ -680,40 +607,32 @@ def test_cos():
             grad(lambda x, y: cos(x + y), 1)(5.0, 6.0),
         ],
     )
-    print("ad.cos(var([3, 4, 5]) + var([6, 6, 6]))")
-    print(
-        f"val match? {check_list(ans_val, sol_val)}; der match? {check_list(sol_der_x, ans_der_x) & check_list(sol_der_y, ans_der_y)}"
-    )
+    assert check_list(ans_val, sol_val)
+    assert check_list(sol_der_x, ans_der_x) & check_list(sol_der_y, ans_der_y)
+
 
 def test_tan():
-    print("-" * 50, "Test tan")
-
     def tan(x):
         return adnp.tan(x)
 
     x = 3
     ans = ad.tan(x)
     sol = tan(x)
-    print("ad.tan(3)")
-    print(f"val match? {sol == ans}")
+    assert sol == ans
 
     x = ad.Variable(3, label="x")
     y = ad.tan(x)
     ans_val, ans_der = y.val, y.der["x"]
     sol_val, sol_der = tan(3), grad(tan)(3.0)
-    print("ad.tan(var(3))")
-    print(
-        f"val match? {ans_val == sol_val}; der match? {math.isclose(ans_der, sol_der)}"
-    )
+    assert ans_val == sol_val
+    assert math.isclose(ans_der, sol_der)
 
     x = ad.Variable(3, label="x") + 3
     y = ad.tan(x)
     ans_val, ans_der = y.val, y.der["x"]
     sol_val, sol_der = tan(6), grad(lambda x: tan(x + 3.0))(3.0)
-    print("ad.tan(var(3)+3)")
-    print(
-        f"val match? {ans_val == sol_val}; der match? {math.isclose(ans_der, sol_der)}"
-    )
+    assert ans_val == sol_val
+    assert math.isclose(ans_der, sol_der)
 
     x = ad.Variable(3, label="x") + ad.Variable(4, label="y")
     y = ad.tan(x)
@@ -722,8 +641,8 @@ def test_tan():
         grad(lambda x, y: tan(x + y), 0)(3.0, 4.0),
         grad(lambda x, y: tan(x + y), 1)(3.0, 4.0),
     ]
-    print("ad.tan(var(3) + var(4))")
-    print(f"val match? {ans_val == sol_val}; der match? {check_list(ans_der, sol_der)}")
+    assert ans_val == sol_val
+    assert check_list(ans_der, sol_der)
 
     x = ad.Variable([3, 4, 5], label="x")
     y = ad.tan(x)
@@ -733,10 +652,8 @@ def test_tan():
         grad(lambda x: tan(x))(4.0),
         grad(lambda x: tan(x))(5.0),
     ]
-    print("ad.tan(var([3, 4, 5]))")
-    print(
-        f"val match? {check_list(ans_val, sol_val)}; der match? {check_list(ans_der, sol_der)}"
-    )
+    assert check_list(ans_val, sol_val)
+    assert check_list(ans_der, sol_der)
 
     x = ad.Variable([3, 4, 5], label="x")
     y = ad.tan(x + x)
@@ -746,10 +663,8 @@ def test_tan():
         grad(lambda x: tan(x + x))(4.0),
         grad(lambda x: tan(x + x))(5.0),
     ]
-    print("ad.tan(var([3, 4, 5]) + var([3, 4, 5]))")
-    print(
-        f"val match? {check_list(ans_val, sol_val)}; der match? {check_list(ans_der, sol_der)}"
-    )
+    assert check_list(ans_val, sol_val)
+    assert check_list(ans_der, sol_der)
 
     x = ad.Variable([3, 4, 5], label="x")
     y = ad.Variable([6, 6, 6], label="y")
@@ -768,302 +683,239 @@ def test_tan():
             grad(lambda x, y: tan(x + y), 1)(5.0, 6.0),
         ],
     )
-    print("ad.tan(var([3, 4, 5]) + var([6, 6, 6]))")
-    print(
-        f"val match? {check_list(ans_val, sol_val)}; der match? {check_list(sol_der_x, ans_der_x) & check_list(sol_der_y, ans_der_y)}"
-    )
+    assert check_list(ans_val, sol_val)
+    assert check_list(sol_der_x, ans_der_x) & check_list(sol_der_y, ans_der_y)
+
 
 def test_neg():
-    #print("----------Testing neg-----------")
-    #print("***x=3, y=-x***")
-    x = ad.Variable(3, label='x')
-    y = -x
-    #print(y)
-    assert y.val == -3
-    assert y.der == {'x': -1}
 
-    #print("***x=3, x.der={'x':2}, y=-x***")
-    x = ad.Variable(3, label='x', der={'x':2})
+    x = ad.Variable(3, label="x")
     y = -x
-    ##print(y)
     assert y.val == -3
-    assert y.der == {'x': -2}
+    assert y.der == {"x": -1}
 
-    #print("***x=[0,1,2], y=-x***")
-    x = ad.Variable(np.arange(3), label='x')
+    x = ad.Variable(3, label="x", der={"x": 2})
     y = -x
-    ##print(y)
+    assert y.val == -3
+    assert y.der == {"x": -2}
+
+    x = ad.Variable(np.arange(3), label="x")
+    y = -x
     assert np.all(y.val == [0, -1, -2])
-    assert y.der == {'x': [-1,-1,-1]}
+    assert y.der == {"x": [-1, -1, -1]}
 
-    #print("***x=0, y=3, z=x+2y, z2=-z***")
-    x = ad.Variable(0, label='x')
-    y = ad.Variable(3, label='y')
+    x = ad.Variable(0, label="x")
+    y = ad.Variable(3, label="y")
     z = x + 2 * y
     z2 = -z
-    ##print(z2)
     assert z2.val == -6
-    assert z2.der == {'x': -1, 'y': -2}
+    assert z2.der == {"x": -1, "y": -2}
 
-    #print("***x=[0,1,2], y=[3,4,5], z=x+2y, z2=-z***")
-    x = ad.Variable(np.arange(3), label='x')
-    y = ad.Variable(3 + np.arange(3), label='y')
+    x = ad.Variable(np.arange(3), label="x")
+    y = ad.Variable(3 + np.arange(3), label="y")
     z = x + 2 * y
     z2 = -z
-    ##print(z2)
     assert np.all(z2.val == [-6, -9, -12])
-    assert z2.der == {'x': [-1, -1, -1], 'y': [-2, -2, -2]}
+    assert z2.der == {"x": [-1, -1, -1], "y": [-2, -2, -2]}
+
 
 def test_pow():
-    #print("----------Testing pow-----------")
-    #print("***x=3, z=x^2***")
-    #print("should be: z=9, dz/dx=6")
-    x = ad.Variable(3, label='x')
+    x = ad.Variable(3, label="x")
     z = x ** 2
-    ##print(z)
     assert z.val == 9
-    assert z.der == {'x': 6}
+    assert z.der == {"x": 6}
 
-    #print("***x=[3,2], z=x^2***")
-    #print("should be: z=[9,4], dz/dx=[6,4]")
-    x = ad.Variable([3,2], label='x')
+    x = ad.Variable([3, 2], label="x")
     z = x ** 2
-    ##print(z)
-    assert np.all(z.val == [9,4])
-    assert np.all(z.der == {'x': [6,4]})
+    assert np.all(z.val == [9, 4])
+    assert np.all(z.der == {"x": [6, 4]})
 
-    #print("***x=3, y=2, z=x^y***")
-    #print("should be: z=9, dz/dx=6, dz/dy=9.8875")
-    x = ad.Variable(3, label='x')
-    y = ad.Variable(2, label='y')
+    x = ad.Variable(3, label="x")
+    y = ad.Variable(2, label="y")
     z = x ** y
-    ##print(z)
     assert z.val == 9
-    assert z.der == {'x': 6, 'y': 9 * np.log(3)}
+    assert z.der == {"x": 6, "y": 9 * np.log(3)}
 
-    #print("***x=[3,2], y=[2,3], z=x^y***")
-    #print("should be: z=[9,8], dz/dx=[6,12], dz/dy=[9.8875,5.5452]")
-    x = ad.Variable([3,2], label='x')
-    y = ad.Variable([2,3], label='y')
+    x = ad.Variable([3, 2], label="x")
+    y = ad.Variable([2, 3], label="y")
     z = x ** y
-    ##print(z)
-    assert np.all(z.val == [9,8])
-    ##print(z.der)
-    assert compare_dicts_multi(z.der, {'x': [6,12], 'y': [9 * np.log(3), 8 * np.log(2)]}) == True
+    assert np.all(z.val == [9, 8])
+    assert (
+        compare_dicts_multi(z.der, {"x": [6, 12], "y": [9 * np.log(3), 8 * np.log(2)]})
+        == True
+    )
 
-    #print("***x=[e-1, e-1], y=[1,1], z=x+y, z2=z^y***")
-    #print("should be: z2=[e,e], dz/dx=[1,1], dz/dy=[e+1, e+1]")
-    x = ad.Variable([np.e-1, np.e-1], label='x')
-    y = ad.Variable([1,1], label='y')
+    x = ad.Variable([np.e - 1, np.e - 1], label="x")
+    y = ad.Variable([1, 1], label="y")
     z = x + y
     z2 = z ** y
-    ##print(z2)
     assert np.all(z2.val == [np.e, np.e])
-    assert compare_dicts_multi(z2.der, {'x': [1,1], 'y': [np.e+1, np.e+1]}) == True
+    assert compare_dicts_multi(z2.der, {"x": [1, 1], "y": [np.e + 1, np.e + 1]}) == True
+
 
 def test_rpow():
-    #print("----------Testing rpow-----------")
-    #print("***x=1, z=e^x***")
-    #print("should be: z=e, dz/dx=e")
-    x = ad.Variable(1, label='x')
+    x = ad.Variable(1, label="x")
     z = np.e ** x
-    ##print(z)
     assert z.val == np.e
-    assert z.der == {'x': np.e}
+    assert z.der == {"x": np.e}
 
-    #print("***x=[1,2], z=e^x***")
-    #print("should be: z=[e, 7.389], dz/dx=[e, 7.389]")
-    x = ad.Variable([1,2], label='x')
+    x = ad.Variable([1, 2], label="x")
     z = np.e ** x
-    ##print(z)
     assert np.all(z.val == [np.e, np.e ** 2])
-    assert np.all(z.der == {'x': [np.e, np.e ** 2]})
+    assert np.all(z.der == {"x": [np.e, np.e ** 2]})
 
-    #print("***x=2, y=-1, z=e^(x+2*y)***")
-    #print("should be: z=1, dz/dx=1, dz/dy=2")
-    x = ad.Variable(2, label='x')
-    y = ad.Variable(-1, label='y')
+    x = ad.Variable(2, label="x")
+    y = ad.Variable(-1, label="y")
     z = np.e ** (x + 2 * y)
-    ##print(z)
     assert z.val == 1
-    assert z.der == {'x': 1, 'y': 2}
+    assert z.der == {"x": 1, "y": 2}
 
-    #print("***x=[2,-2], y=[-1,1], z=e^(x+2*y)***")
-    #print("should be: z=[1,1], dz/dx=[1,1], dz/dy=[2,2]")
-    x = ad.Variable([2,-2], label='x')
-    y = ad.Variable([-1,1], label='y')
+    x = ad.Variable([2, -2], label="x")
+    y = ad.Variable([-1, 1], label="y")
     z = np.e ** (x + 2 * y)
-    ##print(z)
-    assert np.all(z.val == [1,1])
-    assert np.all(z.der == {'x': [1,1], 'y': [2,2]})
+    assert np.all(z.val == [1, 1])
+    assert np.all(z.der == {"x": [1, 1], "y": [2, 2]})
+
 
 def test_ne():
-    #print("----------Testing ne-----------")
-    #print("!!!!!!!!NOTICE: ONLY COMPARING LABEL!!!!!!!!")
-    #print("***x=1, y=1***")
-    #print("should be: x==x, x!=y")
-    x = ad.Variable(1, label='x')
-    y = ad.Variable(1, label='y')
+    x = ad.Variable(1, label="x")
+    y = ad.Variable(1, label="y")
     assert (x != x) == False
     assert (x != y) == True
 
-    z1 = ad.Variable([1,2], der={'x':[1,2], 'y':[1,2]}, label='z1')
-    z2 = ad.Variable([1,2], der={'x':[1,2], 'y':[1,2]}, label='z2')
+    z1 = ad.Variable([1, 2], der={"x": [1, 2], "y": [1, 2]}, label="z1")
+    z2 = ad.Variable([1, 2], der={"x": [1, 2], "y": [1, 2]}, label="z2")
     assert (z1 != z2) == False
 
-    z1 = ad.Variable(1, der={'x':2, 'y':3}, label='z1')
-    z2 = ad.Variable(1, der={'x':2, 'y':3}, label='z2')
+    z1 = ad.Variable(1, der={"x": 2, "y": 3}, label="z1")
+    z2 = ad.Variable(1, der={"x": 2, "y": 3}, label="z2")
     assert (z1 != z2) == False
 
-    z1 = ad.Variable([1,2], der={'x':[1,2], 'y':[1,2]}, label='z1')
-    z2 = ad.Variable([1,2], der={'x':[1,2], 'y':[1,3]}, label='z2')
+    z1 = ad.Variable([1, 2], der={"x": [1, 2], "y": [1, 2]}, label="z1")
+    z2 = ad.Variable([1, 2], der={"x": [1, 2], "y": [1, 3]}, label="z2")
     assert (z1 != z2) == True
 
-    x = ad.Variable(1, label='x')
-    y = ad.Variable(1, label='y')
+    x = ad.Variable(1, label="x")
+    y = ad.Variable(1, label="y")
     z1 = ad.exp(x) + np.e * y
     z2 = ad.exp(y) + np.e * x
     assert (z1 != z2) == False
 
 
 def test_lt():
-    #print("----------Testing lt-----------")
-    #print("***x=1, y=2***")
-    #print("should be: x<y")
-    x = ad.Variable(1, label='x')
-    y = ad.Variable(2, label='y')
-    ##print("x<y: ", x<y)
+    x = ad.Variable(1, label="x")
+    y = ad.Variable(2, label="y")
     assert (x < y) == True
 
-    #print("***x=[1,2], y=[2,2]***")
-    #print("should be: [T, F]")
-    x = ad.Variable([1,2], label='x')
-    y = ad.Variable([2,2], label='y')
-    #print("x<y: ", x<y)
+    x = ad.Variable([1, 2], label="x")
+    y = ad.Variable([2, 2], label="y")
     assert np.all((x < y) == [True, False])
 
+
 def test_le():
-    #print("----------Testing le-----------")
-    #print("***x=1, y=2***")
-    #print("should be: x<=y")
-    x = ad.Variable(1, label='x')
-    y = ad.Variable(2, label='y')
-    #print("x<=y: ", x<=y)
+    x = ad.Variable(1, label="x")
+    y = ad.Variable(2, label="y")
     assert (x <= y) == True
 
-    #print("***x=[1,2], y=[2,2]***")
-    #print("should be: [T, T]")
-    x = ad.Variable([1,2], label='x')
-    y = ad.Variable([2,2], label='y')
-    #print("x<=y: ", x<=y)
+    x = ad.Variable([1, 2], label="x")
+    y = ad.Variable([2, 2], label="y")
     assert np.all((x <= y) == [True, True])
 
+
 def test_gt():
-    #print("----------Testing gt-----------")
-    #print("***x=3, y=2***")
-    #print("should be: x>y")
-    x = ad.Variable(3, label='x')
-    y = ad.Variable(2, label='y')
-    #print("x>y: ", x>y)
+    x = ad.Variable(3, label="x")
+    y = ad.Variable(2, label="y")
     assert (x > y) == True
 
-    #print("***x=[3,2], y=[2,2]***")
-    #print("should be: [T, F]")
-    x = ad.Variable([3,2], label='x')
-    y = ad.Variable([2,2], label='y')
-    #print("x>y: ", x>y)
+    x = ad.Variable([3, 2], label="x")
+    y = ad.Variable([2, 2], label="y")
     assert np.all((x > y) == [True, False])
 
+
 def test_ge():
-    #print("----------Testing ge-----------")
-    #print("***x=3, y=2***")
-    #print("should be: x>=y")
-    x = ad.Variable(3, label='x')
-    y = ad.Variable(2, label='y')
-    #print("x>=y: ", x>=y)
+    x = ad.Variable(3, label="x")
+    y = ad.Variable(2, label="y")
     assert (x >= y) == True
 
-    #print("***x=[3,2], y=[2,2]***")
-    #print("should be: [T, T]")
-    x = ad.Variable([3,2], label='x')
-    y = ad.Variable([2,2], label='y')
-    #print("x>=y: ", x>=y)
+    x = ad.Variable([3, 2], label="x")
+    y = ad.Variable([2, 2], label="y")
     assert np.all((x >= y) == [True, True])
 
 
 def test_complicated_functions():
     ## Function 1
-    x = np.random.rand(5,4)
-    x_var = ad.Variable(x, label='x')
-    y = np.random.rand(5,4)
-    y_var = ad.Variable(y, label='y')
+    x = np.random.rand(5, 4)
+    x_var = ad.Variable(x, label="x")
+    y = np.random.rand(5, 4)
+    y_var = ad.Variable(y, label="y")
 
     # sin(x) + cos(x) * 3*y - x^4 + ln(x*y)
-    f_ad = ad.sin(x_var) + ad.cos(x_var) * 3*y_var - x_var**4 + ad.ln(x_var*y_var)
+    f_ad = ad.sin(x_var) + ad.cos(x_var) * 3 * y_var - x_var ** 4 + ad.ln(x_var * y_var)
     f_ad_val = f_ad.val
     f_ad_grad = f_ad.der
-    
-    f_np_val = np.sin(x) + np.cos(x) * 3*y - x**4 + np.log(x*y)
-    dx = -4*x**3 - 3*y*np.sin(x) + 1/x + np.cos(x)
-    dy = 3*np.cos(x) + 1/y
 
+    f_np_val = np.sin(x) + np.cos(x) * 3 * y - x ** 4 + np.log(x * y)
+    dx = -4 * x ** 3 - 3 * y * np.sin(x) + 1 / x + np.cos(x)
+    dy = 3 * np.cos(x) + 1 / y
 
     assert np.array_equal(f_ad_val, f_np_val)
-    assert np.array_equal(np.around(f_ad_grad['x'],4), np.around(dx,4))
-    assert np.array_equal(np.around(f_ad_grad['y'],4), np.around(dy,4))
-
+    assert np.array_equal(np.around(f_ad_grad["x"], 4), np.around(dx, 4))
+    assert np.array_equal(np.around(f_ad_grad["y"], 4), np.around(dy, 4))
 
     ## Function 2
-    x = np.random.rand(3,8)
-    x_var = ad.Variable(x, label='x')
-    y = np.random.rand(3,8)
-    y_var = ad.Variable(y, label='y')
+    x = np.random.rand(3, 8)
+    x_var = ad.Variable(x, label="x")
+    y = np.random.rand(3, 8)
+    y_var = ad.Variable(y, label="y")
 
     # cos(x*y^2) + exp(x*y*3x)
-    f_ad = ad.cos(x_var*y_var**2) + ad.exp(x_var*y_var*3*x_var)
+    f_ad = ad.cos(x_var * y_var ** 2) + ad.exp(x_var * y_var * 3 * x_var)
     f_ad_val = f_ad.val
     f_ad_grad = f_ad.der
-    
-    f_np_val = np.cos(x*y**2) + np.exp(x*y*3*x)
-    dx = y * (6*x*np.exp(3*x**2*y) - y*np.sin(x*y**2))
-    dy = x * (3*x*np.exp(3*x**2*y) - 2*y*np.sin(x*y**2))
 
+    f_np_val = np.cos(x * y ** 2) + np.exp(x * y * 3 * x)
+    dx = y * (6 * x * np.exp(3 * x ** 2 * y) - y * np.sin(x * y ** 2))
+    dy = x * (3 * x * np.exp(3 * x ** 2 * y) - 2 * y * np.sin(x * y ** 2))
 
     assert np.array_equal(f_ad_val, f_np_val)
-    assert np.array_equal(np.around(f_ad_grad['x'],4), np.around(dx,4))
-    assert np.array_equal(np.around(f_ad_grad['y'],4), np.around(dy,4))
-
+    assert np.array_equal(np.around(f_ad_grad["x"], 4), np.around(dx, 4))
+    assert np.array_equal(np.around(f_ad_grad["y"], 4), np.around(dy, 4))
 
     ## Function 3
-    x = np.random.rand(10,10)
-    x_var = ad.Variable(x, label='x')
-    y = np.random.rand(10,10)
-    y_var = ad.Variable(y, label='y')
+    x = np.random.rand(10, 10)
+    x_var = ad.Variable(x, label="x")
+    y = np.random.rand(10, 10)
+    y_var = ad.Variable(y, label="y")
 
     # tan(x+y/2) - ln(z/x)
-    f_ad = ad.tan(x_var+y_var/2) - ad.ln(y_var/x_var)
+    f_ad = ad.tan(x_var + y_var / 2) - ad.ln(y_var / x_var)
     f_ad_val = f_ad.val
     f_ad_grad = f_ad.der
-    
-    f_np_val = np.tan(x+y/2) - np.log(y/x)
-    dx = (1/np.cos(x + y/2))**2 + 1/x
-    dy = 1/2*(1/np.cos(x + y/2))**2 - 1/y
 
+    f_np_val = np.tan(x + y / 2) - np.log(y / x)
+    dx = (1 / np.cos(x + y / 2)) ** 2 + 1 / x
+    dy = 1 / 2 * (1 / np.cos(x + y / 2)) ** 2 - 1 / y
 
-    assert np.array_equal(np.around(f_ad_val,4), np.around(f_np_val, 4))
-    assert np.array_equal(np.around(f_ad_grad['x'],4), np.around(dx,4))
-    assert np.array_equal(np.around(f_ad_grad['y'],4), np.around(dy,4))
+    assert np.array_equal(np.around(f_ad_val, 4), np.around(f_np_val, 4))
+    assert np.array_equal(np.around(f_ad_grad["x"], 4), np.around(dx, 4))
+    assert np.array_equal(np.around(f_ad_grad["y"], 4), np.around(dy, 4))
+
 
 def test_forward_class():
-    variables = {'x': 3, 'y': 5}
-    functions = ['2*x + exp(y)', '3*x + 2*sin(y)']
-    numpy_functions = ['2*x + exp(y)', '3*x + 2*sin(y)']
-    function_ders = [{'x': 2, 'y': np.exp(5)}, {'x': 3, 'y': 2*np.cos(5)}] # Expected derivatives
+    variables = {"x": 3, "y": 5}
+    functions = ["2*x + exp(y)", "3*x + 2*sin(y)"]
+    numpy_functions = ["2*x + exp(y)", "3*x + 2*sin(y)"]
+    function_ders = [
+        {"x": 2, "y": np.exp(5)},
+        {"x": 3, "y": 2 * np.cos(5)},
+    ]  # Expected derivatives
     f = ad.Forward(variables, functions)
     for idx, variable in enumerate(f.results):
-        assert variable.val == eval(numpy_functions[idx], {**variables, **{'exp': np.exp, 'cos': np.cos, 'sin': np.sin}})
+        assert variable.val == eval(
+            numpy_functions[idx],
+            {**variables, **{"exp": np.exp, "cos": np.cos, "sin": np.sin}},
+        )
         assert compare_dicts(variable.der, function_ders[idx])
-        
 
 
 if __name__ == "__main__":
