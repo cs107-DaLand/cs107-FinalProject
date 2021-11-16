@@ -1,31 +1,27 @@
 #!/usr/bin/env python3
 # File       : newton_salad.py
-# Description: Newton's method using Salad AD
+# Description: Newton's method using Salad AD. Only works for single variable case
 import numpy as np
 from salad import *
 
 
-# f = lambda x: x + 2*x + 3/x
-# J = lambda x, eps: (f(x + eps) - f(x)) / eps # Finite-Difference approximation of J
 
-def newton(x_k, tol=1.0e-8, max_it=100, eps=1.0e-8):
+def newton(f, x_k, tol=1.0e-8, max_it=100, eps=1.0e-8):
     root = None
     for k in range(max_it):
 
-        x = Variable(x_k, label='x_k')
-        f = 2*x**3  - 2*x - 5
+        x = {'x': x_k}
+        forward = Forward(x, [f])
 
-        dx_k = -1 * f.val / f.der['x_k']
-        print(dx_k)
         # dx_k = -f(x_k) / J(x_k, eps)
+        dx_k = -1 * forward.results[0].val / forward.results[0].der['x']
+        print(dx_k)
 
         if abs(dx_k) < tol:
             root = x_k + dx_k
-            # print(f"Found root {root:e} at iteration {k+1}")
             print("Found root ", root, " at iteration ", k+1)
-            # print(f(root)) # Function cannot currently be called like this
+            print(eval(f[0], {'x': root}))
             break
-        # print(f"Iteration {k+1}: Delta x = {dx_k:e}")
         print("Iteration ", k+1, ": Delta x = ", dx_k)
         x_k += dx_k
     return root
@@ -42,7 +38,8 @@ if __name__ == "__main__":
         return parser.parse_args()
 
     args = parse_args()
-    # newton(f, J, args.initial_guess, args.tolerance, args.maximum_iterations)
-    newton(x_k=args.initial_guess, tol=args.tolerance, max_it=args.maximum_iterations)
+
+    f = '2*x**3  - 2*x - 5'
+    newton(f=f, x_k=args.initial_guess, tol=args.tolerance, max_it=args.maximum_iterations)
 
 
