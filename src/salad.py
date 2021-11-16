@@ -15,7 +15,19 @@ class Forward(object):
         Label: v6, Value: 19, Derivative: {'x': 3.0, 'y': 2.0}
     """
     def __init__(self, variables: dict, functions: list):
-        var_dict = {}
+        # need to overwrite functions
+        var_dict = {
+            'tan': tan,
+            'cos': cos,
+            'sin': sin,
+            'tan': tan,
+            'tan': tan,
+            "logistic": logistic,
+            "ln": ln,
+            "log10": log10,
+            "exp": exp
+        }
+        # var_dict = {}
         for key in variables:
             var_dict[key] = Variable(val=variables[key], label=key)
         
