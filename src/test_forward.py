@@ -1056,12 +1056,12 @@ def test_complicated_functions():
 
 def test_forward_class():
     variables = {'x': 3, 'y': 5}
-    functions = ['2*x + exp(y)', '3*x + 2*y']
-    numpy_functions = ['2*x + exp(y)', '3*x + 2*y']
-    function_ders = [{'x': 2, 'y': np.exp(5)}, {'x': 3, 'y': 2}] # Expected derivatives
+    functions = ['2*x + exp(y)', '3*x + 2*sin(y)']
+    numpy_functions = ['2*x + exp(y)', '3*x + 2*sin(y)']
+    function_ders = [{'x': 2, 'y': np.exp(5)}, {'x': 3, 'y': 2*np.cos(5)}] # Expected derivatives
     f = ad.Forward(variables, functions)
     for idx, variable in enumerate(f.results):
-        assert variable.val == eval(numpy_functions[idx], {**variables, **{'exp': np.exp}})
+        assert variable.val == eval(numpy_functions[idx], {**variables, **{'exp': np.exp, 'cos': np.cos, 'sin': np.sin}})
         assert compare_dicts(variable.der, function_ders[idx])
         
 
