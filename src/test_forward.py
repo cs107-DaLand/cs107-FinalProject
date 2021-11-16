@@ -990,6 +990,82 @@ def test_ge():
     #print("x>=y: ", x>=y)
     assert np.all((x >= y) == [True, True])
 
+
+def test_complicated_functions():
+    ## Function 1
+    x = np.random.rand(5,4)
+    x_var = ad.Variable(x, label='x')
+    y = np.random.rand(5,4)
+    y_var = ad.Variable(y, label='y')
+
+    # sin(x) + cos(x) * 3*y - x^4 + ln(x*y)
+    f_ad = ad.sin(x_var) + ad.cos(x_var) * 3*y_var - x_var**4 + ad.ln(x_var*y_var)
+    f_ad_val = f_ad.val
+    f_ad_grad = f_ad.der
+    
+    f_np_val = np.sin(x) + np.cos(x) * 3*y - x**4 + np.log(x*y)
+    dx = -4*x**3 - 3*y*np.sin(x) + 1/x + np.cos(x)
+    dy = 3*np.cos(x) + 1/y
+
+
+    assert np.array_equal(f_ad_val, f_np_val)
+    assert np.array_equal(np.around(f_ad_grad['x'],4), np.around(dx,4))
+    assert np.array_equal(np.around(f_ad_grad['y'],4), np.around(dy,4))
+
+
+    ## Function 2
+    x = np.random.rand(3,8)
+    x_var = ad.Variable(x, label='x')
+    y = np.random.rand(3,8)
+    y_var = ad.Variable(y, label='y')
+
+    # cos(x*y^2) + exp(x*y*3x)
+    f_ad = ad.cos(x_var*y_var**2) + ad.exp(x_var*y_var*3*x_var)
+    f_ad_val = f_ad.val
+    f_ad_grad = f_ad.der
+    
+    f_np_val = np.cos(x*y**2) + np.exp(x*y*3*x)
+    dx = y * (6*x*np.exp(3*x**2*y) - y*np.sin(x*y**2))
+    dy = x * (3*x*np.exp(3*x**2*y) - 2*y*np.sin(x*y**2))
+
+
+    assert np.array_equal(f_ad_val, f_np_val)
+    assert np.array_equal(np.around(f_ad_grad['x'],4), np.around(dx,4))
+    assert np.array_equal(np.around(f_ad_grad['y'],4), np.around(dy,4))
+
+
+    ## Function 3
+    x = np.random.rand(10,10)
+    x_var = ad.Variable(x, label='x')
+    y = np.random.rand(10,10)
+    y_var = ad.Variable(y, label='y')
+
+    # tan(x+y/2) - ln(z/x)
+    f_ad = ad.tan(x_var+y_var/2) - ad.ln(y_var/x_var)
+    f_ad_val = f_ad.val
+    f_ad_grad = f_ad.der
+    
+    f_np_val = np.tan(x+y/2) - np.log(y/x)
+    dx = (1/np.cos(x + y/2))**2 + 1/x
+    dy = 1/2*(1/np.cos(x + y/2))**2 - 1/y
+
+
+    assert np.array_equal(np.around(f_ad_val,4), np.around(f_np_val, 4))
+    assert np.array_equal(np.around(f_ad_grad['x'],4), np.around(dx,4))
+    assert np.array_equal(np.around(f_ad_grad['y'],4), np.around(dy,4))
+
+def test_forward_class():
+    variables = {'x': 3, 'y': 5}
+    functions = ['2*x + exp(y)', '3*x + 2*y']
+    numpy_functions = ['2*x + exp(y)', '3*x + 2*y']
+    function_ders = [{'x': 2, 'y': np.exp(5)}, {'x': 3, 'y': 2}] # Expected derivatives
+    f = ad.Forward(variables, functions)
+    for idx, variable in enumerate(f.results):
+        assert variable.val == eval(numpy_functions[idx], {**variables, **{'exp': np.exp}})
+        assert compare_dicts(variable.der, function_ders[idx])
+        
+
+
 if __name__ == "__main__":
     test_add_radd()
     test_sub_rsub()
@@ -1010,3 +1086,5 @@ if __name__ == "__main__":
     test_le()
     test_gt()
     test_ge()
+    test_complicated_functions()
+    test_forward_class()

@@ -8,7 +8,7 @@ class Forward(object):
         For handling multiple function input
         Example:
         >> variables = {'x': 3, 'y': 5}
-        >> functions = ['2*x + y', '3*x + 2*y]
+        >> functions = ['2*x + y', '3*x + 2*y']
         >> f = Forward(variables, functions)
         >> print(f) 
         Label: v3, Value: 11, Derivative: {'x': 2.0, 'y': 1.0}
@@ -100,9 +100,7 @@ class Variable(object):
             new_dict = {}
             for v in set(dict1).intersection(set(dict2)):  # intersection
                 new_dict[v] = a1 * np.asarray(dict2[v]) + a2 * np.asarray(dict1[v])
-            for v in set(dict1) - set(
-                dict2
-            ):  # Only those variables in self DOES THIS WORK
+            for v in set(dict1) - set(dict2):  # Only those variables in self
                 new_dict[v] = a2 * np.asarray(dict1[v])
             for v in set(dict2) - set(dict1):  # Only those variables in other
                 new_dict[v] = a1 * np.asarray(dict2[v])
