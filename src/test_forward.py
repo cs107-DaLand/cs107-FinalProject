@@ -844,12 +844,12 @@ def test_ge():
 
 def test_complicated_functions():
     ## Function 1
+    ## sin(x) + cos(x) * 3*y - x^4 + ln(x*y)
     x = np.random.rand(5, 4)
     x_var = ad.Variable(x, label="x")
     y = np.random.rand(5, 4)
     y_var = ad.Variable(y, label="y")
 
-    # sin(x) + cos(x) * 3*y - x^4 + ln(x*y)
     f_ad = ad.sin(x_var) + ad.cos(x_var) * 3 * y_var - x_var ** 4 + ad.ln(x_var * y_var)
     f_ad_val = f_ad.val
     f_ad_grad = f_ad.der
@@ -863,12 +863,12 @@ def test_complicated_functions():
     assert np.array_equal(np.around(f_ad_grad["y"], 4), np.around(dy, 4))
 
     ## Function 2
+    ## cos(x*y^2) + exp(x*y*3x)
     x = np.random.rand(3, 8)
     x_var = ad.Variable(x, label="x")
     y = np.random.rand(3, 8)
     y_var = ad.Variable(y, label="y")
 
-    # cos(x*y^2) + exp(x*y*3x)
     f_ad = ad.cos(x_var * y_var ** 2) + ad.exp(x_var * y_var * 3 * x_var)
     f_ad_val = f_ad.val
     f_ad_grad = f_ad.der
@@ -882,12 +882,12 @@ def test_complicated_functions():
     assert np.array_equal(np.around(f_ad_grad["y"], 4), np.around(dy, 4))
 
     ## Function 3
+    ## tan(x+y/2) - ln(z/x)
     x = np.random.rand(10, 10)
     x_var = ad.Variable(x, label="x")
     y = np.random.rand(10, 10)
     y_var = ad.Variable(y, label="y")
 
-    # tan(x+y/2) - ln(z/x)
     f_ad = ad.tan(x_var + y_var / 2) - ad.ln(y_var / x_var)
     f_ad_val = f_ad.val
     f_ad_grad = f_ad.der
@@ -899,6 +899,60 @@ def test_complicated_functions():
     assert np.array_equal(np.around(f_ad_val, 4), np.around(f_np_val, 4))
     assert np.array_equal(np.around(f_ad_grad["x"], 4), np.around(dx, 4))
     assert np.array_equal(np.around(f_ad_grad["y"], 4), np.around(dy, 4))
+
+    ## Function 4
+    ## (sin(2*x) + cos(x/2) * y - ln(x^4)) / (x^2 + y^2)
+
+    x = 5
+    x_var = ad.Variable(x, label="x")
+    y = 7
+    y_var = ad.Variable(y, label="y")
+
+    f_ad = (ad.sin(x_var * 2) + ad.cos(x_var / 2) * y_var - ad.ln(x_var ** 4)) / (
+        x_var ** 2 + y_var ** 2
+    )
+    f_ad_val = f_ad.val
+    f_ad_grad = f_ad.der
+
+    def f4(x, y):
+        return (adnp.sin(x * 2) + adnp.cos(x / 2) * y - adnp.log(x ** 4)) / (
+            x ** 2 + y ** 2
+        )
+
+    f_np_val, dx, dy = [
+        f4(x, y),
+        grad(lambda x, y: f4(x, y), 0)(5.0, 7.0),
+        grad(lambda x, y: f4(x, y), 1)(5.0, 7.0),
+    ]
+
+    assert np.around(f_ad_val, 4) == np.around(f_np_val, 4)
+    assert np.around(f_ad_grad["x"], 4) == np.around(dx, 4)
+    assert np.around(f_ad_grad["y"], 4) == np.around(dy, 4)
+
+    ## Function 5
+    ## (tan(2*x-y/2) * y - exp(x^2 / y^2)
+
+    x = 5
+    x_var = ad.Variable(x, label="x")
+    y = 7
+    y_var = ad.Variable(y, label="y")
+
+    f_ad = ad.tan(2 * x_var - y_var / 2) * y_var - ad.exp(x_var ** 2 / y_var ** 2)
+    f_ad_val = f_ad.val
+    f_ad_grad = f_ad.der
+
+    def f5(x, y):
+        return adnp.tan(2 * x - y / 2) * y - adnp.exp((x ** 2) / (y ** 2))
+
+    f_np_val, dx, dy = [
+        f5(x, y),
+        grad(lambda x, y: f5(x, y), 0)(5.0, 7.0),
+        grad(lambda x, y: f5(x, y), 1)(5.0, 7.0),
+    ]
+
+    assert np.around(f_ad_val, 4) == np.around(f_np_val, 4)
+    assert np.around(f_ad_grad["x"], 4) == np.around(dx, 4)
+    assert np.around(f_ad_grad["y"], 4) == np.around(dy, 4)
 
 
 def test_forward_class():
