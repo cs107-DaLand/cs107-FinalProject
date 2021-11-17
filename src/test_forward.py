@@ -992,7 +992,16 @@ def test_forward_class():
         )
         assert compare_dicts(variable.der, function_ders[idx])
 
+def test_str():
+    x = np.random.rand(10, 10)
+    x_var = ad.Variable(x, label="x")
+    assert str(x_var) == f"Label: {x_var.label}, Value: {x_var.val}, Derivative: {x_var.der}"
 
+    variables = {"x": 1}
+    functions = ["x"]
+    f = ad.Forward(variables, functions)
+    assert str(f) == f"Label: {f.results[0].label}, Value: {f.results[0].val}, Derivative: {f.results[0].der}"
+    
 if __name__ == "__main__":
     test_add_radd()
     test_sub_rsub()
@@ -1015,3 +1024,4 @@ if __name__ == "__main__":
     test_ge()
     test_complicated_functions()
     test_forward_class()
+    test_str()
