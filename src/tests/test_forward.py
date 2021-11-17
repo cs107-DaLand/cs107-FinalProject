@@ -1003,7 +1003,7 @@ def test_str():
     variables = {"x": 1}
     functions = ["x"]
     f = ad.Forward(variables, functions)
-    assert str(f) == f"Label: {f.results[0].label}, Value: {f.results[0].val}, Derivative: {f.results[0].der}"
+    assert str(f) == f"Function: {f.functions[0]}, Value: {f.results[0].val}, Derivative: {f.results[0].der}"
     
 if __name__ == "__main__":
     test_add_radd()
