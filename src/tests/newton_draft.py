@@ -1,6 +1,10 @@
 #!/usr/bin/env python3
 # File       : newton_salad.py
 # Description: Newton's method using Salad AD. Only works for single variable case
+
+import sys
+sys.path.append('../')
+
 import numpy as np
 from salad import *
 
