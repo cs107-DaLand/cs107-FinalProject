@@ -111,7 +111,7 @@ class Variable(object):
         except AttributeError:
             new_dict = {}
             for key in self.der:
-                new_dict[key] = other * np.asarray(self.der[key])
+                new_dict[key] = np.asarray(other * np.asarray(self.der[key]))
             return Variable(self.val * other, new_dict)
 
     def __rmul__(self, other):
