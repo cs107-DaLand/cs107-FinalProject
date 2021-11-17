@@ -776,7 +776,6 @@ def test_rpow():
     assert np.all(z.val == [1, 1])
     assert np.all(z.der == {"x": [1, 1], "y": [2, 2]})
 
-
 def test_ne():
     x = ad.Variable(1, label="x")
     y = ad.Variable(1, label="y")
@@ -801,6 +800,12 @@ def test_ne():
     z2 = ad.exp(y) + np.e * x
     assert (z1 != z2) == False
 
+    x = ad.Variable([1,2,3], label="x")
+    y = ad.Variable([2,3], label="y")
+    assert (x != y) == True
+
+    z = 1
+    assert (x != z) == True
 
 def test_lt():
     x = ad.Variable(1, label="x")
@@ -811,6 +816,10 @@ def test_lt():
     y = ad.Variable([2, 2], label="y")
     assert np.all((x < y) == [True, False])
 
+    x = ad.Variable([1,1,1], label="x")
+    y = ad.Variable([2, 2], label="y")
+    with pytest.raises(Exception):
+        print(x < y)
 
 def test_le():
     x = ad.Variable(1, label="x")
@@ -821,6 +830,10 @@ def test_le():
     y = ad.Variable([2, 2], label="y")
     assert np.all((x <= y) == [True, True])
 
+    x = ad.Variable([1,1,1], label="x")
+    y = ad.Variable([2, 2], label="y")
+    with pytest.raises(Exception):
+        print(x <= y)
 
 def test_gt():
     x = ad.Variable(3, label="x")
@@ -831,6 +844,10 @@ def test_gt():
     y = ad.Variable([2, 2], label="y")
     assert np.all((x > y) == [True, False])
 
+    x = ad.Variable([1,1,1], label="x")
+    y = ad.Variable([2, 2], label="y")
+    with pytest.raises(Exception):
+        print(x > y)
 
 def test_ge():
     x = ad.Variable(3, label="x")
@@ -841,6 +858,10 @@ def test_ge():
     y = ad.Variable([2, 2], label="y")
     assert np.all((x >= y) == [True, True])
 
+    x = ad.Variable([1,1,1], label="x")
+    y = ad.Variable([2, 2], label="y")
+    with pytest.raises(Exception):
+        print(x >= y)
 
 def test_complicated_functions():
     ## Function 1
