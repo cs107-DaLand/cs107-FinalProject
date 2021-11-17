@@ -158,33 +158,16 @@ class Variable(object):
 
     def __pow__(self, other):
         if isinstance(other, Variable):
-            if isinstance(other.val, list) and isinstance(self.val, list):
-                if not len(self.val) == len(other.val):
-                    raise ValueError("Dimensions of the two variables are not equal")
-                new_val = self.val ** other.val
-                new_der = {}
-                all_ele = set(self.der.keys()) | set(other.der.keys())
-                for v in list(all_ele): # v: element
-                    new_der[v] = []
-                    for i in range(len(new_val)):
-                        my_der = self.der[v][i] if v in self.der else 0
-                        other_der = other.der[v][i] if v in other.der else 0
-                        v_der = new_val[i] * (other_der * np.log(self.val[i]) + my_der / self.val[i] * other.val[i])
-                        new_der[v].append(v_der)
-                return Variable(val=new_val, der=new_der, ad_mode=self.ad_mode, increment_counter=True)
-            elif isinstance(other.val, list) or isinstance(self.val, list):
-                raise ValueError("Dimensions of the two variables are not equal")
-            else: # only number for x and y
-                new_val = np.array([self.val ** other.val])
-                new_der = {}
-                all_ele = set(self.der.keys()) | set(other.der.keys())
-                for v in list(all_ele): # v: element
-                    my_der = self.der[v] if v in self.der else 0
-                    other_der = other.der[v] if v in other.der else 0
-                    v_der = new_val * (other_der * np.log(self.val) + my_der / self.val * other.val)
-                    #new_der[v] = np.array([v_der])
-                    new_der[v] = v_der
-                return Variable(val=new_val, der=new_der, ad_mode=self.ad_mode, increment_counter=True)
+            new_val = np.array([self.val ** other.val])
+            new_der = {}
+            all_ele = set(self.der.keys()) | set(other.der.keys())
+            for v in list(all_ele): # v: element
+                my_der = self.der[v] if v in self.der else 0
+                other_der = other.der[v] if v in other.der else 0
+                v_der = new_val * (other_der * np.log(self.val) + my_der / self.val * other.val)
+                #new_der[v] = np.array([v_der])
+                new_der[v] = v_der
+            return Variable(val=new_val, der=new_der, ad_mode=self.ad_mode, increment_counter=True)
         else:
             try:
                 new_val = self.val ** other
@@ -221,10 +204,6 @@ class Variable(object):
                     new_der[v] = new_val * self.der[v] * np.log(other)
                 return Variable(val=new_val, der=new_der, ad_mode=self.ad_mode, increment_counter=True)
 
-    '''
-    def __ne__(self, other):
-        return self.label != other.label
-    '''
     def __eq__(self, other):
         if not isinstance(other, Variable):
             return False
@@ -234,16 +213,6 @@ class Variable(object):
             if not compare_dicts_multi(self.der, other.der):
                 return False
             return True
-        elif isinstance(self.val, (list, tuple, np.ndarray)) or isinstance(other.val, (list, tuple, np.ndarray)):
-            return False
-        if self.val != other.val:
-            return False
-        if not set(self.der) == set(other.der):
-            return False
-        for i in self.der:
-            if self.der[i] != other.der[i]:
-                return False
-        return True
 
     def __ne__(self, other):
         return not self.__eq__(other)
@@ -252,33 +221,25 @@ class Variable(object):
         try:
             return self.val < other.val
         except:
-            if not len(self.val) == len(other.val):
-                raise ValueError("Dimensions of the two variables are not equal")
-            return self.val < other.val
+            raise ValueError("Dimensions of the two variables are not equal")
     
     def __le__(self, other):
         try:
             return self.val <= other.val
         except:
-            if not len(self.val) == len(other.val):
-                raise ValueError("Dimensions of the two variables are not equal")
-            return self.val <= other.val
+            raise ValueError("Dimensions of the two variables are not equal")
     
     def __gt__(self, other):
         try:
             return self.val > other.val
         except:
-            if not len(self.val) == len(other.val):
-                raise ValueError("Dimensions of the two variables are not equal")
-            return self.val > other.val
+            raise ValueError("Dimensions of the two variables are not equal")
     
     def __ge__(self, other):
         try:
             return self.val >= other.val
         except:
-            if not len(self.val) == len(other.val):
-                raise ValueError("Dimensions of the two variables are not equal")
-            return self.val >= other.val
+            raise ValueError("Dimensions of the two variables are not equal")
 
 
 
