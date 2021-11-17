@@ -11,8 +11,8 @@ class Forward(object):
         >> functions = ['2*x + y', '3*x + 2*y']
         >> f = Forward(variables, functions)
         >> print(f) 
-        Label: v3, Value: 11, Derivative: {'x': 2.0, 'y': 1.0}
-        Label: v6, Value: 19, Derivative: {'x': 3.0, 'y': 2.0}
+        Function: 2*x + y, Label: v3, Value: 11, Derivative: {'x': 2.0, 'y': 1.0}
+        Function: 3*x + 2*y, Label: v6, Value: 19, Derivative: {'x': 3.0, 'y': 2.0}
     """
     def __init__(self, variables: dict, functions: list):
         # need to overwrite functions
@@ -34,11 +34,13 @@ class Forward(object):
         self.results = []
         for func in functions:
             self.results.append(eval(func, var_dict))
+        
+        self.functions = functions
 
     def __str__(self):
         pretty = []
-        for res in self.results:
-            pretty.append(f"Label: {res.label}, Value: {res.val}, Derivative: {res.der}")
+        for idx, res in enumerate(self.results):
+            pretty.append(f"Function: {self.functions[idx]}, Value: {res.val}, Derivative: {res.der}")
             pretty.append('\n')
         return ''.join(pretty).rstrip()
 
