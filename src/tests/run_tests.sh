@@ -1,18 +1,5 @@
 #!/usr/bin/env bash
 
-tests=(test_forward.py)
-
-# decide what driver to use (depending on arguments given)
-unit='-m unittest'
-if [[ $# -gt 0 && ${1} == 'coverage' ]]; then
-driver="${@} ${unit}"
-elif [[ $# -gt 0 && ${1} == 'pytest'* ]]; then
-driver="${@}"
-else
-driver="python ${@} ${unit}"
-fi
-# we must add the module source path because we use `import cs107_package` in our test suite and we
-# want to test from the source directly (not a package that we have (possibly) installed earlier)
-export PYTHONPATH="$(pwd -P)/..":${PYTHONPATH}
-# run the tests
-${driver} ${tests[@]}
+set -e
+coverage run -m pytest test_forward.py -v
+coverage report --fail-under=90
