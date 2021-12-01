@@ -5,16 +5,33 @@ import copy
 
 class Forward(object):
     """
-        For handling multiple function input
-        Example:
-        >> variables = {'x': 3, 'y': 5}
-        >> functions = ['2*x + y', '3*x + 2*y']
-        >> f = Forward(variables, functions)
-        >> print(f) 
-        Function: 2*x + y, Label: v3, Value: 11, Derivative: {'x': 2.0, 'y': 1.0}
-        Function: 3*x + 2*y, Label: v6, Value: 19, Derivative: {'x': 3.0, 'y': 2.0}
+    For handling multiple function input
+    
+    Attributes
+    ----------
+    results : list
+        List of results (Variable) of different functions
+    functions : list
+        List of functions
     """
     def __init__(self, variables: dict, functions: list):
+        """
+        Parameters
+        ----------
+        variables : dict
+            Dictionary of variables
+        functions : list
+            List of functions
+        
+        Examples
+        -------
+        >>> variables = {'x': 3, 'y': 5}
+        >>> functions = ['2*x + y', '3*x + 2*y']
+        >>> f = Forward(variables, functions)
+        >>> print(f) 
+        Function: 2*x + y, Label: v3, Value: 11, Derivative: {'x': 2.0, 'y': 1.0}
+        Function: 3*x + 2*y, Label: v6, Value: 19, Derivative: {'x': 3.0, 'y': 2.0}
+        """
         # need to overwrite functions
         var_dict = {
             'tan': tan,
@@ -38,6 +55,14 @@ class Forward(object):
         self.functions = functions
 
     def __str__(self):
+        """
+        Prints the results of the functions
+
+        Returns
+        -------
+        str
+            Description of results      
+        """
         pretty = []
         for idx, res in enumerate(self.results):
             pretty.append(f"Function: {self.functions[idx]}, Value: {res.val}, Derivative: {res.der}")
@@ -47,11 +72,59 @@ class Forward(object):
 
 
 class Variable(object):
+    """
+    Create a Variable object for automatic differentiation.
+
+    Attributes
+    ----------
+    val : float
+        Value of the variable
+    der : dict
+        Dictionary of derivatives
+    label : str
+        Label of the variable
+    ad_mode : str
+        Automatic differentiation mode (only forward for now)
+    counter : int
+        Counter for the label
+    """
     counter = 0
 
-    def __init__(
-        self, val, der=None, label=None, ad_mode="forward", increment_counter=True
-    ):
+    def __init__(self, val, der=None, label=None, ad_mode="forward", increment_counter=True):
+        """
+        Parameters
+        ----------
+        val : float
+            Value of the variable
+        der : dict
+            Dictionary of derivatives
+        label : str
+            Label of the variable
+        ad_mode : str
+            Automatic differentiation mode (only forward for now)
+        increment_counter : bool
+            Increment the counter for the label
+        
+        Examples
+        -------
+        >>> v = Variable(3, label='x')
+        >>> print(v.val)
+        3
+        >>> print(v.der)
+        {'x': 1.0}
+
+        >>> v = Variable([1,2], {'x': [1,2]})
+        >>> print(v.val)
+        [1 2]
+        >>> print(v.der)
+        {'x': [1 2]}
+
+        >>> v = Variable([1,2], {'x': [1,2], 'y': [3,4]})
+        >>> print(v.val)
+        [1 2]
+        >>> print(v.der)
+        {'x': [1 2], 'y': [3 4]}
+        """
 
         self.val = np.asarray(val)
         self.ad_mode = ad_mode
@@ -70,6 +143,14 @@ class Variable(object):
             Variable.increment()
 
     def __str__(self):
+        """
+        Prints the value and the derivatives of the variable
+
+        Returns
+        -------
+        str
+            Description of the variable
+        """
         return f"Label: {self.label}, Value: {self.val}, Derivative: {self.der}"
 
     @staticmethod
@@ -81,21 +162,134 @@ class Variable(object):
         return str(Variable.counter)
 
     def __add__(self, other):
+        """
+        Calculates the sum of two variables
+
+        Parameters
+        ----------
+        other : Variable
+            Variable to be added
+        
+        Returns
+        -------
+        Variable
+            Variable of the sum
+        
+        Examples
+        -------
+        >>> v1 = Variable(3, label = 'x')
+        >>> v2 = Variable(5, label = 'y')
+        >>> v3 = v1 + v2
+        >>> print(v3.val)
+        8
+        >>> print(v3.der)
+        {'x': 1.0, 'y': 1.0}
+        """
         try:
             return Variable(self.val + other.val, add_dict(self.der, other.der))
         except AttributeError:
             return Variable(self.val + other, self.der)
 
     def __radd__(self, other):
+        """
+        Calculates the sum of two variables
+
+        Parameters
+        ----------
+        other : Variable
+            Variable to be added
+        
+        Returns
+        -------
+        Variable
+            Variable of the sum
+        
+        Examples
+        -------
+        >>> v1 = Variable(3, label = 'x')
+        >>> v2 = 3 + v1
+        >>> print(v2.val)
+        6
+        >>> print(v2.der)
+        {'x': 1.0}
+        """
         return self.__add__(other)
 
     def __sub__(self, other):
+        """
+        Calculates the difference of two variables
+
+        Parameters
+        ----------
+        other : Variable
+            Variable to be subtracted
+        
+        Returns
+        -------
+        Variable
+            Variable of the difference
+        
+        Examples
+        -------
+        >>> v1 = Variable(3, label = 'x')
+        >>> v2 = Variable(5, label = 'y')
+        >>> v3 = v1 - v2
+        >>> print(v3.val)
+        -2
+        >>> print(v3.der)
+        {'x': 1.0, 'y': -1.0}
+        """
         return self.__add__(-1 * other)
 
     def __rsub__(self, other):
+        """
+        Calculates the difference of two variables
+
+        Parameters
+        ----------
+        other : Variable
+            Variable to be subtracted
+        
+        Returns
+        -------
+        Variable
+            Variable of the difference
+        
+        Examples
+        -------
+        >>> v1 = Variable(3, label = 'x')
+        >>> v2 = 5 - v1
+        >>> print(v2.val)
+        -2
+        >>> print(v2.der)
+        {'x': -1.0}
+        """
         return (-1 * self).__add__(other)
 
     def __mul__(self, other):
+        """
+        Calculates the product of two variables
+
+        Parameters
+        ----------
+        other : Variable
+            Variable to be multiplied
+        
+        Returns
+        -------
+        Variable
+            Variable of the product
+        
+        Examples
+        -------
+        >>> v1 = Variable(3, label = 'x')
+        >>> v2 = Variable(5, label = 'y')
+        >>> v3 = v1 * v2
+        >>> print(v3.val)
+        15
+        >>> print(v3.der)
+        {'x': 5.0, 'y': 3.0}
+        """
         try:
             a1, a2 = self.val, other.val
             dict1, dict2 = self.der, other.der
@@ -115,9 +309,54 @@ class Variable(object):
             return Variable(self.val * other, new_dict)
 
     def __rmul__(self, other):
+        """
+        Calculates the product of two variables
+
+        Parameters
+        ----------
+        other : Variable
+            Variable to be multiplied
+        
+        Returns
+        -------
+        Variable
+            Variable of the product
+        
+        Examples
+        -------
+        >>> v1 = Variable(3, label = 'x')
+        >>> v2 = 3 * v1
+        >>> print(v2.val)
+        9
+        >>> print(v2.der)
+        {'x': 3.0}
+        """
         return self.__mul__(other)
 
     def __truediv__(self, other):
+        """
+        Calculates the division of two variables
+
+        Parameters
+        ----------
+        other : Variable
+            Variable to be divided
+        
+        Returns
+        -------
+        Variable
+            Variable of the division
+        
+        Examples
+        -------
+        >>> v1 = Variable(3, label = 'x')
+        >>> v2 = Variable(1, label = 'y')
+        >>> v3 = v1 / v2
+        >>> print(v3.val)
+        3.0
+        >>> print(v3.der)
+        {'x': 1.0, 'y': -3.0}
+        """
         try:
             # divide other by 1
             a2 = 1 / other.val
@@ -136,6 +375,28 @@ class Variable(object):
             return Variable(a1, dict1)
 
     def __rtruediv__(self, other):
+        """
+        Calculates the division of two variables
+
+        Parameters
+        ----------
+        other : Variable
+            Variable to be divided
+        
+        Returns
+        -------
+        Variable
+            Variable of the division
+        
+        Examples
+        -------
+        >>> v1 = Variable(1, label = 'x')
+        >>> v2 = 3 / v1
+        >>> print(v2.val)
+        3.0
+        >>> print(v2.der)
+        {'x': -3.0}
+        """
         new_var = self.__truediv__(other)
         # return reciprocal
         a2 = 1 / new_var.val
@@ -146,6 +407,23 @@ class Variable(object):
         return reciprocal_new_var
 
     def __neg__(self):
+        """
+        Calculates the negative of a variable
+
+        Returns
+        -------
+        Variable
+            Variable of the negative
+        
+        Examples
+        -------
+        >>> v1 = Variable(3, label = 'x')
+        >>> v2 = -v1
+        >>> print(v2.val)
+        -3.0
+        >>> print(v2.der)
+        {'x': -1.0}
+        """
         new_dir = {}
         try:
             for key in self.der:
@@ -159,6 +437,28 @@ class Variable(object):
 
 
     def __pow__(self, other):
+        """
+        Calculates the power of a variable
+
+        Parameters
+        ----------
+        other : Variable
+            Variable to be powered
+        
+        Returns
+        -------
+        Variable
+            Variable of the power
+        
+        Examples
+        -------
+        >>> v1 = Variable(3, label = 'x')
+        >>> v2 = v1 ** 2
+        >>> print(v2.val)
+        9.0
+        >>> print(v2.der)
+        {'x': 6.0}
+        """
         if isinstance(other, Variable):
             new_val = np.array([self.val ** other.val])
             new_der = {}
@@ -188,6 +488,28 @@ class Variable(object):
 
 
     def __rpow__(self, other):
+        """
+        Calculates the power of a variable
+
+        Parameters
+        ----------
+        other : Variable
+            Variable to be powered
+        
+        Returns
+        -------
+        Variable
+            Variable of the power
+        
+        Examples
+        -------
+        >>> v1 = Variable(2, label = 'x')
+        >>> v2 = np.e ** v1
+        >>> print(v2.val)
+        7.38905609893065
+        >>> print(v2.der)
+        {'x': 7.38905609893065}
+        """
         if isinstance(other, Variable):
             return other ** self
         else:
@@ -207,6 +529,32 @@ class Variable(object):
                 return Variable(val=new_val, der=new_der, ad_mode=self.ad_mode, increment_counter=True)
 
     def __eq__(self, other):
+        """
+        Returns True if the two variables are equal
+
+        Parameters
+        ----------
+        other : Variable
+            Variable to be compared
+        
+        Returns
+        -------
+        bool
+            True if the two variables are equal
+        
+        Examples
+        -------
+        >>> v1 = Variable(1)
+        >>> v2 = Variable(1)
+        >>> v3 = Variable(2)
+        >>> v4 = Variable(1, {'x': 2})
+        >>> print(v1 == v2)
+        True
+        >>> print(v1 == v3)
+        False
+        >>> print(v1 == v4)
+        False
+        """
         if not isinstance(other, Variable):
             return False
         if isinstance(self.val, (list, tuple, np.ndarray)) and isinstance(other.val, (list, tuple, np.ndarray)):
@@ -217,39 +565,166 @@ class Variable(object):
             return True
 
     def __ne__(self, other):
+        """
+        Returns True if the two variables are not equal
+
+        Parameters
+        ----------
+        other : Variable
+            Variable to be compared
+        
+        Returns
+        -------
+        bool
+            True if the two variables are not equal
+        
+        Examples
+        -------
+        >>> v1 = Variable(1)
+        >>> v2 = Variable(1)
+        >>> v3 = Variable(2)
+        >>> v4 = Variable(1, {'x': 2})
+        >>> print(v1 != v2)
+        False
+        >>> print(v1 != v3)
+        True
+        >>> print(v1 != v4)
+        True
+        """
         return not self.__eq__(other)
 
     def __lt__(self, other):
+        """
+        Returns True if the first variable is less than the second
+
+        Parameters
+        ----------
+        other : Variable
+            Variable to be compared
+        
+        Returns
+        -------
+        bool
+            True if the first variable is less than the second
+        
+        Examples
+        -------
+        >>> v1 = Variable(1)
+        >>> v2 = Variable(2)
+        >>> print(v1 < v2)
+        True
+        """
         try:
             return self.val < other.val
         except:
             raise ValueError("Dimensions of the two variables are not equal")
     
     def __le__(self, other):
+        """
+        Returns True if the first variable is less than or equal to the second
+
+        Parameters
+        ----------
+        other : Variable
+            Variable to be compared
+        
+        Returns
+        -------
+        bool
+            True if the first variable is less than or equal to the second
+        
+        Examples
+        -------
+        >>> v1 = Variable(1)
+        >>> v2 = Variable(2)
+        >>> print(v1 <= v2)
+        True
+        """
         try:
             return self.val <= other.val
         except:
             raise ValueError("Dimensions of the two variables are not equal")
     
     def __gt__(self, other):
+        """
+        Returns True if the first variable is greater than the second
+
+        Parameters
+        ----------
+        other : Variable
+            Variable to be compared
+        
+        Returns
+        -------
+        bool
+            True if the first variable is greater than the second
+        
+        Examples
+        -------
+        >>> v1 = Variable(1)
+        >>> v2 = Variable(2)
+        >>> print(v1 > v2)
+        False
+        """
         try:
             return self.val > other.val
         except:
             raise ValueError("Dimensions of the two variables are not equal")
     
     def __ge__(self, other):
+        """
+        Returns True if the first variable is greater than or equal to the second
+
+        Parameters
+        ----------
+        other : Variable
+            Variable to be compared
+        
+        Returns
+        -------
+        bool
+            True if the first variable is greater than or equal to the second
+        
+        Examples
+        -------
+        >>> v1 = Variable(2)
+        >>> v2 = Variable(2)
+        >>> print(v1 >= v2)
+        True
+        """
         try:
             return self.val >= other.val
         except:
             raise ValueError("Dimensions of the two variables are not equal")
 
-
-
-
 def exp(x):
     """
-    If x is a Variable, returns a new variable with val and der
-    If x is a number, returns numeric exp(x)
+    Calculates the exponential of a variable
+
+    Parameters
+    ----------
+    x : Variable or float
+        Variable or float to be exponentiated
+    
+    Returns
+    -------
+    Variable or float
+        Exponential of the variable or float.
+        If x is a Variable, returns a new variable with val and der
+        If x is a number, returns numeric exp(x)
+    
+    Examples
+    -------
+    >>> v1 = Variable(2, label = 'x')
+    >>> v2 = exp(v1)
+    >>> print(v2.val)
+    7.38905609893065
+    >>> print(v2.der)
+    {'x': 7.38905609893065}
+
+    >>> v3 = exp(2)
+    >>> print(v3)
+    7.38905609893065
     """
 
     def exp_by_element(x):
@@ -274,8 +749,32 @@ def exp(x):
 
 def log10(x):
     """
-    If x is a Variable, returns a new variable with val and der
-    If x is a number, returns numeric log(x)
+    Calculates the logarithm of a variable
+
+    Parameters
+    ----------
+    x : Variable or float
+        Variable or float to be logarithmized
+    
+    Returns
+    -------
+    Variable or float
+        Logarithm of the variable or float.
+        If x is a Variable, returns a new variable with val and der
+        If x is a number, returns numeric log10(x)
+    
+    Examples
+    -------
+    >>> v1 = Variable(2, label = 'x')
+    >>> v2 = log10(v1)
+    >>> print(v2.val)
+    0.301029995663981
+    >>> print(v2.der)
+    0.217147240951626
+
+    >>> v3 = log10(2)
+    >>> print(v3)
+    0.301029995663981
     """
 
     def log10_by_element(x):
@@ -301,8 +800,32 @@ def log10(x):
 
 def ln(x):
     """
-    If x is a Variable, returns a new variable with val and der
-    If x is a number, returns numeric ln(x)
+    Calculates the natural logarithm of a variable
+
+    Parameters
+    ----------
+    x : Variable or float
+        Variable or float to be logarithmized
+    
+    Returns
+    -------
+    Variable or float
+        Natural logarithm of the variable or float.
+        If x is a Variable, returns a new variable with val and der
+        If x is a number, returns numeric ln(x)
+    
+    Examples
+    -------
+    >>> v1 = Variable(2, label = 'x')
+    >>> v2 = ln(v1)
+    >>> print(v2.val)
+    0.693147180559945
+    >>> print(v2.der)
+    {'x': 0.5}
+
+    >>> v3 = ln(2)
+    >>> print(v3)
+    0.693147180559945
     """
 
     def ln_by_element(x):
@@ -326,8 +849,32 @@ def ln(x):
 
 def logistic(x):
     """
-    If x is a Variable, returns a new variable with val and der
-    If x is a number, returns numeric 1 / (1 + np.exp(x))
+    Calculates the logistic function of a variable
+
+    Parameters
+    ----------
+    x : Variable or float
+        Variable or float to be logisticized
+    
+    Returns
+    -------
+    Variable or float
+        Logistic of the variable or float.
+        If x is a Variable, returns a new variable with val and der
+        If x is a number, returns numeric logistic(x)
+    
+    Examples
+    -------
+    >>> v1 = Variable(2, label = 'x')
+    >>> v2 = logistic(v1)
+    >>> print(v2.val)
+    0.880797077977882
+    >>> print(v2.der)
+    {'x': 0.104993585403506}
+
+    >>> v3 = logistic(2)
+    >>> print(v3)
+    0.880797077977882
     """
 
     def logistic_by_element(x):
@@ -349,11 +896,36 @@ def logistic(x):
     else:
         return logistic_by_element(x)
 
-def sin(x): #x is an instance of class Variable
+def sin(x):
     """
-    If x is a Variable, returns a new variable with val and der
-    If x is a number, returns numeric sin(x)
+    Calculates the sine of a variable
+
+    Parameters
+    ----------
+    x : Variable or float
+        Variable or float to be sined
+    
+    Returns
+    -------
+    Variable or float
+        Sine of the variable or float.
+        If x is a Variable, returns a new variable with val and der
+        If x is a number, returns numeric sin(x)
+
+    Examples
+    -------
+    >>> v1 = Variable(2, label = 'x')
+    >>> v2 = sin(v1)
+    >>> print(v2.val)
+    0.909297426825682
+    >>> print(v2.der)
+    {'x': -0.41614683654714}
+
+    >>> v3 = sin(2)
+    >>> print(v3)
+    0.909297426825682
     """
+
     def sin_by_element(x):
         if isinstance(x, Variable):
             val = np.sin(x.val)
@@ -372,11 +944,36 @@ def sin(x): #x is an instance of class Variable
     else:
         return sin_by_element(x)
 
-def cos(x): #x is an instance of class Variable
+def cos(x):
     """
-    If x is a Variable, returns a new variable with val and der
-    If x is a number, returns numeric cos(x)
+    Calculates the cosine of a variable
+
+    Parameters
+    ----------
+    x : Variable or float
+        Variable or float to be cosined
+    
+    Returns
+    -------
+    Variable or float
+        Cosine of the variable or float.
+        If x is a Variable, returns a new variable with val and der
+        If x is a number, returns numeric cos(x)
+    
+    Examples
+    -------
+    >>> v1 = Variable(2, label = 'x')
+    >>> v2 = cos(v1)
+    >>> print(v2.val)
+    -0.41614683654714
+    >>> print(v2.der)
+    {'x': -0.909297426825682}
+
+    >>> v3 = cos(2)
+    >>> print(v3)
+    -0.41614683654714
     """
+
     def cos_by_element(x):
         if isinstance(x, Variable):
             val = np.cos(x.val)
@@ -395,10 +992,34 @@ def cos(x): #x is an instance of class Variable
     else:
         return cos_by_element(x)
 
-def tan(x): #x is an instance of class Variable
+def tan(x):
     """
-    If x is a Variable, returns a new variable with val and der
-    If x is a number, returns numeric tan(x)
+    Calculates the tangent of a variable
+
+    Parameters
+    ----------
+    x : Variable or float
+        Variable or float to be tanged
+    
+    Returns
+    -------
+    Variable or float
+        Tangent of the variable or float.
+        If x is a Variable, returns a new variable with val and der
+        If x is a number, returns numeric tan(x)
+    
+    Examples
+    -------
+    >>> v1 = Variable(2, label = 'x')
+    >>> v2 = tan(v1)
+    >>> print(v2.val)
+    -2.185039863261519
+    >>> print(v2.der)
+    {'x': 5.774399204041917}
+
+    >>> v3 = tan(2)
+    >>> print(v3)
+    -2.185039863261519
     """
     def tan_by_element(x):
         if isinstance(x, Variable):
