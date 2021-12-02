@@ -5,10 +5,11 @@
 - Lotus Xia (lxia@g.harvard.edu)
 - Neil Sehgal (neil_sehgal@g.harvard.edu)
 
-# Codecov Badges
+# SALAD: An AutoDiff Package
 
-[![codecov](https://codecov.io/gh/cs107-DaLand/cs107-FinalProject/branch/main/graph/badge.svg?token=VPHTGWGKES)](https://codecov.io/gh/cs107-DaLand/cs107-FinalProject)
+This project is available for download through 
+```
+pip install <Insert Name HERE>
+```
 
-# Travis CI Badges
-
-[![Build Status](https://app.travis-ci.com/cs107-DaLand/cs107-FinalProject.svg?branch=main)](https://app.travis-ci.com/cs107-DaLand/cs107-FinalProject)
+Documentation available [here](https://duckduckgo.com)
