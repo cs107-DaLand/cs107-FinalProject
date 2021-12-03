@@ -13,3 +13,6 @@ pip install <Insert Name HERE>
 ```
 
 Documentation available [here](https://duckduckgo.com)
+
+PyPi link [here](https://duckduckgo.com)
+
