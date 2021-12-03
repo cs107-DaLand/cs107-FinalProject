@@ -2,8 +2,24 @@
 # File       : newton_salad.py
 # Description: Newton's method using Salad AD. Only works for single variable case
 
-# import sys
-# sys.path.append('../')
+"""
+To use right now, you can do 
+>>> from cs107_salad.Optimization.newton_draft import *
+>>> f = '2*x**3  - 2*x - 5'
+>>> newton(f, 2, 1.0e-8, 100)
+-0.3181818181818182
+Iteration  1 : Delta x =  -0.3181818181818182
+-0.07684490502597054
+Iteration  2 : Delta x =  -0.07684490502597054
+-0.004361047546956799
+Iteration  3 : Delta x =  -0.004361047546956799
+-1.3684177142438221e-05
+Iteration  4 : Delta x =  -1.3684177142438221e-05
+-1.344910547632496e-10
+Found root  1.6005985449336209  at iteration  5
+2
+1.6005985449336209
+"""
 
 import numpy as np
 from ..Forward import salad
