@@ -725,6 +725,11 @@ def test_pow():
     assert z.val == 9
     assert z.der == {"x": 6}
 
+    x = ad.Variable(0, label="x")
+    z = x ** 2
+    assert z.val == 0
+    assert z.der == {"x": 0}
+
     x = ad.Variable([3, 2], label="x")
     z = x ** 2
     assert np.all(z.val == [9, 4])
@@ -752,12 +757,22 @@ def test_pow():
     assert np.all(z2.val == [np.e, np.e])
     assert compare_dicts_multi(z2.der, {"x": [1, 1], "y": [np.e + 1, np.e + 1]}) == True
 
+    x = ad.Variable([0, 0], label="x")
+    y = ad.Variable([1, 2], label="y")
+    z = x ** y
+    assert np.all(z.val == [0, 0])
+    assert compare_dicts_multi(z.der, {"x": [1, 0], "y": [0, 0]}) == True
 
 def test_rpow():
     x = ad.Variable(1, label="x")
     z = np.e ** x
     assert z.val == np.e
     assert z.der == {"x": np.e}
+
+    x = ad.Variable(1, label="x")
+    z = 0 ** x
+    assert z.val == 0
+    assert z.der == {"x": 0}
 
     x = ad.Variable([1, 2], label="x")
     z = np.e ** x

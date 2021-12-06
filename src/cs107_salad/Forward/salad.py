@@ -466,16 +466,21 @@ class Variable(object):
             for v in list(all_ele): # v: element
                 my_der = self.der[v] if v in self.der else 0
                 other_der = other.der[v] if v in other.der else 0
-                v_der = new_val * (other_der * np.log(self.val) + my_der / self.val * other.val)
-                #new_der[v] = np.array([v_der])
-                new_der[v] = v_der
+                if v not in other.der:
+                    new_der[v] = other.val * (self.val ** (other.val - 1)) * my_der
+                else:
+                    v_der = new_val * (other_der * np.log(self.val) + my_der / self.val * other.val)
+                    #new_der[v] = np.array([v_der])
+                    v_der[np.isnan(v_der)] = 0
+                    new_der[v] = v_der
             return Variable(val=new_val, der=new_der, ad_mode=self.ad_mode, increment_counter=True)
         else:
             try:
                 new_val = self.val ** other
                 new_der = {}
                 for v in self.der:
-                    new_der[v] = [new_val[i] * self.der[v][i] * other / self.val[i] for i in range(len(new_val))]
+                    #new_der[v] = [new_val[i] * self.der[v][i] * other / self.val[i] for i in range(len(new_val))]
+                    new_der[v] = [other * (self.val[i] ** (other - 1)) * self.der[v][i] for i in range(len(new_val))]
                 return Variable(val=new_val, der=new_der, ad_mode=self.ad_mode, increment_counter=True)
             except:
                 #new_val = [self.val ** other]
@@ -483,7 +488,7 @@ class Variable(object):
                 new_der = {}
                 for v in self.der:
                     #new_der[v] = [new_val[0] * self.der[v] * other / self.val]
-                    new_der[v] = new_val * self.der[v] * other / self.val
+                    new_der[v] = self.der[v] * other * (self.val ** (other - 1))
                 return Variable(val=new_val, der=new_der, ad_mode=self.ad_mode, increment_counter=True)
 
 
@@ -510,23 +515,25 @@ class Variable(object):
         >>> print(v2.der)
         {'x': 7.38905609893065}
         """
-        if isinstance(other, Variable):
-            return other ** self
-        else:
-            try:
-                new_val = other ** self.val
-                new_der = {}
-                for v in self.der:
-                    new_der[v] = [new_val[i] * self.der[v][i] * np.log(other) for i in range(len(new_val))]
-                return Variable(val=new_val, der=new_der, ad_mode=self.ad_mode, increment_counter=True)
-            except:
-                #new_val = [other ** self.val]
-                new_val = other ** self.val
-                new_der = {}
-                for v in self.der:
-                    #new_der[v] = [new_val[0] * self.der[v] * np.log(other)]
-                    new_der[v] = new_val * self.der[v] * np.log(other)
-                return Variable(val=new_val, der=new_der, ad_mode=self.ad_mode, increment_counter=True)
+        if other == 0:
+            new_der = {}
+            for v in self.der:
+                new_der[v] = 0
+            return Variable(val=0, der=new_der, ad_mode=self.ad_mode, increment_counter=True)
+        try:
+            new_val = other ** self.val
+            new_der = {}
+            for v in self.der:
+                new_der[v] = [new_val[i] * self.der[v][i] * np.log(other) for i in range(len(new_val))]
+            return Variable(val=new_val, der=new_der, ad_mode=self.ad_mode, increment_counter=True)
+        except:
+            #new_val = [other ** self.val]
+            new_val = other ** self.val
+            new_der = {}
+            for v in self.der:
+                #new_der[v] = [new_val[0] * self.der[v] * np.log(other)]
+                new_der[v] = new_val * self.der[v] * np.log(other)
+            return Variable(val=new_val, der=new_der, ad_mode=self.ad_mode, increment_counter=True)
 
     def __eq__(self, other):
         """
