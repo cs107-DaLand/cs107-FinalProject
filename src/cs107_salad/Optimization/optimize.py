@@ -16,6 +16,13 @@ class Optimizer:
 class GradientDescent(Optimizer):
     """
     Class to run GD on a function
+
+    Attributes
+    ----------
+    f: function, str
+        The function to minimize.
+    min_params: a dict of the form {var: value}
+        The optimized parameters
     """
 
     def __init__(self):
@@ -33,20 +40,40 @@ class GradientDescent(Optimizer):
         """
         Minimize a function using gradient descent.
 
-        Inputs
-        ------
-            f: function, str
-                The function to minimize.
-            starting_pos: a dict of the form {var: value}
-            learning_rate: a float of the learning rate
-            grad_tol: a float of the gradient tolerance
-                when the norm of gradient is smalled than tol, the algorithm stops
-            max_iter: an int of the maximum number of iterations
-            full_history: a bool of whether to return the full history of the parameters searched
+        Parameters
+        ----------
+        f: function, str
+            The function to minimize.
+        starting_pos: a dict of the form {var: value}
+            The starting parameters
+        learning_rate: float
+            The learning rate for the gradient descent algorithm
+        grad_tol: float
+            The tolerance for the gradient
+        max_iter: int
+            The maximum number of iterations to run the gradient descent algorithm
+        full_history: bool
+            Whether to return the full history of the gradient descent algorithm
 
         Returns
         -------
-            params: a numpy array of the optimized parameters
+        self.min_params: a dict of the form {var: value}
+            The optimized parameters
+        der: a dict of the form {var: derivative}
+            The derivative of the function at the optimized parameters
+        history: bool
+            Whether to return the full history of the gradient descent algorithm
+        
+        Examples
+        --------
+        >>> f = "sin(x**2)"
+        >>> starting_pos = {"x": 5}
+        >>> GD = optimize.GradientDescent()
+        >>> min_params, der = GD.optimize(f, starting_pos)
+        >>> print(min_params)
+        {'x': 4.854064781389672}
+        >>> print(der)
+        {'x': 6.942271683968039e-10}
         """
         self.learning_rate = learning_rate
         self.func = f
@@ -81,6 +108,13 @@ class GradientDescent(Optimizer):
 class BFGS(Optimizer):
     """
     Class to run BFGS on a function
+
+    Attributes
+    ----------
+    f: function, str
+        The function to minimize.
+    min_params: a dict of the form {var: value}
+        The optimized parameters
     """
 
     def __init__(self):
@@ -92,19 +126,34 @@ class BFGS(Optimizer):
         """
         Minimize a function using gradient descent.
 
-        Inputs
-        ------
-            f: function, str
-                The function to minimize.
-            starting_pos: a dict of the form {var: value}
-            tol: a float of the update tolerance
-                when the norm of update is smalled than tol, the algorithm stops
-            max_iter: an int of the maximum number of iterations
-
-
+        Parameters
+        ----------
+        f: function, str
+            The function to minimize.
+        starting_pos: a dict of the form {var: value}
+            The starting parameters
+        tol: float
+            The tolerance for the gradient
+        max_iter: int
+            The maximum number of iterations to run the gradient descent algorithm
+        full_history: bool
+            Whether to return the full history of the gradient descent algorithm
+        
         Returns
         -------
-            params: a numpy array of the optimized parameters
+        self.min_params: a dict of the form {var: value}
+            The optimized parameters
+        history: bool
+            Whether to return the full history of the gradient descent algorithm
+        
+        Examples
+        --------
+        >>> f = "sin(x**2)"
+        >>> starting_pos = {"x": 5}
+        >>> BFGS = optimize.BFGS()
+        >>> min_params = BFGS.optimize(f, starting_pos)
+        >>> print(min_params)
+        {'x': -2.1708037636748028}
         """
         self.func = f
         self.params = (
@@ -178,16 +227,14 @@ class StochasticGradientDescent(Optimizer):
         """
         Minimize a function using stochastic gradient descent.
 
-        Inputs
-        ------
-            X: an np.array of size (n,p) where n is the number of data points and p is the number of parameters
-            y: an np.array of size (n,) where n is the number of data points
-            batch_size: an int of the batch size
-            learning_rate: a float of the learning rate
-
-        Returns
-        -------
-            params: a numpy array of the optimized parameters
+        Parameters
+        ----------
+        X: numpy.ndarray
+            The dataset
+        y: numpy.ndarray
+            The labels
+        batch_size: int
+            The size of the batch
         """
 
         self.data = X
@@ -214,15 +261,41 @@ class StochasticGradientDescent(Optimizer):
         """
         Minimize a function using stochastic gradient descent.
         
-        Inputs
-        ------
-            starting_pos: a list of the form [var1, var2, ...] 
-                          where var1, var2,... correspond to the estimated parameter 
-                          of each column of the input data
+        Parameters
+        ----------
+        starting_pos: a dict of the form {var: value}
+            The starting parameters
+        learning_rate: float
+            The learning rate
+        grad_tol: float
+            The tolerance for the gradient
+        max_iter: int
+            The maximum number of iterations to run the gradient descent algorithm
+        full_history: bool
+            Whether to return the full history of the gradient descent algorithm
 
         Returns
         -------
-            params: a numpy array of the optimized parameters
+        self.min_params: a dict of the form {var: value}
+            The optimized parameters
+        der: a dict of the form {var: derivative}
+            The derivative of the function at the optimized parameters
+
+        Examples
+        --------
+        >>> import numpy as np
+        >>> X = np.random.rand(100, 3)
+        >>> y = X @ np.array([0, 1, 2])
+        >>> SGD = optimize.StochasticGradientDescent(X, y, batch_size=10)
+        >>> min_params, der = SGD.optimize([0, 0, 0], max_iter=5000, learning_rate=0.01)
+        >>> print(min_params)
+        {'b0': 0.00038398377190103383,
+         'b1': 1.0002070838383432,
+         'b2': 1.999274296181649}
+        >>> print(der)
+        {'b0': -1.88086866634477e-06,
+         'b1': -0.00010693649472573479,
+         'b2': -0.0001979083464866652}
         """
 
         self.learning_rate = learning_rate
