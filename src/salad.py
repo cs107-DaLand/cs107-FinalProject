@@ -417,3 +417,164 @@ def tan(x): #x is an instance of class Variable
         return [tan_by_element(i) for i in x]
     else:
         return tan_by_element(x)
+
+def arcsin(x): #x is an instance of class Variable
+    """
+    If x is a Variable, returns a new variable with val and der
+    If x is a number, returns numeric arcsin(x)
+    """
+    def arcsin_by_element(x):
+        if isinstance(x, Variable):
+            val = np.arcsin(x.val)
+            der = copy.deepcopy(x.der)
+            for key in der:
+                der[key] = 1/np.sqrt(1 - x.val**2) * x.der[key]
+            return Variable(val, der, increment_counter=True)
+
+        elif isinstance(x, (int, float)):
+            return np.arcsin(x)
+        else:
+            raise TypeError("x must be a Variable or a number")
+
+    if isinstance(x, (list, tuple, np.ndarray)):
+        return [arcsin_by_element(i) for i in x]
+    else:
+        return arcsin_by_element(x)
+
+def arccos(x): #x is an instance of class Variable
+    """
+    If x is a Variable, returns a new variable with val and der
+    If x is a number, returns numeric arccos(x)
+    """
+    def arccos_by_element(x):
+        if isinstance(x, Variable):
+            val = np.arccos(x.val)
+            der = copy.deepcopy(x.der)
+            for key in der:
+                der[key] = -1/np.sqrt(1 - x.val**2) * x.der[key]
+            return Variable(val, der, increment_counter=True)
+
+        elif isinstance(x, (int, float)):
+            return np.arccos(x)
+        else:
+            raise TypeError("x must be a Variable or a number")
+    
+    if isinstance(x, (list, tuple, np.ndarray)):
+        return [arccos_by_element(i) for i in x]
+    else:
+        return arccos_by_element(x)
+
+def arctan(x): #x is an instance of class Variable
+    """
+    If x is a Variable, returns a new variable with val and der
+    If x is a number, returns numeric arctan(x)
+    """
+    def arctan_by_element(x):
+        if isinstance(x, Variable):
+            val = np.arctan(x.val)
+            der = copy.deepcopy(x.der)
+            for key in der:
+                der[key] = 1/(1 + x.val**2) * x.der[key]
+            return Variable(val, der, increment_counter=True)
+
+        elif isinstance(x, (int, float)):
+            return np.arctan(x)
+        else:
+            raise TypeError("x must be a Variable or a number")
+
+    if isinstance(x, (list, tuple, np.ndarray)):
+        return [arctan_by_element(i) for i in x]
+    else:
+        return arctan_by_element(x)
+
+def sinh(x): #x is an instance of class Variable
+    """
+    If x is a Variable, returns a new variable with val and der
+    If x is a number, returns numeric sinh(x)
+    """
+    def sinh_by_element(x):
+        if isinstance(x, Variable):
+            val = np.sinh(x.val)
+            der = copy.deepcopy(x.der)
+            for key in der:
+                der[key] = np.cosh(x.val) * x.der[key]
+            return Variable(val, der, increment_counter=True)
+
+        elif isinstance(x, (int, float)):
+            return np.sinh(x)
+        else:
+            raise TypeError("x must be a Variable or a number")
+
+    if isinstance(x, (list, tuple, np.ndarray)):
+        return [sinh_by_element(i) for i in x]
+    else:
+        return sinh_by_element(x)
+
+def cosh(x): #x is an instance of class Variable
+    """
+    If x is a Variable, returns a new variable with val and der
+    If x is a number, returns numeric cosh(x)
+    """
+    def cosh_by_element(x):
+        if isinstance(x, Variable):
+            val = np.cosh(x.val)
+            der = copy.deepcopy(x.der)
+            for key in der:
+                der[key] = np.sinh(x.val) * x.der[key]
+            return Variable(val, der, increment_counter=True)
+
+        elif isinstance(x, (int, float)):
+            return np.cosh(x)
+        else:
+            raise TypeError("x must be a Variable or a number")
+    
+    if isinstance(x, (list, tuple, np.ndarray)):
+        return [cosh_by_element(i) for i in x]
+    else:
+        return cosh_by_element(x)
+
+def tanh(x): #x is an instance of class Variable
+    """
+    If x is a Variable, returns a new variable with val and der
+    If x is a number, returns numeric tanh(x)
+    """
+    def tanh_by_element(x):
+        if isinstance(x, Variable):
+            val = np.tanh(x.val)
+            der = copy.deepcopy(x.der)
+            for key in der:
+                der[key] = (1 - np.tanh(x.val)**2) * x.der[key]
+            return Variable(val, der, increment_counter=True)
+
+        elif isinstance(x, (int, float)):
+            return np.tanh(x)
+        else:
+            raise TypeError("x must be a Variable or a number")
+
+    if isinstance(x, (list, tuple, np.ndarray)):
+        return [tanh_by_element(i) for i in x]
+    else:
+        return tanh_by_element(x)
+
+def sqrt(x): #x is an instance of class Variable
+    """
+    If x is a Variable, returns a new variable with val and der
+    If x is a number, returns numeric sqrt(x)
+    """
+    def sqrt_by_element(x):
+        if isinstance(x, Variable):
+            val = np.sqrt(x.val)
+            der = copy.deepcopy(x.der)
+            for key in der:
+                der[key] = 1/(2*np.sqrt(x.val)) * x.der[key]
+            return Variable(val, der, increment_counter=True)
+
+        elif isinstance(x, (int, float)):
+            return np.sqrt(x)
+        else:
+            raise TypeError("x must be a Variable or a number")
+
+    if isinstance(x, (list, tuple, np.ndarray)):
+        return [sqrt_by_element(i) for i in x]
+    else:
+        return sqrt_by_element(x)
