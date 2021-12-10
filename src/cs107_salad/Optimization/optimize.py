@@ -63,8 +63,8 @@ class GradientDescent(Optimizer):
             The value of the function at the minimum
         der: a dict of the form {var: derivative}
             The derivative of the function at the optimized parameters
-        history: bool
-            Whether to return the full history of the gradient descent algorithm
+        self.history: a dict of the form {var: list of values}
+            All min_paraims searched in the history of the gradient descent algorithm
         
         Examples
         --------
@@ -152,8 +152,8 @@ class BFGS(Optimizer):
             The optimized parameters
         val: (list of) float
             The value of the function at the minimum
-        history: bool
-            Whether to return the full history of the gradient descent algorithm
+        self.history: a dict of the form {var: list of values}
+            All min_paraims searched in the history of the gradient descent algorithm
         
         Examples
         --------
@@ -296,6 +296,8 @@ class StochasticGradientDescent(Optimizer):
             The value of the function at the minimum
         der: a dict of the form {var: derivative}
             The derivative of the function at the optimized parameters
+        self.history: a dict of the form {var: list of values}
+            All min_paraims searched in the history of the gradient descent algorithm
 
         Examples
         --------
