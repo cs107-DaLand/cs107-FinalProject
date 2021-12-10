@@ -3,6 +3,7 @@ import numpy as np
 import autograd.numpy as adnp
 from autograd import grad
 import salad as ad
+import pytest
 
 def add_dict(dict1, dict2):
     # Need to copy dictionaries to prevent changing der for original variables
@@ -39,6 +40,7 @@ def compare_dicts_multi(d1, d2):
             return False
     return True
 
+@pytest.mark.skip
 def test_trig(adfunc, adnpfunc):
     '''
     Master test suite for trig functions
