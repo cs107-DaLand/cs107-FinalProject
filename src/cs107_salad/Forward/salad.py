@@ -1090,10 +1090,30 @@ def tan(x):
         return tan_by_element(x)
 
 
-def arcsin(x):  # x is an instance of class Variable
+def arcsin(x):
     """
-    If x is a Variable, returns a new variable with val and der
-    If x is a number, returns numeric arcsin(x)
+    Calculates the inverse sine of a variable
+
+    Parameters
+    ----------
+    x : Variable or float
+        Variable or float to be arcsined
+    
+    Returns
+    -------
+    Variable or float
+        Inverse sine of the variable or float.
+        If x is a Variable, returns a new variable with val and der
+        If x is a number, returns numeric arcsin(x)
+    
+    Examples
+    -------
+    >>> v1 = Variable(0.5, label = 'x')
+    >>> v2 = arcsin(v1)
+    >>> print(v2.val)
+    0.523598775598299
+    >>> print(v2.der)
+    {'x': 1.1547005383792517}
     """
 
     def arcsin_by_element(x):
@@ -1121,10 +1141,30 @@ def arcsin(x):  # x is an instance of class Variable
         return arcsin_by_element(x)
 
 
-def arccos(x):  # x is an instance of class Variable
+def arccos(x):
     """
-    If x is a Variable, returns a new variable with val and der
-    If x is a number, returns numeric arccos(x)
+    Calculates the inverse cosine of a variable
+
+    Parameters
+    ----------
+    x : Variable or float
+        Variable or float to be arccosed
+    
+    Returns
+    -------
+    Variable or float
+        Inverse cosine of the variable or float.
+        If x is a Variable, returns a new variable with val and der
+        If x is a number, returns numeric arccos(x)
+    
+    Examples
+    -------
+    >>> v1 = Variable(0.5, label = 'x')
+    >>> v2 = arccos(v1)
+    >>> print(v2.val)
+    1.0471975511965976
+    >>> print(v2.der)
+    {'x': -1.1547005383792517}
     """
 
     def arccos_by_element(x):
@@ -1150,7 +1190,31 @@ def arccos(x):  # x is an instance of class Variable
         return arccos_by_element(x)
 
 
-def arctan(x):  # x is an instance of class Variable
+def arctan(x):
+    """
+    Calculates the inverse tangent of a variable
+
+    Parameters
+    ----------
+    x : Variable or float
+        Variable or float to be arctanted
+    
+    Returns
+    -------
+    Variable or float
+        Inverse tangent of the variable or float.
+        If x is a Variable, returns a new variable with val and der
+        If x is a number, returns numeric arctan(x)
+    
+    Examples
+    -------
+    >>> v1 = Variable(0.5, label = 'x')
+    >>> v2 = arctan(v1)
+    >>> print(v2.val)
+    0.4636476090008061
+    >>> print(v2.der)
+    {'x': 0.8}
+    """
     """
     If x is a Variable, returns a new variable with val and der
     If x is a number, returns numeric arctan(x)
@@ -1175,10 +1239,30 @@ def arctan(x):  # x is an instance of class Variable
         return arctan_by_element(x)
 
 
-def sinh(x):  # x is an instance of class Variable
+def sinh(x):  
     """
-    If x is a Variable, returns a new variable with val and der
-    If x is a number, returns numeric sinh(x)
+    Calculates the hyperbolic sine of a variable
+
+    Parameters
+    ----------
+    x : Variable or float
+        Variable or float to be sinh'ed
+    
+    Returns
+    -------
+    Variable or float
+        Hyperbolic sine of the variable or float.
+        If x is a Variable, returns a new variable with val and der
+        If x is a number, returns numeric sinh(x)
+    
+    Examples
+    -------
+    >>> v1 = Variable(0.5, label = 'x')
+    >>> v2 = sinh(v1)
+    >>> print(v2.val)
+    0.5210953054937474
+    >>> print(v2.der)
+    {'x': 1.1547005383792517}
     """
 
     def sinh_by_element(x):
@@ -1200,10 +1284,30 @@ def sinh(x):  # x is an instance of class Variable
         return sinh_by_element(x)
 
 
-def cosh(x):  # x is an instance of class Variable
+def cosh(x): 
     """
-    If x is a Variable, returns a new variable with val and der
-    If x is a number, returns numeric cosh(x)
+    Calculates the hyperbolic cosine of a variable
+
+    Parameters
+    ----------
+    x : Variable or float
+        Variable or float to be cosh'ed
+    
+    Returns
+    -------
+    Variable or float
+        Hyperbolic cosine of the variable or float.
+        If x is a Variable, returns a new variable with val and der
+        If x is a number, returns numeric cosh(x)
+    
+    Examples
+    -------
+    >>> v1 = Variable(0.5, label = 'x')
+    >>> v2 = cosh(v1)
+    >>> print(v2.val)
+    1.12762596520638
+    >>> print(v2.der)
+    {'x': 0.5210953054937474}
     """
 
     def cosh_by_element(x):
@@ -1225,10 +1329,30 @@ def cosh(x):  # x is an instance of class Variable
         return cosh_by_element(x)
 
 
-def tanh(x):  # x is an instance of class Variable
+def tanh(x):
     """
-    If x is a Variable, returns a new variable with val and der
-    If x is a number, returns numeric tanh(x)
+    Calculates the hyperbolic tangent of a variable
+
+    Parameters
+    ----------
+    x : Variable or float
+        Variable or float to be tanh'ed
+    
+    Returns
+    -------
+    Variable or float
+        Hyperbolic tangent of the variable or float.
+        If x is a Variable, returns a new variable with val and der
+        If x is a number, returns numeric tanh(x)
+    
+    Examples
+    -------
+    >>> v1 = Variable(0.5, label = 'x')
+    >>> v2 = tanh(v1)
+    >>> print(v2.val)
+    0.46211715726000974
+    >>> print(v2.der)
+    {'x': 0.7864477329659274}
     """
 
     def tanh_by_element(x):
@@ -1250,10 +1374,30 @@ def tanh(x):  # x is an instance of class Variable
         return tanh_by_element(x)
 
 
-def sqrt(x):  # x is an instance of class Variable
+def sqrt(x):
     """
-    If x is a Variable, returns a new variable with val and der
-    If x is a number, returns numeric sqrt(x)
+    Calculates the square root of a variable
+
+    Parameters
+    ----------
+    x : Variable or float
+        Variable or float to be sqrt'ed
+    
+    Returns
+    -------
+    Variable or float
+        Square root of the variable or float.
+        If x is a Variable, returns a new variable with val and der
+        If x is a number, returns numeric sqrt(x)
+    
+    Examples
+    -------
+    >>> v1 = Variable(4, label = 'x')
+    >>> v2 = sqrt(v1)
+    >>> print(v2.val)
+    2.0
+    >>> print(v2.der)
+    {'x': 0.25}
     """
 
     def sqrt_by_element(x):
