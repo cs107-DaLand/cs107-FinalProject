@@ -425,6 +425,8 @@ def arcsin(x): #x is an instance of class Variable
     """
     def arcsin_by_element(x):
         if isinstance(x, Variable):
+            if np.any(x.val < -1*np.ones_like(x.val)) or np.any(x.val > 1*np.ones_like(x.val)):
+                raise ValueError('Domain of arcsin must be in interval [-1, 1]')
             val = np.arcsin(x.val)
             der = copy.deepcopy(x.der)
             for key in der:
@@ -432,6 +434,8 @@ def arcsin(x): #x is an instance of class Variable
             return Variable(val, der, increment_counter=True)
 
         elif isinstance(x, (int, float)):
+            if x < -1 or x > 1:
+                raise ValueError('Domain of arcsin must be in interval [-1, 1]')
             return np.arcsin(x)
         else:
             raise TypeError("x must be a Variable or a number")
@@ -448,6 +452,8 @@ def arccos(x): #x is an instance of class Variable
     """
     def arccos_by_element(x):
         if isinstance(x, Variable):
+            if np.any(x.val < -1*np.ones_like(x.val)) or np.any(x.val > 1*np.ones_like(x.val)):
+                raise ValueError('Domain of arccos must be in interval [-1, 1]')
             val = np.arccos(x.val)
             der = copy.deepcopy(x.der)
             for key in der:
@@ -563,6 +569,8 @@ def sqrt(x): #x is an instance of class Variable
     """
     def sqrt_by_element(x):
         if isinstance(x, Variable):
+            if np.any(x.val <= np.zeros_like(x.val)):
+                raise ValueError('Domain of sqrt must be in interval (0, inf)')
             val = np.sqrt(x.val)
             der = copy.deepcopy(x.der)
             for key in der:

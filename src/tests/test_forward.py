@@ -7,7 +7,7 @@ import numpy as np
 import autograd.numpy as adnp
 from autograd import grad
 import salad as ad
-from utils import check_list, compare_dicts, compare_dicts_multi
+from utils import check_list, compare_dicts, compare_dicts_multi, test_trig
 
 #################### Test suite for elementary operators #########################
 
@@ -573,81 +573,6 @@ def test_log10():
 
 #################### Test suite for trigonometric functions #########################
 
-def test_trig(adfunc, adnpfunc):
-    '''
-    Master test suite for trig functions
-    '''
-    x = 3
-    ans = adfunc(x)
-    sol = adnpfunc(x)
-    assert sol == ans
-
-    x = ad.Variable(3, label="x")
-    y = adfunc(x)
-    ans_val, ans_der = y.val, y.der["x"]
-    sol_val, sol_der = adnpfunc(3), grad(adnpfunc)(3.0)
-    assert ans_val == sol_val
-    assert math.isclose(ans_der, sol_der)
-
-    x = ad.Variable(3, label="x") + 3
-    y = adfunc(x)
-    ans_val, ans_der = y.val, y.der["x"]
-    sol_val, sol_der = adnpfunc(6), grad(lambda x: adnpfunc(x + 3.0))(3.0)
-    assert ans_val == sol_val
-    assert math.isclose(ans_der, sol_der)
-
-    x = ad.Variable(3, label="x") + ad.Variable(4, label="y")
-    y = adfunc(x)
-    ans_val, ans_der = y.val, [y.der["x"], y.der["y"]]
-    sol_val, sol_der = adnpfunc(7), [
-        grad(lambda x, y: adnpfunc(x + y), 0)(3.0, 4.0),
-        grad(lambda x, y: adnpfunc(x + y), 1)(3.0, 4.0),
-    ]
-    assert ans_val == sol_val
-    assert check_list(ans_der, sol_der)
-
-    x = ad.Variable([3, 4, 5], label="x")
-    y = adfunc(x)
-    ans_val, ans_der = y.val, y.der["x"]
-    sol_val, sol_der = [adnpfunc(3), adnpfunc(4), adnpfunc(5)], [
-        grad(lambda x: adnpfunc(x))(3.0),
-        grad(lambda x: adnpfunc(x))(4.0),
-        grad(lambda x: adnpfunc(x))(5.0),
-    ]
-    assert check_list(ans_val, sol_val)
-    assert check_list(ans_der, sol_der)
-
-    x = ad.Variable([3, 4, 5], label="x")
-    y = adfunc(x + x)
-    ans_val, ans_der = y.val, y.der["x"]
-    sol_val, sol_der = [adnpfunc(3 * 2), adnpfunc(4 * 2), adnpfunc(5 * 2)], [
-        grad(lambda x: adnpfunc(x + x))(3.0),
-        grad(lambda x: adnpfunc(x + x))(4.0),
-        grad(lambda x: adnpfunc(x + x))(5.0),
-    ]
-    assert check_list(ans_val, sol_val)
-    assert check_list(ans_der, sol_der)
-
-    x = ad.Variable([3, 4, 5], label="x")
-    y = ad.Variable([6, 6, 6], label="y")
-    y = adfunc(x + y)
-    ans_val, ans_der_x, ans_der_y = y.val, y.der["x"], y.der["y"]
-    sol_val, sol_der_x, sol_der_y = (
-        [adnpfunc(9), adnpfunc(10), adnpfunc(11)],
-        [
-            grad(lambda x, y: adnpfunc(x + y), 0)(3.0, 6.0),
-            grad(lambda x, y: adnpfunc(x + y), 0)(4.0, 6.0),
-            grad(lambda x, y: adnpfunc(x + y), 0)(5.0, 6.0),
-        ],
-        [
-            grad(lambda x, y: adnpfunc(x + y), 1)(3.0, 6.0),
-            grad(lambda x, y: adnpfunc(x + y), 1)(4.0, 6.0),
-            grad(lambda x, y: adnpfunc(x + y), 1)(5.0, 6.0),
-        ],
-    )
-    assert check_list(ans_val, sol_val)
-    assert check_list(sol_der_x, ans_der_x) & check_list(sol_der_y, ans_der_y)
-
 def test_sin():
     return test_trig(ad.sin, adnp.sin)
 def test_arcsin():
@@ -909,13 +834,13 @@ if __name__ == "__main__":
     test_sin()
     test_cos()
     test_tan()
-    # test_arcsin()
-    # test_arccos()
+    test_arcsin()
+    test_arccos()
     test_arctan()
     test_sinh()
     test_cosh()
     test_tanh()
-    # test_sqrt()
+    test_sqrt()
     test_neg()
     test_pow()
     test_rpow()
