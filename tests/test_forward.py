@@ -645,6 +645,10 @@ def test_arcsin():
     assert check_list(ans_val, sol_val)
     assert check_list(sol_der_x, ans_der_x) & check_list(sol_der_y, ans_der_y)
 
+    x = ad.Variable(2, label="x")
+    with pytest.raises(Exception):
+        y = ad.arcsin(x)
+
 
 def test_sinh():
     x = 0.3
@@ -890,6 +894,10 @@ def test_arccos():
     )
     assert check_list(ans_val, sol_val)
     assert check_list(sol_der_x, ans_der_x) & check_list(sol_der_y, ans_der_y)
+
+    x = ad.Variable(2, label="x")
+    with pytest.raises(Exception):
+        y = ad.arccos(x)
 
 
 def test_cosh():
@@ -1564,6 +1572,34 @@ def test_str():
         == f"Function: {f.functions[0]}, Value: {f.results[0].val}, Derivative: {f.results[0].der}"
     )
 
+def test_sqrt():
+    x = ad.Variable(3, label="x")
+    z = ad.sqrt(x)
+    assert z.val == np.sqrt(3)
+    assert z.der == {"x": 1/(2*np.sqrt(x.val))}
+
+    x = ad.Variable([3, 2], label="x")
+    z = ad.sqrt(x)
+    assert np.all(z.val == np.sqrt(x.val))
+    assert np.all(z.der['x'] == 1/(2*np.sqrt(x.val)))
+
+    x = ad.Variable(3, label="x")
+    y = ad.Variable(2, label="y")
+    z = ad.sqrt(x * y)
+    assert z.val == np.sqrt(6)
+    assert z.der == {"x": y.val/(2*np.sqrt(x.val*y.val)), "y": x.val/(2*np.sqrt(x.val*y.val))}
+
+    x = ad.Variable([3, 2], label="x")
+    y = ad.Variable([2, 3], label="y")
+    z = ad.sqrt(x * y)
+    assert np.all(z.val == np.sqrt(x.val*y.val))
+    assert (
+        compare_dicts_multi(z.der, {"x": y.val/(2*np.sqrt(x.val*y.val)), "y": x.val/(2*np.sqrt(x.val*y.val))})
+    )
+
+    x = ad.Variable(-1, label="x")
+    with pytest.raises(Exception):
+        z = ad.sqrt(x)
 
 if __name__ == "__main__":
     test_add_radd()
