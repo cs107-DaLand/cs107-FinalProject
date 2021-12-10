@@ -482,6 +482,7 @@ def test_log10():
     assert check_list(ans_val, sol_val)
     assert check_list(sol_der_x, ans_der_x) & check_list(sol_der_y, ans_der_y)
 
+
 def test_sin():
     x = 0.3
     ans = ad.sin(x)
@@ -1538,6 +1539,60 @@ def test_complicated_functions():
     assert np.around(f_ad_grad["x"], 4) == np.around(dx, 4)
     assert np.around(f_ad_grad["y"], 4) == np.around(dy, 4)
 
+    ## Function 6
+    ## arctan(tan(2*x-y/2) * y - exp(x^2 / y^2))
+    x = 1
+    x_var = ad.Variable(x, label="x")
+    y = -1
+    y_var = ad.Variable(y, label="y")
+
+    f_ad = ad.arctan(
+        ad.tan(2 * x_var - y_var / 2) * y_var - ad.exp(x_var ** 2 / y_var ** 2)
+    )
+    f_ad_val = f_ad.val
+    f_ad_grad = f_ad.der
+
+    def f6(x, y):
+        return adnp.arctan(adnp.tan(2 * x - y / 2) * y - adnp.exp((x ** 2) / (y ** 2)))
+
+    f_np_val, dx, dy = [
+        f6(x, y),
+        grad(lambda x, y: f6(x, y), 0)(1.0, -1.0),
+        grad(lambda x, y: f6(x, y), 1)(1.0, -1.0),
+    ]
+
+    assert np.around(f_ad_val, 4) == np.around(f_np_val, 4)
+    assert np.around(f_ad_grad["x"], 4) == np.around(dx, 4)
+    assert np.around(f_ad_grad["y"], 4) == np.around(dy, 4)
+
+    ## Function 7
+    ## arcsin(cos(tan(2*x-y/2) * y - exp(x^2 / y^2)))
+    x = 1
+    x_var = ad.Variable(x, label="x")
+    y = -1
+    y_var = ad.Variable(y, label="y")
+
+    f_ad = ad.arcsin(
+        ad.cos(ad.tan(2 * x_var - y_var / 2) * y_var - ad.exp(x_var ** 2 / y_var ** 2))
+    )
+    f_ad_val = f_ad.val
+    f_ad_grad = f_ad.der
+
+    def f7(x, y):
+        return adnp.arcsin(
+            adnp.cos(adnp.tan(2 * x - y / 2) * y - adnp.exp((x ** 2) / (y ** 2)))
+        )
+
+    f_np_val, dx, dy = [
+        f7(x, y),
+        grad(lambda x, y: f7(x, y), 0)(1.0, -1.0),
+        grad(lambda x, y: f7(x, y), 1)(1.0, -1.0),
+    ]
+
+    assert np.around(f_ad_val, 4) == np.around(f_np_val, 4)
+    assert np.around(f_ad_grad["x"], 4) == np.around(dx, 4)
+    assert np.around(f_ad_grad["y"], 4) == np.around(dy, 4)
+
 
 def test_forward_class():
     variables = {"x": 3, "y": 5}
@@ -1572,34 +1627,43 @@ def test_str():
         == f"Function: {f.functions[0]}, Value: {f.results[0].val}, Derivative: {f.results[0].der}"
     )
 
+
 def test_sqrt():
     x = ad.Variable(3, label="x")
     z = ad.sqrt(x)
     assert z.val == np.sqrt(3)
-    assert z.der == {"x": 1/(2*np.sqrt(x.val))}
+    assert z.der == {"x": 1 / (2 * np.sqrt(x.val))}
 
     x = ad.Variable([3, 2], label="x")
     z = ad.sqrt(x)
     assert np.all(z.val == np.sqrt(x.val))
-    assert np.all(z.der['x'] == 1/(2*np.sqrt(x.val)))
+    assert np.all(z.der["x"] == 1 / (2 * np.sqrt(x.val)))
 
     x = ad.Variable(3, label="x")
     y = ad.Variable(2, label="y")
     z = ad.sqrt(x * y)
     assert z.val == np.sqrt(6)
-    assert z.der == {"x": y.val/(2*np.sqrt(x.val*y.val)), "y": x.val/(2*np.sqrt(x.val*y.val))}
+    assert z.der == {
+        "x": y.val / (2 * np.sqrt(x.val * y.val)),
+        "y": x.val / (2 * np.sqrt(x.val * y.val)),
+    }
 
     x = ad.Variable([3, 2], label="x")
     y = ad.Variable([2, 3], label="y")
     z = ad.sqrt(x * y)
-    assert np.all(z.val == np.sqrt(x.val*y.val))
-    assert (
-        compare_dicts_multi(z.der, {"x": y.val/(2*np.sqrt(x.val*y.val)), "y": x.val/(2*np.sqrt(x.val*y.val))})
+    assert np.all(z.val == np.sqrt(x.val * y.val))
+    assert compare_dicts_multi(
+        z.der,
+        {
+            "x": y.val / (2 * np.sqrt(x.val * y.val)),
+            "y": x.val / (2 * np.sqrt(x.val * y.val)),
+        },
     )
 
     x = ad.Variable(-1, label="x")
     with pytest.raises(Exception):
         z = ad.sqrt(x)
+
 
 if __name__ == "__main__":
     test_add_radd()
