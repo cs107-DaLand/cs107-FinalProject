@@ -182,22 +182,20 @@ def test_exp():
     x = ad.Variable([3, 4, 5], label="x")
     y = ad.exp(x)
     ans_val, ans_der = y.val, y.der["x"]
-    sol_val, sol_der = [np.exp(3), np.exp(4), np.exp(5)], [
-        np.exp(3),
-        np.exp(4),
-        np.exp(5),
-    ]
+    sol_val, sol_der = (
+        [np.exp(3), np.exp(4), np.exp(5)],
+        [np.exp(3), np.exp(4), np.exp(5),],
+    )
     assert check_list(ans_val, sol_val)
     assert check_list(ans_der, sol_der)
 
     x = ad.Variable([3, 4, 5], label="x")
     y = ad.exp(x) + ad.exp(x)
     ans_val, ans_der = y.val, y.der["x"]
-    sol_val, sol_der = [2 * np.exp(3), 2 * np.exp(4), 2 * np.exp(5)], [
-        2 * np.exp(3),
-        2 * np.exp(4),
-        2 * np.exp(5),
-    ]
+    sol_val, sol_der = (
+        [2 * np.exp(3), 2 * np.exp(4), 2 * np.exp(5)],
+        [2 * np.exp(3), 2 * np.exp(4), 2 * np.exp(5),],
+    )
     assert check_list(ans_val, sol_val)
     assert check_list(ans_der, sol_der)
 
@@ -205,11 +203,10 @@ def test_exp():
     z = x + x
     y = ad.exp(z)
     ans_val, ans_der = y.val, y.der["x"]
-    sol_val, sol_der = [np.exp(2 * 3), np.exp(2 * 4), np.exp(2 * 5)], [
-        2 * np.exp(2 * 3),
-        2 * np.exp(2 * 4),
-        2 * np.exp(2 * 5),
-    ]
+    sol_val, sol_der = (
+        [np.exp(2 * 3), np.exp(2 * 4), np.exp(2 * 5)],
+        [2 * np.exp(2 * 3), 2 * np.exp(2 * 4), 2 * np.exp(2 * 5),],
+    )
     assert check_list(ans_val, sol_val)
     assert check_list(ans_der, sol_der)
 
@@ -257,32 +254,41 @@ def test_ln():
     x = ad.Variable(3, label="x") + ad.Variable(4, label="y")
     y = ad.ln(x)
     ans_val, ans_der = y.val, [y.der["x"], y.der["y"]]
-    sol_val, sol_der = adnp.log(7), [
-        grad(lambda x, y: adnp.log(x + y), 0)(3.0, 4.0),
-        grad(lambda x, y: adnp.log(x + y), 1)(3.0, 4.0),
-    ]
+    sol_val, sol_der = (
+        adnp.log(7),
+        [
+            grad(lambda x, y: adnp.log(x + y), 0)(3.0, 4.0),
+            grad(lambda x, y: adnp.log(x + y), 1)(3.0, 4.0),
+        ],
+    )
     assert ans_val == sol_val
     assert check_list(ans_der, sol_der)
 
     x = ad.Variable([3, 4, 5], label="x")
     y = ad.ln(x)
     ans_val, ans_der = y.val, y.der["x"]
-    sol_val, sol_der = [np.log(3), np.log(4), np.log(5)], [
-        grad(lambda x: adnp.log(x))(3.0),
-        grad(lambda x: adnp.log(x))(4.0),
-        grad(lambda x: adnp.log(x))(5.0),
-    ]
+    sol_val, sol_der = (
+        [np.log(3), np.log(4), np.log(5)],
+        [
+            grad(lambda x: adnp.log(x))(3.0),
+            grad(lambda x: adnp.log(x))(4.0),
+            grad(lambda x: adnp.log(x))(5.0),
+        ],
+    )
     assert check_list(ans_val, sol_val)
     assert check_list(ans_der, sol_der)
 
     x = ad.Variable([3, 4, 5], label="x")
     y = ad.ln(x + x)
     ans_val, ans_der = y.val, y.der["x"]
-    sol_val, sol_der = [adnp.log(3 * 2), adnp.log(4 * 2), adnp.log(5 * 2)], [
-        grad(lambda x: adnp.log(x + x))(3.0),
-        grad(lambda x: adnp.log(x + x))(4.0),
-        grad(lambda x: adnp.log(x + x))(5.0),
-    ]
+    sol_val, sol_der = (
+        [adnp.log(3 * 2), adnp.log(4 * 2), adnp.log(5 * 2)],
+        [
+            grad(lambda x: adnp.log(x + x))(3.0),
+            grad(lambda x: adnp.log(x + x))(4.0),
+            grad(lambda x: adnp.log(x + x))(5.0),
+        ],
+    )
     assert check_list(ans_val, sol_val)
     assert check_list(ans_der, sol_der)
 
@@ -333,32 +339,41 @@ def test_logistic():
     x = ad.Variable(3, label="x") + ad.Variable(4, label="y")
     y = ad.logistic(x)
     ans_val, ans_der = y.val, [y.der["x"], y.der["y"]]
-    sol_val, sol_der = logistic(7), [
-        grad(lambda x, y: logistic(x + y), 0)(3.0, 4.0),
-        grad(lambda x, y: logistic(x + y), 1)(3.0, 4.0),
-    ]
+    sol_val, sol_der = (
+        logistic(7),
+        [
+            grad(lambda x, y: logistic(x + y), 0)(3.0, 4.0),
+            grad(lambda x, y: logistic(x + y), 1)(3.0, 4.0),
+        ],
+    )
     assert ans_val == sol_val
     assert check_list(ans_der, sol_der)
 
     x = ad.Variable([3, 4, 5], label="x")
     y = ad.logistic(x)
     ans_val, ans_der = y.val, y.der["x"]
-    sol_val, sol_der = [logistic(3), logistic(4), logistic(5)], [
-        grad(lambda x: logistic(x))(3.0),
-        grad(lambda x: logistic(x))(4.0),
-        grad(lambda x: logistic(x))(5.0),
-    ]
+    sol_val, sol_der = (
+        [logistic(3), logistic(4), logistic(5)],
+        [
+            grad(lambda x: logistic(x))(3.0),
+            grad(lambda x: logistic(x))(4.0),
+            grad(lambda x: logistic(x))(5.0),
+        ],
+    )
     assert check_list(ans_val, sol_val)
     assert check_list(ans_der, sol_der)
 
     x = ad.Variable([3, 4, 5], label="x")
     y = ad.logistic(x + x)
     ans_val, ans_der = y.val, y.der["x"]
-    sol_val, sol_der = [logistic(3 * 2), logistic(4 * 2), logistic(5 * 2)], [
-        grad(lambda x: logistic(x + x))(3.0),
-        grad(lambda x: logistic(x + x))(4.0),
-        grad(lambda x: logistic(x + x))(5.0),
-    ]
+    sol_val, sol_der = (
+        [logistic(3 * 2), logistic(4 * 2), logistic(5 * 2)],
+        [
+            grad(lambda x: logistic(x + x))(3.0),
+            grad(lambda x: logistic(x + x))(4.0),
+            grad(lambda x: logistic(x + x))(5.0),
+        ],
+    )
     assert check_list(ans_val, sol_val)
     assert check_list(ans_der, sol_der)
 
@@ -409,32 +424,41 @@ def test_log10():
     x = ad.Variable(3, label="x") + ad.Variable(4, label="y")
     y = ad.log10(x)
     ans_val, ans_der = y.val, [y.der["x"], y.der["y"]]
-    sol_val, sol_der = log10(7), [
-        grad(lambda x, y: log10(x + y), 0)(3.0, 4.0),
-        grad(lambda x, y: log10(x + y), 1)(3.0, 4.0),
-    ]
+    sol_val, sol_der = (
+        log10(7),
+        [
+            grad(lambda x, y: log10(x + y), 0)(3.0, 4.0),
+            grad(lambda x, y: log10(x + y), 1)(3.0, 4.0),
+        ],
+    )
     assert ans_val == sol_val
     assert check_list(ans_der, sol_der)
 
     x = ad.Variable([3, 4, 5], label="x")
     y = ad.log10(x)
     ans_val, ans_der = y.val, y.der["x"]
-    sol_val, sol_der = [log10(3), log10(4), log10(5)], [
-        grad(lambda x: log10(x))(3.0),
-        grad(lambda x: log10(x))(4.0),
-        grad(lambda x: log10(x))(5.0),
-    ]
+    sol_val, sol_der = (
+        [log10(3), log10(4), log10(5)],
+        [
+            grad(lambda x: log10(x))(3.0),
+            grad(lambda x: log10(x))(4.0),
+            grad(lambda x: log10(x))(5.0),
+        ],
+    )
     assert check_list(ans_val, sol_val)
     assert check_list(ans_der, sol_der)
 
     x = ad.Variable([3, 4, 5], label="x")
     y = ad.log10(x + x)
     ans_val, ans_der = y.val, y.der["x"]
-    sol_val, sol_der = [log10(3 * 2), log10(4 * 2), log10(5 * 2)], [
-        grad(lambda x: log10(x + x))(3.0),
-        grad(lambda x: log10(x + x))(4.0),
-        grad(lambda x: log10(x + x))(5.0),
-    ]
+    sol_val, sol_der = (
+        [log10(3 * 2), log10(4 * 2), log10(5 * 2)],
+        [
+            grad(lambda x: log10(x + x))(3.0),
+            grad(lambda x: log10(x + x))(4.0),
+            grad(lambda x: log10(x + x))(5.0),
+        ],
+    )
     assert check_list(ans_val, sol_val)
     assert check_list(ans_der, sol_der)
 
@@ -458,77 +482,246 @@ def test_log10():
     assert check_list(ans_val, sol_val)
     assert check_list(sol_der_x, ans_der_x) & check_list(sol_der_y, ans_der_y)
 
-
 def test_sin():
-    def sin(x):
-        return adnp.sin(x)
-
-    x = 3
+    x = 0.3
     ans = ad.sin(x)
-    sol = sin(x)
+    sol = adnp.sin(x)
     assert sol == ans
 
-    x = ad.Variable(3, label="x")
+    x = ad.Variable(0.3, label="x")
     y = ad.sin(x)
     ans_val, ans_der = y.val, y.der["x"]
-    sol_val, sol_der = sin(3), grad(sin)(3.0)
+    sol_val, sol_der = adnp.sin(0.3), grad(adnp.sin)(0.3)
     assert ans_val == sol_val
     assert math.isclose(ans_der, sol_der)
 
-    x = ad.Variable(3, label="x") + 3
+    x = ad.Variable(0.3, label="x") + 0.3
     y = ad.sin(x)
     ans_val, ans_der = y.val, y.der["x"]
-    sol_val, sol_der = sin(6), grad(lambda x: sin(x + 3.0))(3.0)
+    sol_val, sol_der = adnp.sin(0.6), grad(lambda x: adnp.sin(x + 0.3))(0.3)
     assert ans_val == sol_val
     assert math.isclose(ans_der, sol_der)
 
-    x = ad.Variable(3, label="x") + ad.Variable(4, label="y")
+    x = ad.Variable(0.3, label="x") + ad.Variable(0.4, label="y")
     y = ad.sin(x)
     ans_val, ans_der = y.val, [y.der["x"], y.der["y"]]
-    sol_val, sol_der = sin(7), [
-        grad(lambda x, y: sin(x + y), 0)(3.0, 4.0),
-        grad(lambda x, y: sin(x + y), 1)(3.0, 4.0),
-    ]
+    sol_val, sol_der = (
+        adnp.sin(0.7),
+        [
+            grad(lambda x, y: adnp.sin(x + y), 0)(0.3, 0.4),
+            grad(lambda x, y: adnp.sin(x + y), 1)(0.3, 0.4),
+        ],
+    )
     assert ans_val == sol_val
     assert check_list(ans_der, sol_der)
 
-    x = ad.Variable([3, 4, 5], label="x")
+    x = ad.Variable([0.3, 0.4, 0.5], label="x")
     y = ad.sin(x)
     ans_val, ans_der = y.val, y.der["x"]
-    sol_val, sol_der = [sin(3), sin(4), sin(5)], [
-        grad(lambda x: sin(x))(3.0),
-        grad(lambda x: sin(x))(4.0),
-        grad(lambda x: sin(x))(5.0),
-    ]
+    sol_val, sol_der = (
+        [adnp.sin(0.3), adnp.sin(0.4), adnp.sin(0.5)],
+        [
+            grad(lambda x: adnp.sin(x))(0.3),
+            grad(lambda x: adnp.sin(x))(0.4),
+            grad(lambda x: adnp.sin(x))(0.5),
+        ],
+    )
     assert check_list(ans_val, sol_val)
     assert check_list(ans_der, sol_der)
 
-    x = ad.Variable([3, 4, 5], label="x")
+    x = ad.Variable([0.3, 0.4, 0.5], label="x")
     y = ad.sin(x + x)
     ans_val, ans_der = y.val, y.der["x"]
-    sol_val, sol_der = [sin(3 * 2), sin(4 * 2), sin(5 * 2)], [
-        grad(lambda x: sin(x + x))(3.0),
-        grad(lambda x: sin(x + x))(4.0),
-        grad(lambda x: sin(x + x))(5.0),
-    ]
+    sol_val, sol_der = (
+        [adnp.sin(0.3 * 2), adnp.sin(0.4 * 2), adnp.sin(0.5 * 2)],
+        [
+            grad(lambda x: adnp.sin(x + x))(0.3),
+            grad(lambda x: adnp.sin(x + x))(0.4),
+            grad(lambda x: adnp.sin(x + x))(0.5),
+        ],
+    )
     assert check_list(ans_val, sol_val)
     assert check_list(ans_der, sol_der)
 
-    x = ad.Variable([3, 4, 5], label="x")
-    y = ad.Variable([6, 6, 6], label="y")
+    x = ad.Variable([0.03, 0.04, 0.05], label="x")
+    y = ad.Variable([0.06, 0.06, 0.06], label="y")
     y = ad.sin(x + y)
     ans_val, ans_der_x, ans_der_y = y.val, y.der["x"], y.der["y"]
     sol_val, sol_der_x, sol_der_y = (
-        [sin(9), sin(10), sin(11)],
+        [adnp.sin(0.09), adnp.sin(0.10), adnp.sin(0.11)],
         [
-            grad(lambda x, y: sin(x + y), 0)(3.0, 6.0),
-            grad(lambda x, y: sin(x + y), 0)(4.0, 6.0),
-            grad(lambda x, y: sin(x + y), 0)(5.0, 6.0),
+            grad(lambda x, y: adnp.sin(x + y), 0)(0.030, 0.060),
+            grad(lambda x, y: adnp.sin(x + y), 0)(0.040, 0.060),
+            grad(lambda x, y: adnp.sin(x + y), 0)(0.050, 0.060),
         ],
         [
-            grad(lambda x, y: sin(x + y), 1)(3.0, 6.0),
-            grad(lambda x, y: sin(x + y), 1)(4.0, 6.0),
-            grad(lambda x, y: sin(x + y), 1)(5.0, 6.0),
+            grad(lambda x, y: adnp.sin(x + y), 1)(0.030, 0.060),
+            grad(lambda x, y: adnp.sin(x + y), 1)(0.040, 0.060),
+            grad(lambda x, y: adnp.sin(x + y), 1)(0.050, 0.060),
+        ],
+    )
+    assert check_list(ans_val, sol_val)
+    assert check_list(sol_der_x, ans_der_x) & check_list(sol_der_y, ans_der_y)
+
+
+def test_arcsin():
+    x = 0.3
+    ans = ad.arcsin(x)
+    sol = adnp.arcsin(x)
+    assert sol == ans
+
+    x = ad.Variable(0.3, label="x")
+    y = ad.arcsin(x)
+    ans_val, ans_der = y.val, y.der["x"]
+    sol_val, sol_der = adnp.arcsin(0.3), grad(adnp.arcsin)(0.3)
+    assert ans_val == sol_val
+    assert math.isclose(ans_der, sol_der)
+
+    x = ad.Variable(0.3, label="x") + 0.3
+    y = ad.arcsin(x)
+    ans_val, ans_der = y.val, y.der["x"]
+    sol_val, sol_der = adnp.arcsin(0.6), grad(lambda x: adnp.arcsin(x + 0.3))(0.3)
+    assert ans_val == sol_val
+    assert math.isclose(ans_der, sol_der)
+
+    x = ad.Variable(0.3, label="x") + ad.Variable(0.4, label="y")
+    y = ad.arcsin(x)
+    ans_val, ans_der = y.val, [y.der["x"], y.der["y"]]
+    sol_val, sol_der = (
+        adnp.arcsin(0.7),
+        [
+            grad(lambda x, y: adnp.arcsin(x + y), 0)(0.3, 0.4),
+            grad(lambda x, y: adnp.arcsin(x + y), 1)(0.3, 0.4),
+        ],
+    )
+    assert ans_val == sol_val
+    assert check_list(ans_der, sol_der)
+
+    x = ad.Variable([0.3, 0.4, 0.5], label="x")
+    y = ad.arcsin(x)
+    ans_val, ans_der = y.val, y.der["x"]
+    sol_val, sol_der = (
+        [adnp.arcsin(0.3), adnp.arcsin(0.4), adnp.arcsin(0.5)],
+        [
+            grad(lambda x: adnp.arcsin(x))(0.3),
+            grad(lambda x: adnp.arcsin(x))(0.4),
+            grad(lambda x: adnp.arcsin(x))(0.5),
+        ],
+    )
+    assert check_list(ans_val, sol_val)
+    assert check_list(ans_der, sol_der)
+
+    x = ad.Variable([0.3, 0.4, 0.5], label="x")
+    y = ad.arcsin(x + x)
+    ans_val, ans_der = y.val, y.der["x"]
+    sol_val, sol_der = (
+        [adnp.arcsin(0.3 * 2), adnp.arcsin(0.4 * 2), adnp.arcsin(0.5 * 2)],
+        [
+            grad(lambda x: adnp.arcsin(x + x))(0.3),
+            grad(lambda x: adnp.arcsin(x + x))(0.4),
+            grad(lambda x: adnp.arcsin(x + x))(0.5),
+        ],
+    )
+    assert check_list(ans_val, sol_val)
+    assert check_list(ans_der, sol_der)
+
+    x = ad.Variable([0.03, 0.04, 0.05], label="x")
+    y = ad.Variable([0.06, 0.06, 0.06], label="y")
+    y = ad.arcsin(x + y)
+    ans_val, ans_der_x, ans_der_y = y.val, y.der["x"], y.der["y"]
+    sol_val, sol_der_x, sol_der_y = (
+        [adnp.arcsin(0.09), adnp.arcsin(0.10), adnp.arcsin(0.11)],
+        [
+            grad(lambda x, y: adnp.arcsin(x + y), 0)(0.030, 0.060),
+            grad(lambda x, y: adnp.arcsin(x + y), 0)(0.040, 0.060),
+            grad(lambda x, y: adnp.arcsin(x + y), 0)(0.050, 0.060),
+        ],
+        [
+            grad(lambda x, y: adnp.arcsin(x + y), 1)(0.030, 0.060),
+            grad(lambda x, y: adnp.arcsin(x + y), 1)(0.040, 0.060),
+            grad(lambda x, y: adnp.arcsin(x + y), 1)(0.050, 0.060),
+        ],
+    )
+    assert check_list(ans_val, sol_val)
+    assert check_list(sol_der_x, ans_der_x) & check_list(sol_der_y, ans_der_y)
+
+
+def test_sinh():
+    x = 0.3
+    ans = ad.sinh(x)
+    sol = adnp.sinh(x)
+    assert sol == ans
+
+    x = ad.Variable(0.3, label="x")
+    y = ad.sinh(x)
+    ans_val, ans_der = y.val, y.der["x"]
+    sol_val, sol_der = adnp.sinh(0.3), grad(adnp.sinh)(0.3)
+    assert ans_val == sol_val
+    assert math.isclose(ans_der, sol_der)
+
+    x = ad.Variable(0.3, label="x") + 0.3
+    y = ad.sinh(x)
+    ans_val, ans_der = y.val, y.der["x"]
+    sol_val, sol_der = adnp.sinh(0.6), grad(lambda x: adnp.sinh(x + 0.3))(0.3)
+    assert ans_val == sol_val
+    assert math.isclose(ans_der, sol_der)
+
+    x = ad.Variable(0.3, label="x") + ad.Variable(0.4, label="y")
+    y = ad.sinh(x)
+    ans_val, ans_der = y.val, [y.der["x"], y.der["y"]]
+    sol_val, sol_der = (
+        adnp.sinh(0.7),
+        [
+            grad(lambda x, y: adnp.sinh(x + y), 0)(0.3, 0.4),
+            grad(lambda x, y: adnp.sinh(x + y), 1)(0.3, 0.4),
+        ],
+    )
+    assert ans_val == sol_val
+    assert check_list(ans_der, sol_der)
+
+    x = ad.Variable([0.3, 0.4, 0.5], label="x")
+    y = ad.sinh(x)
+    ans_val, ans_der = y.val, y.der["x"]
+    sol_val, sol_der = (
+        [adnp.sinh(0.3), adnp.sinh(0.4), adnp.sinh(0.5)],
+        [
+            grad(lambda x: adnp.sinh(x))(0.3),
+            grad(lambda x: adnp.sinh(x))(0.4),
+            grad(lambda x: adnp.sinh(x))(0.5),
+        ],
+    )
+    assert check_list(ans_val, sol_val)
+    assert check_list(ans_der, sol_der)
+
+    x = ad.Variable([0.3, 0.4, 0.5], label="x")
+    y = ad.sinh(x + x)
+    ans_val, ans_der = y.val, y.der["x"]
+    sol_val, sol_der = (
+        [adnp.sinh(0.3 * 2), adnp.sinh(0.4 * 2), adnp.sinh(0.5 * 2)],
+        [
+            grad(lambda x: adnp.sinh(x + x))(0.3),
+            grad(lambda x: adnp.sinh(x + x))(0.4),
+            grad(lambda x: adnp.sinh(x + x))(0.5),
+        ],
+    )
+    assert check_list(ans_val, sol_val)
+    assert check_list(ans_der, sol_der)
+
+    x = ad.Variable([0.03, 0.04, 0.05], label="x")
+    y = ad.Variable([0.06, 0.06, 0.06], label="y")
+    y = ad.sinh(x + y)
+    ans_val, ans_der_x, ans_der_y = y.val, y.der["x"], y.der["y"]
+    sol_val, sol_der_x, sol_der_y = (
+        [adnp.sinh(0.09), adnp.sinh(0.10), adnp.sinh(0.11)],
+        [
+            grad(lambda x, y: adnp.sinh(x + y), 0)(0.030, 0.060),
+            grad(lambda x, y: adnp.sinh(x + y), 0)(0.040, 0.060),
+            grad(lambda x, y: adnp.sinh(x + y), 0)(0.050, 0.060),
+        ],
+        [
+            grad(lambda x, y: adnp.sinh(x + y), 1)(0.030, 0.060),
+            grad(lambda x, y: adnp.sinh(x + y), 1)(0.040, 0.060),
+            grad(lambda x, y: adnp.sinh(x + y), 1)(0.050, 0.060),
         ],
     )
     assert check_list(ans_val, sol_val)
@@ -536,75 +729,245 @@ def test_sin():
 
 
 def test_cos():
-    def cos(x):
-        return adnp.cos(x)
-
-    x = 3
+    x = 0.3
     ans = ad.cos(x)
-    sol = cos(x)
+    sol = adnp.cos(x)
     assert sol == ans
 
-    x = ad.Variable(3, label="x")
+    x = ad.Variable(0.3, label="x")
     y = ad.cos(x)
     ans_val, ans_der = y.val, y.der["x"]
-    sol_val, sol_der = cos(3), grad(cos)(3.0)
+    sol_val, sol_der = adnp.cos(0.3), grad(adnp.cos)(0.3)
     assert ans_val == sol_val
     assert math.isclose(ans_der, sol_der)
 
-    x = ad.Variable(3, label="x") + 3
+    x = ad.Variable(0.3, label="x") + 0.3
     y = ad.cos(x)
     ans_val, ans_der = y.val, y.der["x"]
-    sol_val, sol_der = cos(6), grad(lambda x: cos(x + 3.0))(3.0)
+    sol_val, sol_der = adnp.cos(0.6), grad(lambda x: adnp.cos(x + 0.3))(0.3)
     assert ans_val == sol_val
     assert math.isclose(ans_der, sol_der)
 
-    x = ad.Variable(3, label="x") + ad.Variable(4, label="y")
+    x = ad.Variable(0.3, label="x") + ad.Variable(0.4, label="y")
     y = ad.cos(x)
     ans_val, ans_der = y.val, [y.der["x"], y.der["y"]]
-    sol_val, sol_der = cos(7), [
-        grad(lambda x, y: cos(x + y), 0)(3.0, 4.0),
-        grad(lambda x, y: cos(x + y), 1)(3.0, 4.0),
-    ]
+    sol_val, sol_der = (
+        adnp.cos(0.7),
+        [
+            grad(lambda x, y: adnp.cos(x + y), 0)(0.3, 0.4),
+            grad(lambda x, y: adnp.cos(x + y), 1)(0.3, 0.4),
+        ],
+    )
     assert ans_val == sol_val
     assert check_list(ans_der, sol_der)
 
-    x = ad.Variable([3, 4, 5], label="x")
+    x = ad.Variable([0.3, 0.4, 0.5], label="x")
     y = ad.cos(x)
     ans_val, ans_der = y.val, y.der["x"]
-    sol_val, sol_der = [cos(3), cos(4), cos(5)], [
-        grad(lambda x: cos(x))(3.0),
-        grad(lambda x: cos(x))(4.0),
-        grad(lambda x: cos(x))(5.0),
-    ]
+    sol_val, sol_der = (
+        [adnp.cos(0.3), adnp.cos(0.4), adnp.cos(0.5)],
+        [
+            grad(lambda x: adnp.cos(x))(0.3),
+            grad(lambda x: adnp.cos(x))(0.4),
+            grad(lambda x: adnp.cos(x))(0.5),
+        ],
+    )
     assert check_list(ans_val, sol_val)
     assert check_list(ans_der, sol_der)
 
-    x = ad.Variable([3, 4, 5], label="x")
+    x = ad.Variable([0.3, 0.4, 0.5], label="x")
     y = ad.cos(x + x)
     ans_val, ans_der = y.val, y.der["x"]
-    sol_val, sol_der = [cos(3 * 2), cos(4 * 2), cos(5 * 2)], [
-        grad(lambda x: cos(x + x))(3.0),
-        grad(lambda x: cos(x + x))(4.0),
-        grad(lambda x: cos(x + x))(5.0),
-    ]
+    sol_val, sol_der = (
+        [adnp.cos(0.3 * 2), adnp.cos(0.4 * 2), adnp.cos(0.5 * 2)],
+        [
+            grad(lambda x: adnp.cos(x + x))(0.3),
+            grad(lambda x: adnp.cos(x + x))(0.4),
+            grad(lambda x: adnp.cos(x + x))(0.5),
+        ],
+    )
     assert check_list(ans_val, sol_val)
     assert check_list(ans_der, sol_der)
 
-    x = ad.Variable([3, 4, 5], label="x")
-    y = ad.Variable([6, 6, 6], label="y")
+    x = ad.Variable([0.03, 0.04, 0.05], label="x")
+    y = ad.Variable([0.06, 0.06, 0.06], label="y")
     y = ad.cos(x + y)
     ans_val, ans_der_x, ans_der_y = y.val, y.der["x"], y.der["y"]
     sol_val, sol_der_x, sol_der_y = (
-        [cos(9), cos(10), cos(11)],
+        [adnp.cos(0.09), adnp.cos(0.10), adnp.cos(0.11)],
         [
-            grad(lambda x, y: cos(x + y), 0)(3.0, 6.0),
-            grad(lambda x, y: cos(x + y), 0)(4.0, 6.0),
-            grad(lambda x, y: cos(x + y), 0)(5.0, 6.0),
+            grad(lambda x, y: adnp.cos(x + y), 0)(0.030, 0.060),
+            grad(lambda x, y: adnp.cos(x + y), 0)(0.040, 0.060),
+            grad(lambda x, y: adnp.cos(x + y), 0)(0.050, 0.060),
         ],
         [
-            grad(lambda x, y: cos(x + y), 1)(3.0, 6.0),
-            grad(lambda x, y: cos(x + y), 1)(4.0, 6.0),
-            grad(lambda x, y: cos(x + y), 1)(5.0, 6.0),
+            grad(lambda x, y: adnp.cos(x + y), 1)(0.030, 0.060),
+            grad(lambda x, y: adnp.cos(x + y), 1)(0.040, 0.060),
+            grad(lambda x, y: adnp.cos(x + y), 1)(0.050, 0.060),
+        ],
+    )
+    assert check_list(ans_val, sol_val)
+    assert check_list(sol_der_x, ans_der_x) & check_list(sol_der_y, ans_der_y)
+
+
+def test_arccos():
+    x = 0.3
+    ans = ad.arccos(x)
+    sol = adnp.arccos(x)
+    assert sol == ans
+
+    x = ad.Variable(0.3, label="x")
+    y = ad.arccos(x)
+    ans_val, ans_der = y.val, y.der["x"]
+    sol_val, sol_der = adnp.arccos(0.3), grad(adnp.arccos)(0.3)
+    assert ans_val == sol_val
+    assert math.isclose(ans_der, sol_der)
+
+    x = ad.Variable(0.3, label="x") + 0.3
+    y = ad.arccos(x)
+    ans_val, ans_der = y.val, y.der["x"]
+    sol_val, sol_der = adnp.arccos(0.6), grad(lambda x: adnp.arccos(x + 0.3))(0.3)
+    assert ans_val == sol_val
+    assert math.isclose(ans_der, sol_der)
+
+    x = ad.Variable(0.3, label="x") + ad.Variable(0.4, label="y")
+    y = ad.arccos(x)
+    ans_val, ans_der = y.val, [y.der["x"], y.der["y"]]
+    sol_val, sol_der = (
+        adnp.arccos(0.7),
+        [
+            grad(lambda x, y: adnp.arccos(x + y), 0)(0.3, 0.4),
+            grad(lambda x, y: adnp.arccos(x + y), 1)(0.3, 0.4),
+        ],
+    )
+    assert ans_val == sol_val
+    assert check_list(ans_der, sol_der)
+
+    x = ad.Variable([0.3, 0.4, 0.5], label="x")
+    y = ad.arccos(x)
+    ans_val, ans_der = y.val, y.der["x"]
+    sol_val, sol_der = (
+        [adnp.arccos(0.3), adnp.arccos(0.4), adnp.arccos(0.5)],
+        [
+            grad(lambda x: adnp.arccos(x))(0.3),
+            grad(lambda x: adnp.arccos(x))(0.4),
+            grad(lambda x: adnp.arccos(x))(0.5),
+        ],
+    )
+    assert check_list(ans_val, sol_val)
+    assert check_list(ans_der, sol_der)
+
+    x = ad.Variable([0.3, 0.4, 0.5], label="x")
+    y = ad.arccos(x + x)
+    ans_val, ans_der = y.val, y.der["x"]
+    sol_val, sol_der = (
+        [adnp.arccos(0.3 * 2), adnp.arccos(0.4 * 2), adnp.arccos(0.5 * 2)],
+        [
+            grad(lambda x: adnp.arccos(x + x))(0.3),
+            grad(lambda x: adnp.arccos(x + x))(0.4),
+            grad(lambda x: adnp.arccos(x + x))(0.5),
+        ],
+    )
+    assert check_list(ans_val, sol_val)
+    assert check_list(ans_der, sol_der)
+
+    x = ad.Variable([0.03, 0.04, 0.05], label="x")
+    y = ad.Variable([0.06, 0.06, 0.06], label="y")
+    y = ad.arccos(x + y)
+    ans_val, ans_der_x, ans_der_y = y.val, y.der["x"], y.der["y"]
+    sol_val, sol_der_x, sol_der_y = (
+        [adnp.arccos(0.09), adnp.arccos(0.10), adnp.arccos(0.11)],
+        [
+            grad(lambda x, y: adnp.arccos(x + y), 0)(0.030, 0.060),
+            grad(lambda x, y: adnp.arccos(x + y), 0)(0.040, 0.060),
+            grad(lambda x, y: adnp.arccos(x + y), 0)(0.050, 0.060),
+        ],
+        [
+            grad(lambda x, y: adnp.arccos(x + y), 1)(0.030, 0.060),
+            grad(lambda x, y: adnp.arccos(x + y), 1)(0.040, 0.060),
+            grad(lambda x, y: adnp.arccos(x + y), 1)(0.050, 0.060),
+        ],
+    )
+    assert check_list(ans_val, sol_val)
+    assert check_list(sol_der_x, ans_der_x) & check_list(sol_der_y, ans_der_y)
+
+
+def test_cosh():
+    x = 0.3
+    ans = ad.cosh(x)
+    sol = adnp.cosh(x)
+    assert sol == ans
+
+    x = ad.Variable(0.3, label="x")
+    y = ad.cosh(x)
+    ans_val, ans_der = y.val, y.der["x"]
+    sol_val, sol_der = adnp.cosh(0.3), grad(adnp.cosh)(0.3)
+    assert ans_val == sol_val
+    assert math.isclose(ans_der, sol_der)
+
+    x = ad.Variable(0.3, label="x") + 0.3
+    y = ad.cosh(x)
+    ans_val, ans_der = y.val, y.der["x"]
+    sol_val, sol_der = adnp.cosh(0.6), grad(lambda x: adnp.cosh(x + 0.3))(0.3)
+    assert ans_val == sol_val
+    assert math.isclose(ans_der, sol_der)
+
+    x = ad.Variable(0.3, label="x") + ad.Variable(0.4, label="y")
+    y = ad.cosh(x)
+    ans_val, ans_der = y.val, [y.der["x"], y.der["y"]]
+    sol_val, sol_der = (
+        adnp.cosh(0.7),
+        [
+            grad(lambda x, y: adnp.cosh(x + y), 0)(0.3, 0.4),
+            grad(lambda x, y: adnp.cosh(x + y), 1)(0.3, 0.4),
+        ],
+    )
+    assert ans_val == sol_val
+    assert check_list(ans_der, sol_der)
+
+    x = ad.Variable([0.3, 0.4, 0.5], label="x")
+    y = ad.cosh(x)
+    ans_val, ans_der = y.val, y.der["x"]
+    sol_val, sol_der = (
+        [adnp.cosh(0.3), adnp.cosh(0.4), adnp.cosh(0.5)],
+        [
+            grad(lambda x: adnp.cosh(x))(0.3),
+            grad(lambda x: adnp.cosh(x))(0.4),
+            grad(lambda x: adnp.cosh(x))(0.5),
+        ],
+    )
+    assert check_list(ans_val, sol_val)
+    assert check_list(ans_der, sol_der)
+
+    x = ad.Variable([0.3, 0.4, 0.5], label="x")
+    y = ad.cosh(x + x)
+    ans_val, ans_der = y.val, y.der["x"]
+    sol_val, sol_der = (
+        [adnp.cosh(0.3 * 2), adnp.cosh(0.4 * 2), adnp.cosh(0.5 * 2)],
+        [
+            grad(lambda x: adnp.cosh(x + x))(0.3),
+            grad(lambda x: adnp.cosh(x + x))(0.4),
+            grad(lambda x: adnp.cosh(x + x))(0.5),
+        ],
+    )
+    assert check_list(ans_val, sol_val)
+    assert check_list(ans_der, sol_der)
+
+    x = ad.Variable([0.03, 0.04, 0.05], label="x")
+    y = ad.Variable([0.06, 0.06, 0.06], label="y")
+    y = ad.cosh(x + y)
+    ans_val, ans_der_x, ans_der_y = y.val, y.der["x"], y.der["y"]
+    sol_val, sol_der_x, sol_der_y = (
+        [adnp.cosh(0.09), adnp.cosh(0.10), adnp.cosh(0.11)],
+        [
+            grad(lambda x, y: adnp.cosh(x + y), 0)(0.030, 0.060),
+            grad(lambda x, y: adnp.cosh(x + y), 0)(0.040, 0.060),
+            grad(lambda x, y: adnp.cosh(x + y), 0)(0.050, 0.060),
+        ],
+        [
+            grad(lambda x, y: adnp.cosh(x + y), 1)(0.030, 0.060),
+            grad(lambda x, y: adnp.cosh(x + y), 1)(0.040, 0.060),
+            grad(lambda x, y: adnp.cosh(x + y), 1)(0.050, 0.060),
         ],
     )
     assert check_list(ans_val, sol_val)
@@ -612,75 +975,245 @@ def test_cos():
 
 
 def test_tan():
-    def tan(x):
-        return adnp.tan(x)
-
-    x = 3
+    x = 0.3
     ans = ad.tan(x)
-    sol = tan(x)
+    sol = adnp.tan(x)
     assert sol == ans
 
-    x = ad.Variable(3, label="x")
+    x = ad.Variable(0.3, label="x")
     y = ad.tan(x)
     ans_val, ans_der = y.val, y.der["x"]
-    sol_val, sol_der = tan(3), grad(tan)(3.0)
+    sol_val, sol_der = adnp.tan(0.3), grad(adnp.tan)(0.3)
     assert ans_val == sol_val
     assert math.isclose(ans_der, sol_der)
 
-    x = ad.Variable(3, label="x") + 3
+    x = ad.Variable(0.3, label="x") + 0.3
     y = ad.tan(x)
     ans_val, ans_der = y.val, y.der["x"]
-    sol_val, sol_der = tan(6), grad(lambda x: tan(x + 3.0))(3.0)
+    sol_val, sol_der = adnp.tan(0.6), grad(lambda x: adnp.tan(x + 0.3))(0.3)
     assert ans_val == sol_val
     assert math.isclose(ans_der, sol_der)
 
-    x = ad.Variable(3, label="x") + ad.Variable(4, label="y")
+    x = ad.Variable(0.3, label="x") + ad.Variable(0.4, label="y")
     y = ad.tan(x)
     ans_val, ans_der = y.val, [y.der["x"], y.der["y"]]
-    sol_val, sol_der = tan(7), [
-        grad(lambda x, y: tan(x + y), 0)(3.0, 4.0),
-        grad(lambda x, y: tan(x + y), 1)(3.0, 4.0),
-    ]
+    sol_val, sol_der = (
+        adnp.tan(0.7),
+        [
+            grad(lambda x, y: adnp.tan(x + y), 0)(0.3, 0.4),
+            grad(lambda x, y: adnp.tan(x + y), 1)(0.3, 0.4),
+        ],
+    )
     assert ans_val == sol_val
     assert check_list(ans_der, sol_der)
 
-    x = ad.Variable([3, 4, 5], label="x")
+    x = ad.Variable([0.3, 0.4, 0.5], label="x")
     y = ad.tan(x)
     ans_val, ans_der = y.val, y.der["x"]
-    sol_val, sol_der = [tan(3), tan(4), tan(5)], [
-        grad(lambda x: tan(x))(3.0),
-        grad(lambda x: tan(x))(4.0),
-        grad(lambda x: tan(x))(5.0),
-    ]
+    sol_val, sol_der = (
+        [adnp.tan(0.3), adnp.tan(0.4), adnp.tan(0.5)],
+        [
+            grad(lambda x: adnp.tan(x))(0.3),
+            grad(lambda x: adnp.tan(x))(0.4),
+            grad(lambda x: adnp.tan(x))(0.5),
+        ],
+    )
     assert check_list(ans_val, sol_val)
     assert check_list(ans_der, sol_der)
 
-    x = ad.Variable([3, 4, 5], label="x")
+    x = ad.Variable([0.3, 0.4, 0.5], label="x")
     y = ad.tan(x + x)
     ans_val, ans_der = y.val, y.der["x"]
-    sol_val, sol_der = [tan(3 * 2), tan(4 * 2), tan(5 * 2)], [
-        grad(lambda x: tan(x + x))(3.0),
-        grad(lambda x: tan(x + x))(4.0),
-        grad(lambda x: tan(x + x))(5.0),
-    ]
+    sol_val, sol_der = (
+        [adnp.tan(0.3 * 2), adnp.tan(0.4 * 2), adnp.tan(0.5 * 2)],
+        [
+            grad(lambda x: adnp.tan(x + x))(0.3),
+            grad(lambda x: adnp.tan(x + x))(0.4),
+            grad(lambda x: adnp.tan(x + x))(0.5),
+        ],
+    )
     assert check_list(ans_val, sol_val)
     assert check_list(ans_der, sol_der)
 
-    x = ad.Variable([3, 4, 5], label="x")
-    y = ad.Variable([6, 6, 6], label="y")
+    x = ad.Variable([0.03, 0.04, 0.05], label="x")
+    y = ad.Variable([0.06, 0.06, 0.06], label="y")
     y = ad.tan(x + y)
     ans_val, ans_der_x, ans_der_y = y.val, y.der["x"], y.der["y"]
     sol_val, sol_der_x, sol_der_y = (
-        [tan(9), tan(10), tan(11)],
+        [adnp.tan(0.09), adnp.tan(0.10), adnp.tan(0.11)],
         [
-            grad(lambda x, y: tan(x + y), 0)(3.0, 6.0),
-            grad(lambda x, y: tan(x + y), 0)(4.0, 6.0),
-            grad(lambda x, y: tan(x + y), 0)(5.0, 6.0),
+            grad(lambda x, y: adnp.tan(x + y), 0)(0.030, 0.060),
+            grad(lambda x, y: adnp.tan(x + y), 0)(0.040, 0.060),
+            grad(lambda x, y: adnp.tan(x + y), 0)(0.050, 0.060),
         ],
         [
-            grad(lambda x, y: tan(x + y), 1)(3.0, 6.0),
-            grad(lambda x, y: tan(x + y), 1)(4.0, 6.0),
-            grad(lambda x, y: tan(x + y), 1)(5.0, 6.0),
+            grad(lambda x, y: adnp.tan(x + y), 1)(0.030, 0.060),
+            grad(lambda x, y: adnp.tan(x + y), 1)(0.040, 0.060),
+            grad(lambda x, y: adnp.tan(x + y), 1)(0.050, 0.060),
+        ],
+    )
+    assert check_list(ans_val, sol_val)
+    assert check_list(sol_der_x, ans_der_x) & check_list(sol_der_y, ans_der_y)
+
+
+def test_arctan():
+    x = 0.3
+    ans = ad.arctan(x)
+    sol = adnp.arctan(x)
+    assert sol == ans
+
+    x = ad.Variable(0.3, label="x")
+    y = ad.arctan(x)
+    ans_val, ans_der = y.val, y.der["x"]
+    sol_val, sol_der = adnp.arctan(0.3), grad(adnp.arctan)(0.3)
+    assert ans_val == sol_val
+    assert math.isclose(ans_der, sol_der)
+
+    x = ad.Variable(0.3, label="x") + 0.3
+    y = ad.arctan(x)
+    ans_val, ans_der = y.val, y.der["x"]
+    sol_val, sol_der = adnp.arctan(0.6), grad(lambda x: adnp.arctan(x + 0.3))(0.3)
+    assert ans_val == sol_val
+    assert math.isclose(ans_der, sol_der)
+
+    x = ad.Variable(0.3, label="x") + ad.Variable(0.4, label="y")
+    y = ad.arctan(x)
+    ans_val, ans_der = y.val, [y.der["x"], y.der["y"]]
+    sol_val, sol_der = (
+        adnp.arctan(0.7),
+        [
+            grad(lambda x, y: adnp.arctan(x + y), 0)(0.3, 0.4),
+            grad(lambda x, y: adnp.arctan(x + y), 1)(0.3, 0.4),
+        ],
+    )
+    assert ans_val == sol_val
+    assert check_list(ans_der, sol_der)
+
+    x = ad.Variable([0.3, 0.4, 0.5], label="x")
+    y = ad.arctan(x)
+    ans_val, ans_der = y.val, y.der["x"]
+    sol_val, sol_der = (
+        [adnp.arctan(0.3), adnp.arctan(0.4), adnp.arctan(0.5)],
+        [
+            grad(lambda x: adnp.arctan(x))(0.3),
+            grad(lambda x: adnp.arctan(x))(0.4),
+            grad(lambda x: adnp.arctan(x))(0.5),
+        ],
+    )
+    assert check_list(ans_val, sol_val)
+    assert check_list(ans_der, sol_der)
+
+    x = ad.Variable([0.3, 0.4, 0.5], label="x")
+    y = ad.arctan(x + x)
+    ans_val, ans_der = y.val, y.der["x"]
+    sol_val, sol_der = (
+        [adnp.arctan(0.3 * 2), adnp.arctan(0.4 * 2), adnp.arctan(0.5 * 2)],
+        [
+            grad(lambda x: adnp.arctan(x + x))(0.3),
+            grad(lambda x: adnp.arctan(x + x))(0.4),
+            grad(lambda x: adnp.arctan(x + x))(0.5),
+        ],
+    )
+    assert check_list(ans_val, sol_val)
+    assert check_list(ans_der, sol_der)
+
+    x = ad.Variable([0.03, 0.04, 0.05], label="x")
+    y = ad.Variable([0.06, 0.06, 0.06], label="y")
+    y = ad.arctan(x + y)
+    ans_val, ans_der_x, ans_der_y = y.val, y.der["x"], y.der["y"]
+    sol_val, sol_der_x, sol_der_y = (
+        [adnp.arctan(0.09), adnp.arctan(0.10), adnp.arctan(0.11)],
+        [
+            grad(lambda x, y: adnp.arctan(x + y), 0)(0.030, 0.060),
+            grad(lambda x, y: adnp.arctan(x + y), 0)(0.040, 0.060),
+            grad(lambda x, y: adnp.arctan(x + y), 0)(0.050, 0.060),
+        ],
+        [
+            grad(lambda x, y: adnp.arctan(x + y), 1)(0.030, 0.060),
+            grad(lambda x, y: adnp.arctan(x + y), 1)(0.040, 0.060),
+            grad(lambda x, y: adnp.arctan(x + y), 1)(0.050, 0.060),
+        ],
+    )
+    assert check_list(ans_val, sol_val)
+    assert check_list(sol_der_x, ans_der_x) & check_list(sol_der_y, ans_der_y)
+
+
+def test_tanh():
+    x = 0.3
+    ans = ad.tanh(x)
+    sol = adnp.tanh(x)
+    assert sol == ans
+
+    x = ad.Variable(0.3, label="x")
+    y = ad.tanh(x)
+    ans_val, ans_der = y.val, y.der["x"]
+    sol_val, sol_der = adnp.tanh(0.3), grad(adnp.tanh)(0.3)
+    assert ans_val == sol_val
+    assert math.isclose(ans_der, sol_der)
+
+    x = ad.Variable(0.3, label="x") + 0.3
+    y = ad.tanh(x)
+    ans_val, ans_der = y.val, y.der["x"]
+    sol_val, sol_der = adnp.tanh(0.6), grad(lambda x: adnp.tanh(x + 0.3))(0.3)
+    assert ans_val == sol_val
+    assert math.isclose(ans_der, sol_der)
+
+    x = ad.Variable(0.3, label="x") + ad.Variable(0.4, label="y")
+    y = ad.tanh(x)
+    ans_val, ans_der = y.val, [y.der["x"], y.der["y"]]
+    sol_val, sol_der = (
+        adnp.tanh(0.7),
+        [
+            grad(lambda x, y: adnp.tanh(x + y), 0)(0.3, 0.4),
+            grad(lambda x, y: adnp.tanh(x + y), 1)(0.3, 0.4),
+        ],
+    )
+    assert ans_val == sol_val
+    assert check_list(ans_der, sol_der)
+
+    x = ad.Variable([0.3, 0.4, 0.5], label="x")
+    y = ad.tanh(x)
+    ans_val, ans_der = y.val, y.der["x"]
+    sol_val, sol_der = (
+        [adnp.tanh(0.3), adnp.tanh(0.4), adnp.tanh(0.5)],
+        [
+            grad(lambda x: adnp.tanh(x))(0.3),
+            grad(lambda x: adnp.tanh(x))(0.4),
+            grad(lambda x: adnp.tanh(x))(0.5),
+        ],
+    )
+    assert check_list(ans_val, sol_val)
+    assert check_list(ans_der, sol_der)
+
+    x = ad.Variable([0.3, 0.4, 0.5], label="x")
+    y = ad.tanh(x + x)
+    ans_val, ans_der = y.val, y.der["x"]
+    sol_val, sol_der = (
+        [adnp.tanh(0.3 * 2), adnp.tanh(0.4 * 2), adnp.tanh(0.5 * 2)],
+        [
+            grad(lambda x: adnp.tanh(x + x))(0.3),
+            grad(lambda x: adnp.tanh(x + x))(0.4),
+            grad(lambda x: adnp.tanh(x + x))(0.5),
+        ],
+    )
+    assert check_list(ans_val, sol_val)
+    assert check_list(ans_der, sol_der)
+
+    x = ad.Variable([0.03, 0.04, 0.05], label="x")
+    y = ad.Variable([0.06, 0.06, 0.06], label="y")
+    y = ad.tanh(x + y)
+    ans_val, ans_der_x, ans_der_y = y.val, y.der["x"], y.der["y"]
+    sol_val, sol_der_x, sol_der_y = (
+        [adnp.tanh(0.09), adnp.tanh(0.10), adnp.tanh(0.11)],
+        [
+            grad(lambda x, y: adnp.tanh(x + y), 0)(0.030, 0.060),
+            grad(lambda x, y: adnp.tanh(x + y), 0)(0.040, 0.060),
+            grad(lambda x, y: adnp.tanh(x + y), 0)(0.050, 0.060),
+        ],
+        [
+            grad(lambda x, y: adnp.tanh(x + y), 1)(0.030, 0.060),
+            grad(lambda x, y: adnp.tanh(x + y), 1)(0.040, 0.060),
+            grad(lambda x, y: adnp.tanh(x + y), 1)(0.050, 0.060),
         ],
     )
     assert check_list(ans_val, sol_val)
@@ -763,6 +1296,7 @@ def test_pow():
     assert np.all(z.val == [0, 0])
     assert compare_dicts_multi(z.der, {"x": [1, 0], "y": [0, 0]}) == True
 
+
 def test_rpow():
     x = ad.Variable(1, label="x")
     z = np.e ** x
@@ -791,6 +1325,7 @@ def test_rpow():
     assert np.all(z.val == [1, 1])
     assert np.all(z.der == {"x": [1, 1], "y": [2, 2]})
 
+
 def test_ne():
     x = ad.Variable(1, label="x")
     y = ad.Variable(1, label="y")
@@ -815,12 +1350,13 @@ def test_ne():
     z2 = ad.exp(y) + np.e * x
     assert (z1 != z2) == False
 
-    x = ad.Variable([1,2,3], label="x")
-    y = ad.Variable([2,3], label="y")
+    x = ad.Variable([1, 2, 3], label="x")
+    y = ad.Variable([2, 3], label="y")
     assert (x != y) == True
 
     z = 1
     assert (x != z) == True
+
 
 def test_lt():
     x = ad.Variable(1, label="x")
@@ -831,10 +1367,11 @@ def test_lt():
     y = ad.Variable([2, 2], label="y")
     assert np.all((x < y) == [True, False])
 
-    x = ad.Variable([1,1,1], label="x")
+    x = ad.Variable([1, 1, 1], label="x")
     y = ad.Variable([2, 2], label="y")
     with pytest.raises(Exception):
         print(x < y)
+
 
 def test_le():
     x = ad.Variable(1, label="x")
@@ -845,10 +1382,11 @@ def test_le():
     y = ad.Variable([2, 2], label="y")
     assert np.all((x <= y) == [True, True])
 
-    x = ad.Variable([1,1,1], label="x")
+    x = ad.Variable([1, 1, 1], label="x")
     y = ad.Variable([2, 2], label="y")
     with pytest.raises(Exception):
         print(x <= y)
+
 
 def test_gt():
     x = ad.Variable(3, label="x")
@@ -859,10 +1397,11 @@ def test_gt():
     y = ad.Variable([2, 2], label="y")
     assert np.all((x > y) == [True, False])
 
-    x = ad.Variable([1,1,1], label="x")
+    x = ad.Variable([1, 1, 1], label="x")
     y = ad.Variable([2, 2], label="y")
     with pytest.raises(Exception):
         print(x > y)
+
 
 def test_ge():
     x = ad.Variable(3, label="x")
@@ -873,10 +1412,11 @@ def test_ge():
     y = ad.Variable([2, 2], label="y")
     assert np.all((x >= y) == [True, True])
 
-    x = ad.Variable([1,1,1], label="x")
+    x = ad.Variable([1, 1, 1], label="x")
     y = ad.Variable([2, 2], label="y")
     with pytest.raises(Exception):
         print(x >= y)
+
 
 def test_complicated_functions():
     ## Function 1
@@ -1007,16 +1547,24 @@ def test_forward_class():
         )
         assert compare_dicts(variable.der, function_ders[idx])
 
+
 def test_str():
     x = np.random.rand(10, 10)
     x_var = ad.Variable(x, label="x")
-    assert str(x_var) == f"Label: {x_var.label}, Value: {x_var.val}, Derivative: {x_var.der}"
+    assert (
+        str(x_var)
+        == f"Label: {x_var.label}, Value: {x_var.val}, Derivative: {x_var.der}"
+    )
 
     variables = {"x": 1}
     functions = ["x"]
     f = ad.Forward(variables, functions)
-    assert str(f) == f"Function: {f.functions[0]}, Value: {f.results[0].val}, Derivative: {f.results[0].der}"
-    
+    assert (
+        str(f)
+        == f"Function: {f.functions[0]}, Value: {f.results[0].val}, Derivative: {f.results[0].der}"
+    )
+
+
 if __name__ == "__main__":
     test_add_radd()
     test_sub_rsub()
@@ -1040,3 +1588,10 @@ if __name__ == "__main__":
     test_complicated_functions()
     test_forward_class()
     test_str()
+    test_arcsin()
+    test_arccos()
+    test_arctan()
+    test_sinh()
+    test_cosh()
+    test_tanh()
+    test_sqrt()
