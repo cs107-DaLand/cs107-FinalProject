@@ -11,11 +11,10 @@ This project is available for download through
 ```
 pip install cs107-salad --extra-index-url=https://test.pypi.org/simple/
 ```
-(Will change this once we upload to main PyPi)
 
-Documentation available [here](https://duckduckgo.com) (Link not correct)
+Documentation available [here](https://github.com/cs107-DaLand/cs107-FinalProject/blob/main/docs/Documentation.ipynb)
 
-PyPi link [here](https://test.pypi.org/project/cs107-salad/) (Link needs to be updated for main PyPi)
+PyPi link [here](https://test.pypi.org/project/cs107-salad/)
 
 ## Broader Impact
 
