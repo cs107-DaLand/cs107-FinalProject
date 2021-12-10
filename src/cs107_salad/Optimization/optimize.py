@@ -59,6 +59,8 @@ class GradientDescent(Optimizer):
         -------
         self.min_params: a dict of the form {var: value}
             The optimized parameters
+        val: (list of) float
+            The value of the function at the minimum
         der: a dict of the form {var: derivative}
             The derivative of the function at the optimized parameters
         history: bool
@@ -99,10 +101,15 @@ class GradientDescent(Optimizer):
             grad_length = np.linalg.norm(np.array(list(der.values())))
             if grad_length < grad_tol:
                 break
+        # calculate the value of the function at the minimum
+        ad_f = ad.Forward(self.min_params, [self.func])
+        for idx, variable in enumerate(ad_f.results):
+            val = variable.val
+
         if full_history:
-            return self.min_params, der, self.history
+            return self.min_params, val, der, self.history
         else:
-            return self.min_params, der
+            return self.min_params, val, der
 
 
 class BFGS(Optimizer):
@@ -143,6 +150,8 @@ class BFGS(Optimizer):
         -------
         self.min_params: a dict of the form {var: value}
             The optimized parameters
+        val: (list of) float
+            The value of the function at the minimum
         history: bool
             Whether to return the full history of the gradient descent algorithm
         
@@ -212,10 +221,15 @@ class BFGS(Optimizer):
             # update B
             self.B = self.B + der_B  # B_{k+1}
 
+        # calculate the value of the function at the minimum
+        ad_f = ad.Forward(self.min_params, [self.func])
+        for idx, variable in enumerate(ad_f.results):
+            val = variable.val
+
         if full_history:
-            return self.min_params, self.history
+            return self.min_params, val, self.history
         else:
-            return self.min_params
+            return self.min_params, val
 
 
 class StochasticGradientDescent(Optimizer):
@@ -278,6 +292,8 @@ class StochasticGradientDescent(Optimizer):
         -------
         self.min_params: a dict of the form {var: value}
             The optimized parameters
+        val: (list of) float
+            The value of the function at the minimum
         der: a dict of the form {var: derivative}
             The derivative of the function at the optimized parameters
 
@@ -332,7 +348,7 @@ class StochasticGradientDescent(Optimizer):
 
             # call GD with one iteration on the minibatch
             GD = GradientDescent()
-            self.min_params, der = GD.optimize(
+            self.min_params, _, der = GD.optimize(
                 self.func,
                 self.min_params,
                 max_iter=1,
@@ -348,7 +364,15 @@ class StochasticGradientDescent(Optimizer):
             if grad_length < grad_tol:
                 break
 
-        return self.min_params, der
+        # calculate the value of the function at the minimum
+        ad_f = ad.Forward(self.min_params, [self.func])
+        for idx, variable in enumerate(ad_f.results):
+            val = variable.val
+
+        if full_history:
+            return self.min_params, val, der, self.history
+        else:
+            return self.min_params, val, der
 
     def _get_batch(self):
         """
