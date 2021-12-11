@@ -1,8 +1,5 @@
-from numpy.lib.histograms import histogram
 import pytest
-import math
 import numpy as np
-from scipy.optimize import minimize
 import cs107_salad.Forward.salad as ad
 import cs107_salad.Optimization.optimize as optimize
 

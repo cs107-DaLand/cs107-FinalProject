@@ -1,8 +1,5 @@
-from numpy.core.numeric import full
-from scipy.optimize.optimize import OptimizeResult
 from ..Forward import salad as ad
 import numpy as np
-import matplotlib.pyplot as plt
 
 
 class Optimizer:
