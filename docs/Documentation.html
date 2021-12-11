@@ -13236,7 +13236,7 @@ div#notebook {
 \end{equation*}<p>If the inputs $g_i$ are themselves multivariate functions with inputs $x \in \mathbb{R}^m$, the chain rule gives</p>
 \begin{equation*}
     \nabla_x f = \sum_{i = 1}^{n} \Bigg( \frac{\partial f}{\partial g_i} \nabla g_i (x) \Bigg)
-\end{equation*}<p>Finally, we reach the most general form of the gradient: for multivariate vector-valued functions with $m$ inputs and $n$ outputs, the derivative of outputs with respect to inputs can be represented in a \textit{Jacobian matrix} of dimensions $n \times m$:</p>
+\end{equation*}<p>Finally, we reach the most general form of the gradient: for multivariate vector-valued functions with $m$ inputs and $n$ outputs, the derivative of outputs with respect to inputs can be represented in a $\textit{Jacobian matrix}$ of dimensions $n \times m$:</p>
 \begin{gather*}
     f(x_1, x_2, ..., x_m) = \begin{bmatrix} y_1 \\ y_2 \\ \vdots \\ y_n \end{bmatrix} \\
     J_f
@@ -13442,7 +13442,7 @@ div#notebook {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[1]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-python"><pre><span></span><span class="err">!</span><span class="n">pip</span> <span class="n">install</span> <span class="n">cs107</span><span class="o">-</span><span class="n">salad</span> <span class="o">--</span><span class="n">extra</span><span class="o">-</span><span class="n">index</span><span class="o">-</span><span class="n">url</span><span class="o">=</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">test</span><span class="o">.</span><span class="n">pypi</span><span class="o">.</span><span class="n">org</span><span class="o">/</span><span class="n">simple</span><span class="o">/</span>
@@ -13463,8 +13463,11 @@ div#notebook {
 
 <div class="output_subarea output_stream output_stdout output_text">
 <pre>Looking in indexes: https://pypi.org/simple, https://test.pypi.org/simple/
-Requirement already satisfied: cs107-salad in /usr/local/lib/python3.7/dist-packages (0.0.73)
+Collecting cs107-salad
+  Downloading https://test-files.pythonhosted.org/packages/52/7b/66409627c663197c0d185dfcf992744bffb2d86982f9aa496a9654854080/cs107_salad-1.0.1-py3-none-any.whl (12 kB)
 Requirement already satisfied: numpy in /usr/local/lib/python3.7/dist-packages (from cs107-salad) (1.19.5)
+Installing collected packages: cs107-salad
+Successfully installed cs107-salad-1.0.1
 </pre>
 </div>
 </div>
@@ -13483,7 +13486,7 @@ Requirement already satisfied: numpy in /usr/local/lib/python3.7/dist-packages (
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-python"><pre><span></span><span class="kn">import</span> <span class="nn">cs107_salad.Forward.salad</span> <span class="k">as</span> <span class="nn">ad</span>
@@ -13513,7 +13516,7 @@ Requirement already satisfied: numpy in /usr/local/lib/python3.7/dist-packages (
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-python"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">ad</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">)</span> <span class="c1"># specifies the input variable</span>
@@ -13536,7 +13539,7 @@ Requirement already satisfied: numpy in /usr/local/lib/python3.7/dist-packages (
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[4]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-python"><pre><span></span><span class="n">val</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">val</span> <span class="c1"># array(exp(4)), numpy.array</span>
@@ -13553,7 +13556,7 @@ Requirement already satisfied: numpy in /usr/local/lib/python3.7/dist-packages (
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[&nbsp;]:</div>
+    <div class="prompt output_prompt">Out[4]:</div>
 
 
 
@@ -13570,7 +13573,7 @@ Requirement already satisfied: numpy in /usr/local/lib/python3.7/dist-packages (
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-python"><pre><span></span><span class="n">der</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">der</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">]</span> <span class="c1"># 2exp(4), float</span>
@@ -13587,7 +13590,7 @@ Requirement already satisfied: numpy in /usr/local/lib/python3.7/dist-packages (
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[&nbsp;]:</div>
+    <div class="prompt output_prompt">Out[5]:</div>
 
 
 
@@ -13612,7 +13615,7 @@ Requirement already satisfied: numpy in /usr/local/lib/python3.7/dist-packages (
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-python"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">ad</span><span class="o">.</span><span class="n">Variable</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">)</span> <span class="c1"># specifies the input variable consisting of 4 points</span>
@@ -13634,7 +13637,7 @@ Requirement already satisfied: numpy in /usr/local/lib/python3.7/dist-packages (
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-python"><pre><span></span><span class="n">val</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">val</span> <span class="c1"># value: exp(2x)</span>
@@ -13651,7 +13654,7 @@ Requirement already satisfied: numpy in /usr/local/lib/python3.7/dist-packages (
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[&nbsp;]:</div>
+    <div class="prompt output_prompt">Out[13]:</div>
 
 
 
@@ -13668,7 +13671,7 @@ Requirement already satisfied: numpy in /usr/local/lib/python3.7/dist-packages (
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-python"><pre><span></span><span class="n">der</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">der</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">]</span> <span class="c1"># derivatives: 2exp(2x)</span>
@@ -13685,7 +13688,7 @@ Requirement already satisfied: numpy in /usr/local/lib/python3.7/dist-packages (
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[&nbsp;]:</div>
+    <div class="prompt output_prompt">Out[14]:</div>
 
 
 
@@ -13703,14 +13706,14 @@ Requirement already satisfied: numpy in /usr/local/lib/python3.7/dist-packages (
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h4 id="4.2.2-$m$-inputs-to-1-output"><a name="c322" />4.2.2 $m$ inputs to 1 output<a class="anchor-link" href="#4.2.2-$m$-inputs-to-1-output">&#182;</a></h4><p>When there are multiple input variables, users can specify the name of the variable when initializing the instance. The name usually matches the variable name on the left hand side.  See the example below with $f(x, y) = \exp(x+y)$, with $x=1, y=1$.</p>
+<h4 id="4.2.2-$m$-inputs-to-1-output"><a name="c322" />4.2.2 $m$ inputs to 1 output<a class="anchor-link" href="#4.2.2-$m$-inputs-to-1-output">&#182;</a></h4><p>When there are multiple input variables, users can specify the name of the variable when initializing the instance. The name usually matches the variable name on the left hand side.  See the example below with $f(x, y) = \exp(x+2y)$, with $x=1, y=1$.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-python"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">ad</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">)</span> <span class="c1"># specifies input variable x</span>
@@ -13725,7 +13728,7 @@ Requirement already satisfied: numpy in /usr/local/lib/python3.7/dist-packages (
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[19]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-python"><pre><span></span><span class="n">val</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">val</span> <span class="c1"># array(exp(3)), numpy.array</span>
@@ -13742,7 +13745,7 @@ Requirement already satisfied: numpy in /usr/local/lib/python3.7/dist-packages (
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[&nbsp;]:</div>
+    <div class="prompt output_prompt">Out[19]:</div>
 
 
 
@@ -13767,7 +13770,7 @@ Requirement already satisfied: numpy in /usr/local/lib/python3.7/dist-packages (
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[20]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-python"><pre><span></span><span class="n">dx</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">der</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">]</span> <span class="c1"># exp(3), float</span>
@@ -13784,7 +13787,7 @@ Requirement already satisfied: numpy in /usr/local/lib/python3.7/dist-packages (
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[&nbsp;]:</div>
+    <div class="prompt output_prompt">Out[20]:</div>
 
 
 
@@ -13801,7 +13804,7 @@ Requirement already satisfied: numpy in /usr/local/lib/python3.7/dist-packages (
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[21]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-python"><pre><span></span><span class="n">dy</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">der</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span> <span class="c1"># 2exp(3), float</span>
@@ -13818,7 +13821,7 @@ Requirement already satisfied: numpy in /usr/local/lib/python3.7/dist-packages (
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[&nbsp;]:</div>
+    <div class="prompt output_prompt">Out[21]:</div>
 
 
 
@@ -13835,7 +13838,7 @@ Requirement already satisfied: numpy in /usr/local/lib/python3.7/dist-packages (
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[22]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-python"><pre><span></span><span class="n">grad</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">der</span> <span class="c1"># {&quot;x&quot;: exp(3), &quot;y&quot;: 2exp(3)}, dict</span>
@@ -13852,7 +13855,7 @@ Requirement already satisfied: numpy in /usr/local/lib/python3.7/dist-packages (
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[&nbsp;]:</div>
+    <div class="prompt output_prompt">Out[22]:</div>
 
 
 
@@ -13870,14 +13873,14 @@ Requirement already satisfied: numpy in /usr/local/lib/python3.7/dist-packages (
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Similarly, the users can calculate the values and derivatives of the function at multiple data points by using a list as input. See the example below with $f(x, y) = \exp(x+y)$ at $(1, 1)$ and $(3, 0)$</p>
+<p>Similarly, the users can calculate the values and derivatives of the function at multiple data points by using a list as input. See the example below with $f(x, y) = \exp(x+2y)$ at $(1, 1)$ and $(3, 0)$</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[23]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-python"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">ad</span><span class="o">.</span><span class="n">Variable</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;x&#39;</span><span class="p">)</span> <span class="c1"># specifies input variable x</span>
@@ -13892,7 +13895,7 @@ Requirement already satisfied: numpy in /usr/local/lib/python3.7/dist-packages (
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[24]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-python"><pre><span></span><span class="n">val</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">val</span> <span class="c1"># array(exp(3), exp(3)), numpy.array</span>
@@ -13909,7 +13912,7 @@ Requirement already satisfied: numpy in /usr/local/lib/python3.7/dist-packages (
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[&nbsp;]:</div>
+    <div class="prompt output_prompt">Out[24]:</div>
 
 
 
@@ -13926,7 +13929,7 @@ Requirement already satisfied: numpy in /usr/local/lib/python3.7/dist-packages (
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[25]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-python"><pre><span></span><span class="n">grad</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">der</span> <span class="c1"># {&quot;x&quot;: [exp(3), exp(3)], &quot;y&quot;: [2exp(3), 2exp(3)]}, dict</span>
@@ -13943,7 +13946,7 @@ Requirement already satisfied: numpy in /usr/local/lib/python3.7/dist-packages (
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[&nbsp;]:</div>
+    <div class="prompt output_prompt">Out[25]:</div>
 
 
 
@@ -13963,18 +13966,18 @@ Requirement already satisfied: numpy in /usr/local/lib/python3.7/dist-packages (
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <h4 id="4.2.3-$m$-inputs-to-$n$-outputs"><a name="s1" />4.2.3 $m$ inputs to $n$ outputs<a class="anchor-link" href="#4.2.3-$m$-inputs-to-$n$-outputs">&#182;</a></h4><p>We recognize that users may sometimes want to compute Jacobians. Consider the following case, $x = [x_1~x_2]^T, y = [y_1~y_2]^T, f(x, y) = [2x + \exp(y) ~ 3x+2\sin(y)]^T$.</p>
-<p>We provide another class \texttt{Forward} to do the calculation.</p>
+<p>We provide another class $\texttt{Forward}$ to do the calculation.</p>
 
 </div>
 </div>
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[26]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-python"><pre><span></span><span class="n">variables</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="mi">5</span><span class="p">}</span> <span class="c1"># specifies input values</span>
-<span class="n">functions</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;2*x + y&#39;</span><span class="p">,</span> <span class="s1">&#39;3*x + 2*y&#39;</span><span class="p">]</span> <span class="c1"># specifies functions</span>
+<span class="n">functions</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;2*x + exp(y)&#39;</span><span class="p">,</span> <span class="s1">&#39;3*x + 2*sin(y)&#39;</span><span class="p">]</span> <span class="c1"># specifies functions</span>
 <span class="n">f</span> <span class="o">=</span> <span class="n">ad</span><span class="o">.</span><span class="n">Forward</span><span class="p">(</span><span class="n">variables</span><span class="p">,</span> <span class="n">functions</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 </pre></div>
@@ -13993,8 +13996,8 @@ Requirement already satisfied: numpy in /usr/local/lib/python3.7/dist-packages (
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Function: 2*x + y, Value: 11, Derivative: {&#39;x&#39;: array(2.), &#39;y&#39;: array(1.)}
-Function: 3*x + 2*y, Value: 19, Derivative: {&#39;x&#39;: array(3.), &#39;y&#39;: array(2.)}
+<pre>Function: 2*x + exp(y), Value: 154.4131591025766, Derivative: {&#39;x&#39;: array(2.), &#39;y&#39;: 148.4131591025766}
+Function: 3*x + 2*sin(y), Value: 7.082151450673723, Derivative: {&#39;x&#39;: array(3.), &#39;y&#39;: array(0.56732437)}
 </pre>
 </div>
 </div>
@@ -14013,7 +14016,7 @@ Function: 3*x + 2*y, Value: 19, Derivative: {&#39;x&#39;: array(3.), &#39;y&#39;
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[27]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-python"><pre><span></span><span class="n">val1</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">val</span> <span class="c1"># array(11)</span>
@@ -14030,13 +14033,13 @@ Function: 3*x + 2*y, Value: 19, Derivative: {&#39;x&#39;: array(3.), &#39;y&#39;
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[&nbsp;]:</div>
+    <div class="prompt output_prompt">Out[27]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>array(11)</pre>
+<pre>array(154.4131591)</pre>
 </div>
 
 </div>
@@ -14047,7 +14050,7 @@ Function: 3*x + 2*y, Value: 19, Derivative: {&#39;x&#39;: array(3.), &#39;y&#39;
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[28]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-python"><pre><span></span><span class="n">der1</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">der</span> <span class="c1"># {&#39;x&#39;: array(2.), &#39;y&#39;: array(1.)}</span>
@@ -14064,13 +14067,13 @@ Function: 3*x + 2*y, Value: 19, Derivative: {&#39;x&#39;: array(3.), &#39;y&#39;
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[&nbsp;]:</div>
+    <div class="prompt output_prompt">Out[28]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>{&#39;x&#39;: array(2.), &#39;y&#39;: array(1.)}</pre>
+<pre>{&#39;x&#39;: array(2.), &#39;y&#39;: 148.4131591025766}</pre>
 </div>
 
 </div>
@@ -14081,7 +14084,7 @@ Function: 3*x + 2*y, Value: 19, Derivative: {&#39;x&#39;: array(3.), &#39;y&#39;
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[29]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-python"><pre><span></span><span class="n">val2</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">val</span> <span class="c1"># array(19)</span>
@@ -14098,13 +14101,13 @@ Function: 3*x + 2*y, Value: 19, Derivative: {&#39;x&#39;: array(3.), &#39;y&#39;
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[&nbsp;]:</div>
+    <div class="prompt output_prompt">Out[29]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>array(19)</pre>
+<pre>array(7.08215145)</pre>
 </div>
 
 </div>
@@ -14115,7 +14118,7 @@ Function: 3*x + 2*y, Value: 19, Derivative: {&#39;x&#39;: array(3.), &#39;y&#39;
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[30]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-python"><pre><span></span><span class="n">der2</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">results</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">der</span> <span class="c1"># {&#39;x&#39;: array(3.), &#39;y&#39;: array(2.)}</span>
@@ -14132,13 +14135,13 @@ Function: 3*x + 2*y, Value: 19, Derivative: {&#39;x&#39;: array(3.), &#39;y&#39;
 
 <div class="output_area">
 
-    <div class="prompt output_prompt">Out[&nbsp;]:</div>
+    <div class="prompt output_prompt">Out[30]:</div>
 
 
 
 
 <div class="output_text output_subarea output_execute_result">
-<pre>{&#39;x&#39;: array(3.), &#39;y&#39;: array(2.)}</pre>
+<pre>{&#39;x&#39;: array(3.), &#39;y&#39;: array(0.56732437)}</pre>
 </div>
 
 </div>
@@ -14157,11 +14160,11 @@ Function: 3*x + 2*y, Value: 19, Derivative: {&#39;x&#39;: array(3.), &#39;y&#39;
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[31]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-python"><pre><span></span><span class="n">variables</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">]}</span> <span class="c1"># specifies input values</span>
-<span class="n">functions</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;2*x + y&#39;</span><span class="p">,</span> <span class="s1">&#39;3*x + 2*y&#39;</span><span class="p">]</span> <span class="c1"># specifies functions</span>
+<span class="n">functions</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;2*x + exp(y)&#39;</span><span class="p">,</span> <span class="s1">&#39;3*x + 2*sin(y)&#39;</span><span class="p">]</span> <span class="c1"># specifies functions</span>
 <span class="n">f</span> <span class="o">=</span> <span class="n">ad</span><span class="o">.</span><span class="n">Forward</span><span class="p">(</span><span class="n">variables</span><span class="p">,</span> <span class="n">functions</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 </pre></div>
@@ -14180,8 +14183,8 @@ Function: 3*x + 2*y, Value: 19, Derivative: {&#39;x&#39;: array(3.), &#39;y&#39;
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>Function: 2*x + y, Value: [ 8 11], Derivative: {&#39;x&#39;: array([2., 2.]), &#39;y&#39;: array([1., 1.])}
-Function: 3*x + 2*y, Value: [13 18], Derivative: {&#39;x&#39;: array([3., 3.]), &#39;y&#39;: array([2., 2.])}
+<pre>Function: 2*x + exp(y), Value: [13.3890561  28.08553692], Derivative: {&#39;x&#39;: array([2., 2.]), &#39;y&#39;: array([ 7.3890561 , 20.08553692])}
+Function: 3*x + 2*sin(y), Value: [10.81859485 12.28224002], Derivative: {&#39;x&#39;: array([3., 3.]), &#39;y&#39;: array([-0.83229367, -1.97998499])}
 </pre>
 </div>
 </div>
@@ -14334,7 +14337,7 @@ Function: 3*x + 2*y, Value: [13 18], Derivative: {&#39;x&#39;: array([3., 3.]), 
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[32]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-python"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="mi">3</span>
@@ -14376,7 +14379,7 @@ type of x: &lt;class &#39;numpy.float64&#39;&gt;
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[33]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-python"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">ad</span><span class="o">.</span><span class="n">Variable</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
@@ -14409,7 +14412,7 @@ type of x: &lt;class &#39;numpy.float64&#39;&gt;
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[34]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-python"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">ans</span><span class="p">))</span>
@@ -14484,7 +14487,7 @@ type of x: &lt;class &#39;numpy.float64&#39;&gt;
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[36]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-python"><pre><span></span><span class="kn">import</span> <span class="nn">cs107_salad.Optimization.optimize</span> <span class="k">as</span> <span class="nn">optimize</span>
@@ -14515,7 +14518,7 @@ $$\textbf{x}_{k+1} = \textbf{x}_k - \lambda \nabla F(\textbf{x}_k)$$<p>The algor
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[37]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-python"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="s2">&quot;x**2 + 2*y**2&quot;</span>
@@ -14532,7 +14535,7 @@ $$\textbf{x}_{k+1} = \textbf{x}_k - \lambda \nabla F(\textbf{x}_k)$$<p>The algor
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[38]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-python"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;optimized parameter:&#39;</span><span class="p">,</span> <span class="n">min_params</span><span class="p">)</span>
@@ -14575,7 +14578,7 @@ gradient at minimum: {&#39;x&#39;: 9.952992126200531e-09, &#39;y&#39;: array(5.1
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[40]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-python"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -14600,7 +14603,7 @@ gradient at minimum: {&#39;x&#39;: 9.952992126200531e-09, &#39;y&#39;: array(5.1
 <span class="n">plot_f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">axs</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Gradient Descent Path&#39;</span><span class="p">)</span>
 <span class="n">axs</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hist</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">hist</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;bo&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;starting position&#39;</span><span class="p">);</span>
 <span class="n">axs</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hist</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">hist</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="s1">&#39;b--&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;search path&#39;</span><span class="p">);</span>
-<span class="n">axs</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">axs</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
 </pre></div>
 
     </div>
@@ -14610,19 +14613,6 @@ gradient at minimum: {&#39;x&#39;: 9.952992126200531e-09, &#39;y&#39;: array(5.1
 <div class="output_wrapper">
 <div class="output">
 
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[&nbsp;]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>&lt;matplotlib.legend.Legend at 0x7f81870c7090&gt;</pre>
-</div>
-
-</div>
 
 <div class="output_area">
 
@@ -14670,7 +14660,7 @@ gradient at minimum: {&#39;x&#39;: 9.952992126200531e-09, &#39;y&#39;: array(5.1
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[41]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-python"><pre><span></span><span class="n">f</span> <span class="o">=</span> <span class="s2">&quot;x**2 + 2*y**2&quot;</span>
@@ -14687,7 +14677,7 @@ gradient at minimum: {&#39;x&#39;: 9.952992126200531e-09, &#39;y&#39;: array(5.1
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[42]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-python"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;optimized parameter:&#39;</span><span class="p">,</span> <span class="n">min_params</span><span class="p">)</span>
@@ -14720,7 +14710,7 @@ function value at minimum 3.5238818632086884e-33
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[44]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-python"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -14745,7 +14735,7 @@ function value at minimum 3.5238818632086884e-33
 <span class="n">plot_f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">axs</span><span class="p">,</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Gradient Descent Path&#39;</span><span class="p">)</span>
 <span class="n">axs</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hist</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">hist</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;bo&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;starting position&#39;</span><span class="p">);</span>
 <span class="n">axs</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">hist</span><span class="p">[</span><span class="s1">&#39;x&#39;</span><span class="p">],</span> <span class="n">hist</span><span class="p">[</span><span class="s1">&#39;y&#39;</span><span class="p">],</span> <span class="s1">&#39;bx--&#39;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;search path&#39;</span><span class="p">);</span>
-<span class="n">axs</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+<span class="n">axs</span><span class="o">.</span><span class="n">legend</span><span class="p">();</span>
 </pre></div>
 
     </div>
@@ -14755,19 +14745,6 @@ function value at minimum 3.5238818632086884e-33
 <div class="output_wrapper">
 <div class="output">
 
-
-<div class="output_area">
-
-    <div class="prompt output_prompt">Out[&nbsp;]:</div>
-
-
-
-
-<div class="output_text output_subarea output_execute_result">
-<pre>&lt;matplotlib.legend.Legend at 0x7f818503c990&gt;</pre>
-</div>
-
-</div>
 
 <div class="output_area">
 
@@ -14809,7 +14786,7 @@ $$\mathbf{b}^* = \arg\min_{\mathbf{b}} = \frac{1}{n} \sum_{i=1}^n \left(y_i - \m
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[45]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-python"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">100</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
@@ -14826,7 +14803,7 @@ $$\mathbf{b}^* = \arg\min_{\mathbf{b}} = \frac{1}{n} \sum_{i=1}^n \left(y_i - \m
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[&nbsp;]:</div>
+<div class="prompt input_prompt">In&nbsp;[46]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-python"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="s1">&#39;optimized parameter:&#39;</span><span class="p">,</span> <span class="n">min_params</span><span class="p">)</span>
@@ -14846,7 +14823,7 @@ $$\mathbf{b}^* = \arg\min_{\mathbf{b}} = \frac{1}{n} \sum_{i=1}^n \left(y_i - \m
 
 
 <div class="output_subarea output_stream output_stdout output_text">
-<pre>optimized parameter: {&#39;b0&#39;: 2.0001473331168262, &#39;b1&#39;: 0.0008425573589737389, &#39;b2&#39;: 2.999853684531857}
+<pre>optimized parameter: {&#39;b0&#39;: 2.0003212074294807, &#39;b1&#39;: 0.0006186558704257924, &#39;b2&#39;: 2.999974911074871}
 </pre>
 </div>
 </div>
